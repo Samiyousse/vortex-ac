@@ -1,0 +1,952 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Vortex — #1 FiveM Anti-Cheat</title>
+<link href="https://fonts.googleapis.com/css2?family=Rajdhani:wght@400;500;600;700;800&family=Inter:wght@300;400;500;600&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg0:#050507;--bg1:#08080d;--bg2:#0d0d14;--bg3:#12121a;--bg4:#181820;
+  --blue:#4f8ef7;--blue2:#2563eb;--blue3:#1e3a8a;
+  --blueglow:rgba(79,142,247,0.12);--bluebrd:rgba(79,142,247,0.2);--bluedim:rgba(79,142,247,0.07);
+  --brd:rgba(255,255,255,0.05);--brd2:rgba(255,255,255,0.08);
+  --t1:#eeeef4;--t2:#787894;--t3:#3a3a52;--t4:#22222e;
+}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+html{scroll-behavior:smooth;}
+body{font-family:'Inter',sans-serif;background:var(--bg0);color:var(--t1);overflow-x:hidden;}
+::-webkit-scrollbar{width:4px;height:4px;}
+::-webkit-scrollbar-track{background:var(--bg0);}
+::-webkit-scrollbar-thumb{background:var(--blue3);border-radius:2px;}
+
+/* ── BG ── */
+.bg-fixed{position:fixed;inset:0;pointer-events:none;z-index:0;overflow:hidden;}
+.bg-grid{
+  position:absolute;inset:0;
+  background-image:linear-gradient(rgba(79,142,247,0.03) 1px,transparent 1px),
+    linear-gradient(90deg,rgba(79,142,247,0.03) 1px,transparent 1px);
+  background-size:60px 60px;
+}
+.bg-radial{
+  position:absolute;width:1000px;height:600px;border-radius:50%;
+  background:radial-gradient(ellipse,rgba(79,142,247,0.06) 0%,transparent 70%);
+  top:-100px;left:50%;transform:translateX(-50%);
+}
+
+/* ── NAV ── */
+nav{
+  position:fixed;top:0;left:0;right:0;z-index:100;
+  height:62px;display:flex;align-items:center;justify-content:space-between;
+  padding:0 60px;
+  background:rgba(5,5,7,0.85);backdrop-filter:blur(24px);
+  border-bottom:1px solid var(--brd);
+}
+.nav-logo{display:flex;align-items:center;gap:10px;cursor:pointer;text-decoration:none;}
+.nav-logo svg{width:30px;height:30px;}
+.nav-brand{font-family:'Rajdhani',sans-serif;font-size:1rem;font-weight:800;letter-spacing:3px;color:var(--t1);}
+.nav-links{display:flex;align-items:center;gap:4px;list-style:none;}
+.nav-links a{
+  font-size:.76rem;font-weight:500;color:var(--t2);text-decoration:none;
+  padding:7px 14px;border-radius:6px;letter-spacing:.3px;transition:all .15s;
+}
+.nav-links a:hover{color:var(--t1);background:rgba(255,255,255,0.04);}
+.nav-cta{background:var(--blue)!important;color:#fff!important;font-weight:600!important;padding:8px 20px!important;}
+.nav-cta:hover{background:var(--blue2)!important;}
+
+/* ── HERO ── */
+.hero{
+  position:relative;z-index:1;
+  min-height:100vh;
+  display:grid;grid-template-columns:1fr 1.1fr;
+  align-items:center;gap:60px;
+  padding:100px 60px 60px;
+  max-width:1400px;margin:0 auto;
+}
+
+/* LEFT */
+.hero-eyebrow{
+  display:inline-flex;align-items:center;gap:8px;
+  background:var(--bluedim);border:1px solid var(--bluebrd);
+  border-radius:100px;padding:5px 16px 5px 10px;
+  font-size:.62rem;font-weight:700;letter-spacing:2.5px;color:var(--blue);
+  text-transform:uppercase;margin-bottom:28px;
+  animation:up .7s ease both;
+}
+.ey-dot{width:6px;height:6px;border-radius:50%;background:var(--blue);animation:blink 2s infinite;}
+@keyframes blink{0%,100%{opacity:1;}50%{opacity:.2;}}
+
+.hero-title{
+  font-family:'Rajdhani',sans-serif;
+  font-size:clamp(3rem,5.5vw,6rem);
+  font-weight:800;letter-spacing:-2px;line-height:.95;
+  margin-bottom:22px;
+  animation:up .7s .1s ease both;
+}
+.hero-title .accent{
+  display:block;
+  background:linear-gradient(110deg,#fff 20%,var(--blue) 55%,#93c5fd 100%);
+  -webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;
+}
+
+.hero-desc{
+  font-size:.95rem;font-weight:300;color:var(--t2);line-height:1.85;
+  max-width:460px;margin-bottom:40px;
+  animation:up .7s .2s ease both;
+}
+.hero-desc strong{color:var(--t1);font-weight:500;}
+
+.hero-btns{
+  display:flex;align-items:center;gap:12px;flex-wrap:wrap;
+  margin-bottom:48px;animation:up .7s .3s ease both;
+}
+.btn-pri{
+  background:var(--blue);color:#fff;
+  padding:14px 32px;border-radius:8px;border:none;
+  font-family:'Rajdhani',sans-serif;font-size:.9rem;font-weight:700;letter-spacing:1.5px;
+  cursor:pointer;text-decoration:none;display:inline-block;text-transform:uppercase;
+  transition:background .2s,transform .15s,box-shadow .2s;
+  box-shadow:0 0 24px rgba(79,142,247,0.25);
+}
+.btn-pri:hover{background:var(--blue2);transform:translateY(-1px);box-shadow:0 0 36px rgba(79,142,247,0.4);}
+.btn-sec{
+  background:transparent;border:1px solid var(--brd2);color:var(--t2);
+  padding:14px 32px;border-radius:8px;
+  font-family:'Rajdhani',sans-serif;font-size:.9rem;font-weight:600;letter-spacing:1px;
+  cursor:pointer;text-decoration:none;display:inline-block;text-transform:uppercase;
+  transition:all .2s;
+}
+.btn-sec:hover{border-color:var(--blue);color:var(--blue);}
+
+.trusted{display:flex;align-items:center;gap:14px;animation:up .7s .4s ease both;}
+.t-avs{display:flex;}
+.t-avs span{
+  width:28px;height:28px;border-radius:50%;border:2px solid var(--bg0);
+  margin-left:-8px;display:flex;align-items:center;justify-content:center;
+  font-size:.65rem;font-weight:700;
+}
+.t-avs span:first-child{margin-left:0;}
+.a1{background:var(--blue);}
+.a2{background:var(--blue2);}
+.a3{background:var(--blue3);}
+.a4{background:#1e3a8a;}
+.t-text{font-size:.72rem;color:var(--t3);}
+.t-text strong{color:var(--t2);}
+
+@keyframes up{from{opacity:0;transform:translateY(24px);}to{opacity:1;transform:translateY(0);}}
+
+/* ── MOCKUP ── */
+.hero-right{position:relative;animation:up .8s .15s ease both;}
+
+.float-top{
+  position:absolute;top:-18px;right:16px;z-index:2;
+  background:var(--bg1);border:1px solid var(--bluebrd);border-radius:10px;
+  padding:8px 14px;display:flex;align-items:center;gap:10px;
+  box-shadow:0 8px 32px rgba(0,0,0,0.5);
+}
+.float-bot{
+  position:absolute;bottom:-18px;left:16px;z-index:2;
+  background:var(--bg1);border:1px solid var(--bluebrd);border-radius:10px;
+  padding:8px 14px;display:flex;align-items:center;gap:10px;
+  box-shadow:0 8px 32px rgba(0,0,0,0.5);
+}
+.fl-icon{font-size:1.1rem;}
+.fl-val{font-family:'JetBrains Mono',monospace;font-size:.9rem;font-weight:700;line-height:1;color:var(--t1);}
+.fl-label{font-size:.52rem;color:var(--t3);letter-spacing:1px;text-transform:uppercase;}
+
+.mockup{
+  background:var(--bg2);
+  border:1px solid var(--bluebrd);
+  border-radius:16px;overflow:hidden;
+  box-shadow:0 0 80px rgba(79,142,247,0.1),0 40px 80px rgba(0,0,0,0.6);
+}
+.mock-bar{
+  background:var(--bg1);border-bottom:1px solid var(--brd);
+  padding:10px 16px;display:flex;align-items:center;gap:8px;
+}
+.mock-dots{display:flex;gap:5px;}
+.mock-dots span{width:8px;height:8px;border-radius:50%;}
+.d-red{background:#e02020;}.d-yellow{background:#eab308;}.d-green{background:#22c55e;}
+.mock-ttl{font-family:'JetBrains Mono',monospace;font-size:.58rem;color:var(--t3);letter-spacing:1px;margin-left:6px;}
+
+.mock-body{padding:14px;}
+.mock-stats{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin-bottom:10px;}
+.ms{
+  background:var(--bg3);border-radius:7px;padding:10px 12px;
+  border:1px solid var(--brd);position:relative;overflow:hidden;
+}
+.ms::before{content:'';position:absolute;top:0;left:0;right:0;height:1px;background:var(--bluebrd);}
+.ms-lbl{font-size:.48rem;letter-spacing:1.5px;color:var(--t3);text-transform:uppercase;}
+.ms-val{font-family:'JetBrains Mono',monospace;font-size:1.1rem;font-weight:700;margin-top:2px;}
+.ms-val.b{color:var(--blue);}.ms-val.r{color:#f87171;}.ms-val.g{color:#4ade80;}
+
+.mock-graph{
+  background:var(--bg3);border:1px solid var(--brd);border-radius:8px;
+  padding:10px;margin-bottom:10px;
+}
+.mg-lbl{font-size:.48rem;letter-spacing:1.5px;color:var(--t3);text-transform:uppercase;margin-bottom:6px;}
+canvas#heroGraph{width:100%;height:50px;display:block;}
+
+.mock-table{background:var(--bg3);border-radius:8px;border:1px solid var(--brd);overflow:hidden;}
+.mr{
+  display:grid;grid-template-columns:1fr 1fr 70px 55px;
+  padding:7px 10px;border-bottom:1px solid rgba(255,255,255,0.02);
+  font-size:.58rem;align-items:center;
+}
+.mr:last-child{border-bottom:none;}
+.mr.mh{color:var(--t3);letter-spacing:1px;text-transform:uppercase;font-size:.5rem;}
+.mb-r{display:inline-block;padding:1px 7px;border-radius:10px;background:rgba(248,113,113,.12);color:#f87171;border:1px solid rgba(248,113,113,.2);font-size:.5rem;font-weight:700;}
+.mb-g{display:inline-block;padding:1px 7px;border-radius:10px;background:rgba(74,222,128,.1);color:#4ade80;border:1px solid rgba(74,222,128,.2);font-size:.5rem;font-weight:700;}
+
+/* ── STATS BAR ── */
+.stats-bar{
+  position:relative;z-index:1;
+  border-top:1px solid var(--brd);border-bottom:1px solid var(--brd);
+  display:grid;grid-template-columns:repeat(4,1fr);
+}
+.sb-item{
+  padding:30px 40px;text-align:center;
+  border-right:1px solid var(--brd);
+}
+.sb-item:last-child{border-right:none;}
+.sb-val{
+  font-family:'JetBrains Mono',monospace;
+  font-size:2rem;font-weight:700;color:var(--t1);letter-spacing:-1px;
+}
+.sb-val em{color:var(--blue);font-style:normal;}
+.sb-lbl{font-size:.58rem;letter-spacing:2px;color:var(--t3);text-transform:uppercase;margin-top:6px;}
+
+/* ── FEATURES ── */
+.section{position:relative;z-index:1;padding:80px 60px;max-width:1400px;margin:0 auto;}
+.sec-tag{font-size:.58rem;font-weight:700;letter-spacing:3px;color:var(--blue);text-transform:uppercase;margin-bottom:12px;}
+.sec-h{font-family:'Rajdhani',sans-serif;font-size:clamp(1.8rem,3vw,2.8rem);font-weight:800;letter-spacing:-1px;margin-bottom:14px;}
+.sec-p{font-size:.88rem;color:var(--t2);line-height:1.8;max-width:440px;}
+
+.feat-grid{
+  display:grid;grid-template-columns:repeat(3,1fr);
+  gap:2px;margin-top:48px;
+  border:1px solid var(--brd);border-radius:14px;overflow:hidden;
+}
+.feat-card{
+  background:var(--bg2);padding:28px 26px;
+  transition:background .2s;position:relative;overflow:hidden;
+}
+.feat-card:hover{background:var(--bg3);}
+.feat-card::after{
+  content:'';position:absolute;top:0;left:0;right:0;height:1px;
+  background:linear-gradient(90deg,transparent,var(--bluebrd),transparent);
+  opacity:0;transition:opacity .3s;
+}
+.feat-card:hover::after{opacity:1;}
+.f-num{font-family:'JetBrains Mono',monospace;font-size:.52rem;color:var(--t3);margin-bottom:14px;letter-spacing:2px;}
+.f-icon{width:38px;height:38px;border-radius:9px;background:var(--bluedim);border:1px solid var(--bluebrd);display:flex;align-items:center;justify-content:center;font-size:1.1rem;margin-bottom:14px;}
+.f-title{font-size:.86rem;font-weight:700;margin-bottom:8px;}
+.f-desc{font-size:.74rem;color:var(--t2);line-height:1.7;}
+
+/* ── COMPARE ── */
+.compare-wrap{margin-top:48px;border:1px solid var(--brd);border-radius:14px;overflow:hidden;}
+.cmp-table{width:100%;border-collapse:collapse;font-size:.78rem;}
+.cmp-table th{
+  padding:14px 20px;text-align:left;
+  font-size:.58rem;letter-spacing:1.5px;color:var(--t3);text-transform:uppercase;
+  border-bottom:1px solid var(--brd);background:var(--bg2);
+}
+.cmp-table th:not(:first-child){text-align:center;}
+.cmp-table th.hl{color:var(--blue);}
+.cmp-table td{padding:13px 20px;border-bottom:1px solid rgba(255,255,255,0.02);color:var(--t2);background:var(--bg2);}
+.cmp-table td:not(:first-child){text-align:center;}
+.cmp-table tr:hover td{background:var(--bg3);}
+.cmp-table td.hl-col{background:var(--bluedim)!important;}
+.ck{color:var(--blue);font-size:1rem;}
+.cx{color:var(--t3);}
+
+/* ── PRICING ── */
+.plans{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;margin-top:48px;}
+.plan{
+  background:var(--bg2);border:1px solid var(--brd);
+  border-radius:16px;padding:30px 26px;position:relative;overflow:hidden;
+  transition:transform .2s,border-color .2s;
+}
+.plan:hover{transform:translateY(-4px);}
+.plan.pop{background:var(--bg3);border-color:var(--blue);}
+.plan.pop:hover{transform:translateY(-6px);}
+.plan-line{position:absolute;top:0;left:0;right:0;height:2px;background:var(--brd);}
+.plan.pop .plan-line{background:linear-gradient(90deg,transparent,var(--blue),transparent);}
+.plan-pill{
+  position:absolute;top:-1px;left:50%;transform:translateX(-50%);
+  background:var(--blue);color:#fff;
+  font-size:.56rem;font-weight:700;letter-spacing:2px;text-transform:uppercase;
+  padding:3px 14px;border-radius:0 0 8px 8px;
+}
+.plan-tier{font-size:.58rem;font-weight:700;letter-spacing:3px;color:var(--t3);text-transform:uppercase;margin-bottom:18px;}
+.plan-price{display:flex;align-items:baseline;gap:3px;margin-bottom:4px;}
+.plan-cur{font-size:1rem;color:var(--t2);font-family:'JetBrains Mono',monospace;}
+.plan-amt{font-family:'JetBrains Mono',monospace;font-size:2.8rem;font-weight:700;color:var(--t1);letter-spacing:-2px;line-height:1;}
+.plan-per{font-size:.65rem;color:var(--t3);font-family:'JetBrains Mono',monospace;margin-bottom:24px;}
+.plan-sep{height:1px;background:var(--brd);margin-bottom:20px;}
+.plan-list{list-style:none;display:flex;flex-direction:column;gap:10px;margin-bottom:26px;}
+.plan-list li{display:flex;align-items:flex-start;gap:9px;font-size:.76rem;color:var(--t2);line-height:1.5;}
+.ico-y{width:15px;height:15px;flex-shrink:0;border-radius:50%;background:var(--bluedim);border:1px solid var(--bluebrd);display:flex;align-items:center;justify-content:center;font-size:.5rem;color:var(--blue);margin-top:1px;}
+.ico-n{width:15px;height:15px;flex-shrink:0;border-radius:50%;background:var(--bg4);border:1px solid var(--brd);display:flex;align-items:center;justify-content:center;font-size:.5rem;color:var(--t3);margin-top:1px;}
+.plan-btn{
+  width:100%;padding:12px;border-radius:8px;border:none;
+  font-family:'Rajdhani',sans-serif;font-size:.8rem;font-weight:700;letter-spacing:1.5px;
+  cursor:pointer;transition:all .2s;text-transform:uppercase;
+}
+.pb-outline{background:transparent;border:1px solid var(--brd2);color:var(--t2);}
+.pb-outline:hover{border-color:var(--blue);color:var(--blue);}
+.pb-solid{background:var(--blue);color:#fff;}
+.pb-solid:hover{background:var(--blue2);}
+
+/* ── FAQ ── */
+.faq-list{margin-top:48px;display:flex;flex-direction:column;gap:2px;border:1px solid var(--brd);border-radius:14px;overflow:hidden;}
+.faq-item{background:var(--bg2);border-bottom:1px solid var(--brd);transition:border-color .2s;}
+.faq-item:last-child{border-bottom:none;}
+.faq-item:hover,.faq-item.open{border-color:var(--bluebrd);}
+.faq-q{
+  width:100%;padding:18px 22px;background:none;border:none;
+  display:flex;align-items:center;justify-content:space-between;gap:14px;
+  text-align:left;cursor:pointer;font-family:'Inter',sans-serif;
+  font-size:.86rem;font-weight:600;color:var(--t1);transition:background .15s;
+}
+.faq-q:hover{background:var(--bg3);}
+.faq-icon{width:20px;height:20px;flex-shrink:0;border:1px solid var(--brd2);border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:.7rem;color:var(--blue);transition:transform .25s;}
+.faq-item.open .faq-icon{transform:rotate(45deg);border-color:var(--blue);}
+.faq-body{max-height:0;overflow:hidden;transition:max-height .3s ease,padding .3s;font-size:.78rem;color:var(--t2);line-height:1.85;padding:0 22px;}
+.faq-item.open .faq-body{max-height:200px;padding:0 22px 18px;}
+
+/* ── CTA ── */
+.cta-wrap{position:relative;z-index:1;padding:60px 60px 80px;}
+.cta-box{
+  max-width:820px;margin:0 auto;background:var(--bg2);
+  border:1px solid var(--bluebrd);border-radius:20px;
+  padding:60px 48px;text-align:center;position:relative;overflow:hidden;
+}
+.cta-box::before{content:'';position:absolute;inset:0;background:radial-gradient(ellipse 60% 50% at 50% 0%,var(--blueglow),transparent);pointer-events:none;}
+.cta-box h2{font-family:'Rajdhani',sans-serif;font-size:clamp(1.8rem,3vw,3rem);font-weight:800;letter-spacing:-1px;margin-bottom:14px;position:relative;}
+.cta-box p{font-size:.9rem;color:var(--t2);line-height:1.8;margin-bottom:32px;position:relative;}
+.cta-btns{display:flex;gap:12px;justify-content:center;flex-wrap:wrap;position:relative;}
+
+/* ── FOOTER ── */
+footer{
+  position:relative;z-index:1;border-top:1px solid var(--brd);
+  padding:30px 60px;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:14px;
+}
+.footer-logo{display:flex;align-items:center;gap:8px;}
+.footer-logo svg{width:22px;height:22px;}
+.footer-brand{font-family:'Rajdhani',sans-serif;font-size:.78rem;font-weight:700;letter-spacing:2px;color:var(--t2);}
+.footer-copy{font-size:.62rem;color:var(--t3);}
+.footer-links{display:flex;gap:20px;list-style:none;}
+.footer-links a{font-size:.62rem;color:var(--t3);text-decoration:none;transition:color .15s;}
+.footer-links a:hover{color:var(--blue);}
+
+/* ── HAMBURGER ── */
+.hamburger{display:none;flex-direction:column;gap:5px;background:none;border:none;cursor:pointer;padding:6px;}
+.hamburger span{display:block;width:20px;height:2px;background:var(--t1);border-radius:2px;transition:all .3s;}
+.hamburger.open span:nth-child(1){transform:translateY(7px) rotate(45deg);}
+.hamburger.open span:nth-child(2){opacity:0;}
+.hamburger.open span:nth-child(3){transform:translateY(-7px) rotate(-45deg);}
+.mobile-menu{display:none;position:fixed;top:62px;left:0;right:0;z-index:99;background:rgba(5,5,7,.97);backdrop-filter:blur(20px);border-bottom:1px solid var(--brd);padding:14px 20px 20px;flex-direction:column;gap:4px;}
+.mobile-menu.open{display:flex;}
+.mobile-menu a{font-size:.88rem;color:var(--t2);text-decoration:none;padding:11px 14px;border-radius:7px;transition:all .15s;}
+.mobile-menu a:hover{color:var(--t1);background:rgba(255,255,255,0.04);}
+.mob-cta{background:var(--blue)!important;color:#fff!important;margin-top:6px;text-align:center;font-weight:600!important;}
+
+/* REVEAL */
+.reveal{opacity:0;transform:translateY(20px);transition:opacity .6s ease,transform .6s ease;}
+.reveal.visible{opacity:1;transform:translateY(0);}
+
+@media(max-width:960px){
+  .nav-links{display:none;}
+  .hamburger{display:flex;}
+  .hero{grid-template-columns:1fr;padding:100px 24px 40px;}
+  .hero-right{display:none;}
+  .stats-bar{grid-template-columns:repeat(2,1fr);}
+  .feat-grid{grid-template-columns:1fr;}
+  .plans{grid-template-columns:1fr;}
+  .section{padding:60px 24px;}
+  footer{flex-direction:column;align-items:flex-start;padding:24px;}
+  .cta-wrap{padding:40px 24px 60px;}
+  nav{padding:0 20px;}
+}
+
+/* ── ORDER MODAL ── */
+#order-overlay{
+  position:fixed;inset:0;z-index:200;
+  background:rgba(0,0,0,0.85);backdrop-filter:blur(8px);
+  display:none;align-items:center;justify-content:center;
+}
+#order-overlay.open{display:flex;}
+.order-modal{
+  background:var(--bg2);border:1px solid var(--bluebrd);
+  border-radius:18px;width:480px;max-width:94vw;
+  position:relative;overflow:hidden;
+  animation:modalIn .3s ease;
+}
+@keyframes modalIn{from{opacity:0;transform:translateY(20px);}to{opacity:1;transform:translateY(0);}}
+.order-top-line{position:absolute;top:0;left:0;right:0;height:2px;background:linear-gradient(90deg,transparent,var(--blue),transparent);}
+.order-head{
+  padding:20px 24px;border-bottom:1px solid var(--brd);
+  display:flex;align-items:center;justify-content:space-between;
+}
+.order-head h2{font-family:'Rajdhani',sans-serif;font-size:.9rem;font-weight:700;letter-spacing:2px;color:var(--t3);}
+.order-close{background:none;border:none;color:var(--t3);cursor:pointer;font-size:1rem;padding:3px 8px;}
+.order-close:hover{color:var(--t1);}
+.order-body{padding:24px;}
+.order-plan-name{
+  font-family:'Rajdhani',sans-serif;
+  font-size:1.4rem;font-weight:800;letter-spacing:1px;
+  color:var(--t1);margin-bottom:4px;
+}
+.order-plan-price{
+  font-family:'JetBrains Mono',monospace;
+  font-size:2.5rem;font-weight:700;color:var(--blue);
+  letter-spacing:-2px;line-height:1;margin-bottom:24px;
+}
+.order-plan-price span{font-size:1rem;color:var(--t2);font-weight:400;}
+.order-label{font-size:.62rem;font-weight:700;letter-spacing:1.5px;color:var(--t3);text-transform:uppercase;margin-bottom:8px;}
+/* Months selector */
+.months-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin-bottom:20px;}
+.month-opt{
+  background:var(--bg3);border:1px solid var(--brd2);border-radius:8px;
+  padding:10px 6px;text-align:center;cursor:pointer;transition:all .15s;
+  position:relative;
+}
+.month-opt:hover{border-color:var(--blue);}
+.month-opt.selected{background:var(--bluedim);border-color:var(--blue);}
+.month-num{font-family:'JetBrains Mono',monospace;font-size:1.1rem;font-weight:700;color:var(--t1);}
+.month-label{font-size:.55rem;color:var(--t3);letter-spacing:1px;margin-top:2px;}
+.month-save{
+  position:absolute;top:-8px;left:50%;transform:translateX(-50%);
+  background:var(--blue);color:#fff;
+  font-size:.5rem;font-weight:700;letter-spacing:1px;
+  padding:2px 7px;border-radius:10px;white-space:nowrap;
+}
+/* Slots selector */
+.slots-row{display:flex;align-items:center;gap:12px;margin-bottom:24px;}
+.slot-btn{
+  width:36px;height:36px;border-radius:8px;border:1px solid var(--brd2);
+  background:var(--bg3);color:var(--t1);font-size:1.1rem;font-weight:700;
+  cursor:pointer;transition:all .15s;display:flex;align-items:center;justify-content:center;
+}
+.slot-btn:hover{border-color:var(--blue);color:var(--blue);}
+.slot-display{
+  font-family:'JetBrains Mono',monospace;
+  font-size:1.4rem;font-weight:700;color:var(--t1);
+  min-width:40px;text-align:center;
+}
+.slot-label{font-size:.72rem;color:var(--t2);}
+/* Total */
+.order-total{
+  background:var(--bg3);border:1px solid var(--brd2);border-radius:10px;
+  padding:14px 16px;margin-bottom:20px;
+  display:flex;align-items:center;justify-content:space-between;
+}
+.ot-label{font-size:.72rem;color:var(--t2);}
+.ot-val{font-family:'JetBrains Mono',monospace;font-size:1.3rem;font-weight:700;color:var(--blue);}
+.order-submit{
+  width:100%;padding:14px;border-radius:9px;border:none;
+  background:var(--blue);color:#fff;
+  font-family:'Rajdhani',sans-serif;font-size:.92rem;font-weight:700;letter-spacing:2px;
+  text-transform:uppercase;cursor:pointer;transition:background .2s;
+}
+.order-submit:hover{background:var(--blue2);}
+.order-note{font-size:.62rem;color:var(--t3);text-align:center;margin-top:10px;line-height:1.6;}
+
+</style>
+</head>
+<body>
+
+<div class="bg-fixed">
+  <div class="bg-grid"></div>
+  <div class="bg-radial"></div>
+</div>
+
+<!-- NAV -->
+<nav>
+  <a href="#" class="nav-logo">
+    <svg viewBox="0 0 200 200" fill="none">
+      <circle cx="100" cy="100" r="90" stroke="white" stroke-width="8"/>
+      <path d="M45 48 L72 48 L100 118 L128 48 L155 48 L100 158 Z" fill="white"/>
+      <path d="M45 48 L62 48 L68 62 L55 82 Z" fill="#050507"/>
+      <path d="M155 48 L138 48 L132 62 L145 82 Z" fill="#050507"/>
+    </svg>
+    <span class="nav-brand">VORTEX</span>
+  </a>
+  <ul class="nav-links">
+    <li><a href="#features">Features</a></li>
+    <li><a href="#compare">Why Us</a></li>
+    <li><a href="#pricing">Pricing</a></li>
+    <li><a href="#faq">FAQ</a></li>
+    <li><a href="YOUR_DISCORD_LINK" target="_blank">Discord</a></li>
+    <li><a href="#pricing" class="nav-cta">Get Started →</a></li>
+  </ul>
+  <button class="hamburger" id="hamburger" onclick="toggleMenu()">
+    <span></span><span></span><span></span>
+  </button>
+</nav>
+
+<!-- MOBILE MENU -->
+<div class="mobile-menu" id="mobile-menu">
+  <a href="#features" onclick="toggleMenu()">Features</a>
+  <a href="#compare" onclick="toggleMenu()">Compare</a>
+  <a href="#pricing" onclick="toggleMenu()">Pricing</a>
+  <a href="#faq" onclick="toggleMenu()">FAQ</a>
+  <a href="YOUR_DISCORD_LINK" target="_blank" onclick="toggleMenu()">Discord</a>
+  <a href="#pricing" class="mob-cta" onclick="toggleMenu()">Get Started →</a>
+</div>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="hero-left">
+    <div class="hero-eyebrow">
+      <div class="ey-dot"></div>
+      FiveM AntiCheat — Active Protection
+    </div>
+    <h1 class="hero-title">
+      Stop Cheaters<br>
+      <span class="accent">Before They Play.</span>
+    </h1>
+    <p class="hero-desc">
+      Vortex combines <strong>35-layer forensic scanning</strong> to catch cheaters before they ruin your server — even if they delete every trace.
+    </p>
+    <div class="hero-btns">
+      <a href="#pricing" class="btn-pri">⚡ Get Protected</a>
+      <a href="YOUR_DISCORD_LINK" target="_blank" class="btn-sec">Join Discord</a>
+    </div>
+
+  </div>
+
+  <div class="hero-right">
+    <div class="float-top">
+      <div class="fl-icon">🚨</div>
+      <div><div class="fl-val">14</div><div class="fl-label">Cheaters Caught Today</div></div>
+    </div>
+
+    <div class="mockup">
+      <div class="mock-bar">
+        <div class="mock-dots"><span class="d-red"></span><span class="d-yellow"></span><span class="d-green"></span></div>
+        <div class="mock-ttl">VORTEX ANTICHEAT — DASHBOARD</div>
+      </div>
+      <div class="mock-body">
+        <div class="mock-stats">
+          <div class="ms"><div class="ms-lbl">Online</div><div class="ms-val b">44</div></div>
+          <div class="ms"><div class="ms-lbl">Peak</div><div class="ms-val">87</div></div>
+          <div class="ms"><div class="ms-lbl">Bans</div><div class="ms-val r">350</div></div>
+          <div class="ms"><div class="ms-lbl">Alerts</div><div class="ms-val r">3</div></div>
+        </div>
+        <div class="mock-graph">
+          <div class="mg-lbl">Player Activity</div>
+          <canvas id="heroGraph" height="50"></canvas>
+        </div>
+        <div class="mock-table">
+          <div class="mr mh"><span>Player</span><span>Cheat</span><span>Status</span><span>Time</span></div>
+          <div class="mr"><span style="color:#eeeef4;font-weight:600">xH4CK3R</span><span style="color:#f87171">Keyser</span><span><i class="mb-r">BANNED</i></span><span style="color:#3a3a52">02:14</span></div>
+          <div class="mr"><span style="color:#eeeef4;font-weight:600">ProPlayer</span><span style="color:#4ade80">—</span><span><i class="mb-g">CLEAN</i></span><span style="color:#3a3a52">02:10</span></div>
+          <div class="mr"><span style="color:#eeeef4;font-weight:600">sk1ddY</span><span style="color:#f87171">2Take1</span><span><i class="mb-r">BANNED</i></span><span style="color:#3a3a52">01:58</span></div>
+          <div class="mr"><span style="color:#eeeef4;font-weight:600">N0_SK1LL</span><span style="color:#f87171">Quancy</span><span><i class="mb-r">BANNED</i></span><span style="color:#3a3a52">01:44</span></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="float-bot">
+      <div class="fl-icon">🧬</div>
+      <div><div class="fl-val">35+</div><div class="fl-label">Scan Layers Active</div></div>
+    </div>
+  </div>
+</section>
+
+<!-- STATS BAR -->
+<div class="stats-bar">
+  <div class="sb-item reveal"><div class="sb-val">35<em>+</em></div><div class="sb-lbl">Scan Layers</div></div>
+  <div class="sb-item reveal"><div class="sb-val">50<em>+</em></div><div class="sb-lbl">Cheats Detected</div></div>
+  <div class="sb-item reveal"><div class="sb-val">2<em>s</em></div><div class="sb-lbl">Live Detection</div></div>
+  <div class="sb-item reveal"><div class="sb-val">0<em>ms</em></div><div class="sb-lbl">Server Impact</div></div>
+</div>
+
+<!-- FEATURES -->
+<div class="section" id="features">
+  <div class="sec-tag">Why Vortex</div>
+  <h2 class="sec-h">Catches what others miss.</h2>
+  <p class="sec-p">Every detection method built and tested against real FiveM cheats — not adapted from generic tools.</p>
+  <div class="feat-grid">
+    <div class="feat-card reveal"><div class="f-num">01</div><div class="f-icon">🧬</div><div class="f-title">Hash Detection</div><div class="f-desc">Reads the actual file content, not just the name. A cheat renamed to "chrome.exe" still gets caught — the fingerprint never lies.</div></div>
+    <div class="feat-card reveal"><div class="f-num">02</div><div class="f-icon">🗑️</div><div class="f-title">Deleted File Forensics</div><div class="f-desc">Reads Recycle Bin metadata to reveal the original cheat path and exact deletion timestamp — even after the cheater clears everything.</div></div>
+    <div class="feat-card reveal"><div class="f-num">03</div><div class="f-icon">📋</div><div class="f-title">Execution History</div><div class="f-desc">BAM, Prefetch, MUICache, UserAssist, ShellBags — Windows records every program ever run. We read all of them.</div></div>
+    <div class="feat-card reveal"><div class="f-num">04</div><div class="f-icon">👻</div><div class="f-title">Live Detection</div><div class="f-desc">Checks for active cheat processes every 2 seconds. Fires an instant Discord alert with a full screenshot the moment anything is detected.</div></div>
+    <div class="feat-card reveal"><div class="f-num">05</div><div class="f-icon">💉</div><div class="f-title">Memory Injection Detection</div><div class="f-desc">Scans what's actually loaded inside FiveM's process. Detects injected DLLs and ReadProcessMemory cheats with no visible name.</div></div>
+    <div class="feat-card reveal"><div class="f-num">06</div><div class="f-icon">🌐</div><div class="f-title">Network & DNS Analysis</div><div class="f-desc">Checks DNS cache for connections to 20+ known cheat domains including KeyAuth — the authentication API used in most paid cheats.</div></div>
+  </div>
+</div>
+
+<!-- COMPARE -->
+<div class="section" id="compare">
+  <div class="sec-tag">Compare</div>
+  <h2 class="sec-h">Vortex vs standard scanners.</h2>
+  <p class="sec-p">Most scanners stop at process names. Vortex goes much deeper.</p>
+  <div class="compare-wrap reveal">
+    <table class="cmp-table">
+      <thead>
+        <tr>
+          <th>Feature</th>
+          <th class="hl" style="color:var(--blue)">Vortex</th>
+          <th>Standard Scanner</th>
+          <th>Basic Scanner</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr><td>Deep Forensic Scanner</td><td class="hl-col"><span class="ck">✓</span></td><td><span class="ck">✓</span></td><td><span class="cx">—</span></td></tr>
+        <tr><td>Live Detection System</td><td class="hl-col"><span class="ck">✓</span></td><td><span class="cx">—</span></td><td><span class="cx">—</span></td></tr>
+        <tr><td>Instant Screenshot on Detection</td><td class="hl-col"><span class="ck">✓</span></td><td><span class="cx">—</span></td><td><span class="cx">—</span></td></tr>
+        <tr><td>Hash Detection (renamed files)</td><td class="hl-col"><span class="ck">✓</span></td><td><span class="cx">—</span></td><td><span class="cx">—</span></td></tr>
+        <tr><td>Custom Hash Manager</td><td class="hl-col"><span class="ck">✓</span></td><td><span class="cx">—</span></td><td><span class="cx">—</span></td></tr>
+        <tr><td>Recycle Bin Forensics</td><td class="hl-col"><span class="ck">✓</span></td><td><span class="ck">✓</span></td><td><span class="cx">—</span></td></tr>
+        <tr><td>BAM + MUICache + UserAssist</td><td class="hl-col"><span class="ck">✓</span></td><td><span class="cx">—</span></td><td><span class="cx">—</span></td></tr>
+        <tr><td>DNS & Network Analysis</td><td class="hl-col"><span class="ck">✓</span></td><td><span class="cx">—</span></td><td><span class="cx">—</span></td></tr>
+        <tr><td>Memory Injection Detection</td><td class="hl-col"><span class="ck">✓</span></td><td><span class="cx">—</span></td><td><span class="cx">—</span></td></tr>
+        <tr><td>Web Dashboard</td><td class="hl-col"><span class="ck">✓</span></td><td><span class="cx">—</span></td><td><span class="cx">—</span></td></tr>
+      </tbody>
+    </table>
+  </div>
+</div>
+
+<!-- PRICING -->
+<div class="section" id="pricing">
+  <div class="sec-tag">Pricing</div>
+  <h2 class="sec-h">Simple, transparent pricing.</h2>
+  <p class="sec-p">No hidden fees. Cancel anytime. Every plan includes Discord webhook integration.</p>
+  <div class="plans">
+    <div class="plan reveal">
+      <div class="plan-line"></div>
+      <div class="plan-tier">Basic</div>
+      <div class="plan-price"><span class="plan-cur">$</span><span class="plan-amt">10</span></div>
+      <div class="plan-per">/ month</div>
+      <div class="plan-sep"></div>
+      <ul class="plan-list">
+        <li><span class="ico-y">✓</span>Deep Forensic Scanner</li>
+        <li><span class="ico-y">✓</span>35+ Scan Layers</li>
+        <li><span class="ico-y">✓</span>Discord Webhook</li>
+        <li><span class="ico-y">✓</span>Hash Detection</li>
+        <li><span class="ico-y">✓</span>BAM + Prefetch + MUICache</li>
+        <li><span class="ico-n">—</span>Live Monitor</li>
+        <li><span class="ico-y">✓</span>Dashboard Access</li>
+      </ul>
+      <button class="plan-btn pb-outline" onclick="openOrder(this)">Get Started</button>
+    </div>
+    <div class="plan pop reveal">
+      <div class="plan-line"></div>
+      <div class="plan-pill">Most Popular</div>
+      <div class="plan-tier">Pro</div>
+      <div class="plan-price"><span class="plan-cur">$</span><span class="plan-amt">40</span></div>
+      <div class="plan-per">/ month</div>
+      <div class="plan-sep"></div>
+      <ul class="plan-list">
+        <li><span class="ico-y">✓</span>Everything in Basic</li>
+        <li><span class="ico-y">✓</span>Instant Screenshot Alert</li>
+        <li><span class="ico-y">✓</span>Memory Injection Detection</li>
+        <li><span class="ico-y">✓</span>50+ Cheat Signatures</li>
+        <li><span class="ico-y">✓</span>Dashboard Access</li>
+        <li><span class="ico-n">—</span>Custom Branding</li>
+      </ul>
+      <button class="plan-btn pb-solid" onclick="openOrder(this)">Get Started</button>
+    </div>
+    <div class="plan reveal">
+      <div class="plan-line"></div>
+      <div class="plan-tier">Elite</div>
+      <div class="plan-price"><span class="plan-cur">$</span><span class="plan-amt">60</span></div>
+      <div class="plan-per">/ month</div>
+      <div class="plan-sep"></div>
+      <ul class="plan-list">
+        <li><span class="ico-y">✓</span>Everything in Pro</li>
+        <li><span class="ico-y">✓</span>Full Web Dashboard</li>
+        <li><span class="ico-y">✓</span>Team Accounts</li>
+        <li><span class="ico-y">✓</span>Ban List Management</li>
+        <li><span class="ico-y">✓</span>Custom Hash Manager</li>
+        <li><span class="ico-y">✓</span>Custom Branding</li>
+        <li><span class="ico-y">✓</span>Priority Support 24/7</li>
+      </ul>
+      <button class="plan-btn pb-outline" onclick="openOrder(this)">Get Started</button>
+    </div>
+  </div>
+</div>
+
+<!-- FAQ -->
+<div class="section" id="faq">
+  <div class="sec-tag">FAQ</div>
+  <h2 class="sec-h">Common questions.</h2>
+  <div class="faq-list">
+    <div class="faq-item"><button class="faq-q" onclick="toggleFaq(this)">Does the scanner need to be installed?<span class="faq-icon">+</span></button><div class="faq-body">No installation required. The player runs a single .exe file once. It completes automatically in under 3 minutes and sends results to your Discord.</div></div>
+    <div class="faq-item"><button class="faq-q" onclick="toggleFaq(this)">What information does the monitor collect?<span class="faq-icon">+</span></button><div class="faq-body">Steam profile, Discord username, IP address, PC hostname, running processes, and a screenshot only when a cheat is actively detected. It does not collect passwords, browser history, personal files, or keystrokes.</div></div>
+    <div class="faq-item"><button class="faq-q" onclick="toggleFaq(this)">Can cheaters bypass Vortex?<span class="faq-icon">+</span></button><div class="faq-body">Vortex uses 35+ independent detection methods. Even if a cheater deletes everything, execution traces remain in BAM, Prefetch, MUICache and Recycle Bin metadata. Hash detection catches renamed files. No scanner is 100% but Vortex makes evasion extremely difficult.</div></div>
+    <div class="faq-item"><button class="faq-q" onclick="toggleFaq(this)">How do I receive scan results?<span class="faq-icon">+</span></button><div class="faq-body">Results are sent instantly to your Discord webhook. Elite plan includes a full web dashboard with scan history, live alerts, ban list and team management.</div></div>
+    <div class="faq-item"><button class="faq-q" onclick="toggleFaq(this)">Do you offer refunds?<span class="faq-icon">+</span></button><div class="faq-body">Due to the digital nature of the product, refunds are not offered after delivery. Contact us on Discord before purchasing if you have any questions.</div></div>
+  </div>
+</div>
+
+<!-- CTA -->
+<div class="cta-wrap">
+  <div class="cta-box">
+    <h2>Ready to protect your server?</h2>
+    <p>Join 500+ FiveM servers already using Vortex AntiCheat.<br>Setup takes less than 5 minutes.</p>
+    <div class="cta-btns">
+      <a href="YOUR_DISCORD_LINK" target="_blank" class="btn-pri">⚡ Get Started Now</a>
+      <a href="#features" class="btn-sec">See Features</a>
+    </div>
+  </div>
+</div>
+
+<!-- FOOTER -->
+<footer>
+  <div class="footer-logo">
+    <svg viewBox="0 0 200 200" fill="none">
+      <circle cx="100" cy="100" r="90" stroke="#4f8ef7" stroke-width="8"/>
+      <path d="M45 48 L72 48 L100 118 L128 48 L155 48 L100 158 Z" fill="white"/>
+      <path d="M45 48 L62 48 L68 62 L55 82 Z" fill="#050507"/>
+      <path d="M155 48 L138 48 L132 62 L145 82 Z" fill="#050507"/>
+    </svg>
+    <span class="footer-brand">VORTEX</span>
+  </div>
+  <span class="footer-copy">© 2026 Vortex AntiCheat. All rights reserved.</span>
+  <ul class="footer-links">
+    <li><a href="#features">Features</a></li>
+    <li><a href="#pricing">Pricing</a></li>
+    <li><a href="#faq">FAQ</a></li>
+    <li><a href="YOUR_DISCORD_LINK" target="_blank">Discord</a></li>
+  </ul>
+</footer>
+
+<script>
+// Graph
+window.addEventListener('load',()=>{
+  const c=document.getElementById('heroGraph');
+  if(!c)return;
+  const ctx=c.getContext('2d');
+  c.width=(c.offsetWidth||400)*2;c.height=100;
+  ctx.scale(2,1);
+  const W=c.offsetWidth/2||200,H=50;
+  const pts=[];
+  for(let i=0;i<70;i++) pts.push(12+Math.sin(i/7)*12+Math.sin(i/2.5)*5+Math.random()*6);
+  const mx=Math.max(...pts);
+  const g=ctx.createLinearGradient(0,0,0,H);
+  g.addColorStop(0,'rgba(79,142,247,0.35)');g.addColorStop(1,'rgba(79,142,247,0.02)');
+  ctx.beginPath();ctx.moveTo(0,H);
+  pts.forEach((v,i)=>{const x=(i/(pts.length-1))*W,y=H-(v/mx)*(H-4);i===0?ctx.lineTo(x,y):ctx.lineTo(x,y);});
+  ctx.lineTo(W,H);ctx.closePath();ctx.fillStyle=g;ctx.fill();
+  ctx.beginPath();
+  pts.forEach((v,i)=>{const x=(i/(pts.length-1))*W,y=H-(v/mx)*(H-4);i===0?ctx.moveTo(x,y):ctx.lineTo(x,y);});
+  ctx.strokeStyle='rgba(79,142,247,0.9)';ctx.lineWidth=1.5;ctx.stroke();
+});
+
+// FAQ
+function toggleFaq(btn){
+  const item=btn.closest('.faq-item');
+  const open=item.classList.contains('open');
+  document.querySelectorAll('.faq-item').forEach(i=>i.classList.remove('open'));
+  if(!open)item.classList.add('open');
+}
+
+// Hamburger
+function toggleMenu(){
+  document.getElementById('hamburger').classList.toggle('open');
+  document.getElementById('mobile-menu').classList.toggle('open');
+}
+document.addEventListener('click',e=>{
+  const m=document.getElementById('mobile-menu');
+  const b=document.getElementById('hamburger');
+  if(m.classList.contains('open')&&!m.contains(e.target)&&!b.contains(e.target)){
+    b.classList.remove('open');m.classList.remove('open');
+  }
+});
+
+
+// ── ORDER SYSTEM ──
+let orderPrice = 10;
+let orderMonths = 1;
+let orderDiscount = 0;
+let orderSlots = 1;
+const SLOT_PRICE = 5; // extra per slot
+
+function openOrder(btn){
+  const plan = btn.closest('.plan');
+  const tier = plan.querySelector('.plan-tier').textContent.trim();
+  const priceEl = plan.querySelector('.plan-amt');
+  const price = parseInt(priceEl.textContent);
+
+  orderPrice = price;
+  orderMonths = 1;
+  orderDiscount = 0;
+  currentPlanName = tier + ' Plan';
+
+  // Set default slots per plan
+  if(tier === 'Pro'){
+    orderSlots = 5;
+  } else if(tier === 'Elite'){
+    orderSlots = 10; // default for 3 months
+  } else {
+    orderSlots = 1;
+  }
+  document.getElementById('slot-display').textContent = orderSlots;
+
+  document.getElementById('order-plan-name').textContent = currentPlanName;
+  document.getElementById('order-plan-price').innerHTML = '$' + price + ' <span>/ month</span>';
+
+  // Show/hide month options based on plan
+  const prices = PLAN_PRICES[currentPlanName] || PLAN_PRICES['Basic Plan'];
+  document.querySelectorAll('.month-opt').forEach(m => {
+    const mo = parseInt(m.getAttribute('data-months'));
+    if(prices[mo] === 'hide'){
+      m.style.display = 'none';
+    } else {
+      m.style.display = '';
+      // Update badge price
+      const badge = m.querySelector('.month-save');
+      if(badge && mo > 1 && prices[mo] !== 'calc') badge.textContent = '$' + prices[mo]; else if(badge && prices[mo] === 'calc') badge.style.display='none';
+    }
+    m.classList.remove('selected');
+  });
+
+  // Pro: default select 3 months, others default 1
+  if(tier === 'Pro'){
+    const m3 = document.querySelector('.month-opt[data-months="3"]');
+    if(m3){ m3.classList.add('selected'); }
+    orderMonths = 3;
+  } else {
+    const m1 = document.querySelector('.month-opt[data-months="1"]');
+    if(m1){ m1.classList.add('selected'); }
+    orderMonths = 1;
+  }
+
+  updateTotal();
+  document.getElementById('order-overlay').classList.add('open');
+}
+
+function closeOrder(){
+  document.getElementById('order-overlay').classList.remove('open');
+}
+
+// Fixed prices per duration (regardless of plan)
+const PLAN_PRICES = {
+  'Basic Plan':  {1: null, 3: 25,    6: 39.99, 12: 65},
+  'Pro Plan':    {1: 'hide', 3: 45,    6: 69.99, 12: 'hide'},
+  'Elite Plan':  {1: 'hide', 3: 99.99, 6: 129.99, 12: 'hide'},
+};
+let currentPlanName = 'Basic Plan';
+
+function selectMonth(months){
+  orderMonths = months;
+  document.querySelectorAll('.month-opt').forEach(m => m.classList.remove('selected'));
+  document.querySelector('.month-opt[data-months="'+months+'"]').classList.add('selected');
+  // Elite: auto-set slots based on month
+  if(currentPlanName === 'Elite Plan'){
+    orderSlots = months === 3 ? 10 : 20;
+    document.getElementById('slot-display').textContent = orderSlots;
+  }
+  updateTotal();
+}
+
+function changeSlots(delta){
+  orderSlots = Math.max(1, Math.min(10, orderSlots + delta));
+  document.getElementById('slot-display').textContent = orderSlots;
+  const includedSlots = currentPlanName === 'Pro Plan' ? 5 : 
+                      currentPlanName === 'Elite Plan' ? (orderMonths === 3 ? 10 : 20) : 1;
+  const extraSlots = Math.max(0, orderSlots - includedSlots);
+  const extra = extraSlots * SLOT_PRICE;
+  if(orderSlots <= includedSlots){
+    document.getElementById('slot-price-label').textContent = 'included';
+  } else {
+    document.getElementById('slot-price-label').textContent = '+$' + extra + '/mo extra';
+  }
+  updateTotal();
+}
+
+function updateTotal(){
+  const prices = PLAN_PRICES[currentPlanName] || PLAN_PRICES['Basic Plan'];
+  const includedSlots = currentPlanName === 'Pro Plan' ? 5 : 
+                      currentPlanName === 'Elite Plan' ? (orderMonths === 3 ? 10 : 20) : 1;
+  const extraSlots = Math.max(0, orderSlots - includedSlots);
+  const slotExtra = extraSlots * SLOT_PRICE; // flat $5 per extra slot, NOT multiplied by months
+  let base;
+  if(prices[orderMonths] && prices[orderMonths] !== null && prices[orderMonths] !== 'hide' && prices[orderMonths] !== 'calc'){
+    base = prices[orderMonths] + slotExtra;
+  } else {
+    base = orderPrice * orderMonths + (orderSlots - 1) * SLOT_PRICE;
+  }
+  const total = Math.round(base * 100) / 100;
+  document.getElementById('order-total').textContent = '$' + total.toFixed(2).replace('.00','');
+}
+
+function submitOrder(){
+  window.open('YOUR_DISCORD_LINK', '_blank');
+  closeOrder();
+}
+
+// Close on outside click
+document.addEventListener('DOMContentLoaded',function(){ const ov=document.getElementById('order-overlay'); if(ov) ov.addEventListener('click', function(e){
+  if(e.target === this) closeOrder();}); });
+
+// Reveal
+const obs=new IntersectionObserver(entries=>{
+  entries.forEach(e=>{if(e.isIntersecting){e.target.classList.add('visible');obs.unobserve(e.target);}});
+},{threshold:0.1});
+document.querySelectorAll('.reveal').forEach((el,i)=>{
+  el.style.transitionDelay=(i%4)*0.07+'s';
+  obs.observe(el);
+});
+</script>
+
+<!-- ORDER MODAL -->
+<div id="order-overlay">
+  <div class="order-modal">
+    <div class="order-top-line"></div>
+    <div class="order-head">
+      <h2>COMPLETE YOUR ORDER</h2>
+      <button class="order-close" onclick="closeOrder()">✕</button>
+    </div>
+    <div class="order-body">
+      <div class="order-plan-name" id="order-plan-name">Pro</div>
+      <div class="order-plan-price" id="order-plan-price">$40 <span>/ month</span></div>
+
+      <div class="order-label">How many months?</div>
+      <div class="months-grid">
+        <div class="month-opt selected" onclick="selectMonth(1)" data-months="1">
+          <div class="month-num">1</div>
+          <div class="month-label">Month</div>
+        </div>
+        <div class="month-opt" onclick="selectMonth(3)" data-months="3">
+          <div class="month-save">$25</div>
+          <div class="month-num">3</div>
+          <div class="month-label">Months</div>
+        </div>
+        <div class="month-opt" onclick="selectMonth(6)" data-months="6">
+          <div class="month-save">$39.99</div>
+          <div class="month-num">6</div>
+          <div class="month-label">Months</div>
+        </div>
+        <div class="month-opt" onclick="selectMonth(12)" data-months="12">
+          <div class="month-save">$65</div>
+          <div class="month-num">12</div>
+          <div class="month-label">Months</div>
+        </div>
+      </div>
+
+      <div class="order-label">How many server slots?</div>
+      <div class="slots-row">
+        <button class="slot-btn" onclick="changeSlots(-1)">−</button>
+        <div class="slot-display" id="slot-display">1</div>
+        <div class="slot-label">slot(s) — <span id="slot-price-label">$0 extra</span></div>
+        <button class="slot-btn" onclick="changeSlots(1)">+</button>
+      </div>
+
+      <div class="order-total">
+        <div class="ot-label">Total</div>
+        <div class="ot-val" id="order-total">$0</div>
+      </div>
+
+      <button class="order-submit" onclick="submitOrder()">⚡ Continue to Discord</button>
+      <div class="order-note">After clicking, you'll be directed to our Discord to complete the purchase.<br>Payment is handled by our team.</div>
+    </div>
+  </div>
+</div>
+
+</body>
+</html>
