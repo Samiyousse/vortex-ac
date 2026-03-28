@@ -304,7 +304,8 @@ body{font-family:'Inter',sans-serif;background:var(--bg0);color:var(--t1);}
             <div class="gen-form">
               <div class="field"><label>Client Name</label><input id="g-name" placeholder="Server name..."></div>
               <div class="field"><label>Plan</label><select id="g-plan"><option value="Basic">Basic</option><option value="Pro">Pro</option><option value="Elite">Elite</option></select></div>
-              <div class="field"><label>Duration</label><select id="g-days"><option value="3">3 Days</option><option value="7">7 Days</option><option value="14">14 Days</option><option value="30">1 Month</option><option value="90">3 Months</option><option value="180">6 Months</option><option value="365">1 Year</option><option value="9999">Lifetime</option></select></div>
+              <div class="field"><label>Duration</label><select id="g-days"><option value="0.003">5 Minutes (TEST)</option>
+              <option value="3">3 Days</option><option value="7">7 Days</option><option value="14">14 Days</option><option value="30">1 Month</option><option value="90">3 Months</option><option value="180">6 Months</option><option value="365">1 Year</option><option value="9999">Lifetime</option></select></div>
               <div class="field"><label>&nbsp;</label><button class="btn btn-solid" style="width:100%;padding:7px" onclick="genKey()">Generate</button></div>
             </div>
             <div class="key-display" id="key-display">
@@ -387,7 +388,8 @@ body{font-family:'Inter',sans-serif;background:var(--bg0);color:var(--t1);}
     <div class="mhead"><h2>GENERATE LICENSE KEY</h2><button class="mclose" onclick="closeModal('modal-gen')">✕</button></div>
     <div class="mbody">
       <div class="fgrid"><div class="field"><label>Client Name</label><input id="mg-name" placeholder="Server name"></div><div class="field"><label>Plan</label><select id="mg-plan"><option value="Basic">Basic</option><option value="Pro">Pro</option><option value="Elite">Elite</option></select></div></div>
-      <div class="fgrid"><div class="field"><label>Duration</label><select id="mg-days"><option value="3">3 Days</option><option value="7">7 Days</option><option value="14">14 Days</option><option value="30">1 Month</option><option value="90">3 Months</option><option value="180">6 Months</option><option value="365">1 Year</option><option value="9999">Lifetime</option></select></div><div class="field"><label>Amount Paid ($)</label><input id="mg-amount" placeholder="0.00" type="number"></div></div>
+      <div class="fgrid"><div class="field"><label>Duration</label><select id="mg-days"><option value="0.003">5 Minutes (TEST)</option>
+              <option value="3">3 Days</option><option value="7">7 Days</option><option value="14">14 Days</option><option value="30">1 Month</option><option value="90">3 Months</option><option value="180">6 Months</option><option value="365">1 Year</option><option value="9999">Lifetime</option></select></div><div class="field"><label>Amount Paid ($)</label><input id="mg-amount" placeholder="0.00" type="number"></div></div>
       <div class="factions"><button class="btn btn-ghost" onclick="closeModal('modal-gen')">Cancel</button><button class="btn btn-solid" onclick="genKeyModal()">⚡ Generate</button></div>
     </div>
   </div>
