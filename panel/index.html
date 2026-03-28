@@ -497,7 +497,15 @@ function generateKey(){
 function getExpiry(days){
   if(days == 9999) return 'Lifetime';
   const d = new Date();
-  d.setDate(d.getDate() + parseInt(days));
+  const daysFloat = parseFloat(days);
+  if(daysFloat < 1){
+    // Add minutes
+    const minutes = Math.round(daysFloat * 24 * 60);
+    d.setMinutes(d.getMinutes() + minutes);
+    // Return full datetime for minute-level expiry
+    return d.toISOString().slice(0,19).replace('T',' ');
+  }
+  d.setDate(d.getDate() + Math.floor(daysFloat));
   return d.toISOString().slice(0,10);
 }
 
