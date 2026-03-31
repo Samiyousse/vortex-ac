@@ -3,30 +3,25 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Maverick AntiCheat — Dashboard</title>
+<title>Vortex — Control Panel</title>
 <link href="https://fonts.googleapis.com/css2?family=Rajdhani:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
 <style>
-:root {
-  --bg0:#030305;--bg1:#08080d;--bg2:#0e0e15;--bg3:#13131c;--bg4:#1a1a26;
-  --red:#e02020;--red2:#b91c1c;--red3:#7f1d1d;--redglow:rgba(224,32,32,0.12);
-  --redbrd:rgba(224,32,32,0.2);--reddim:rgba(224,32,32,0.08);
-  --silver:#9ca3af;--silver2:#6b7280;
+:root{
+  --bg0:#050507;--bg1:#08080d;--bg2:#0d0d14;--bg3:#12121a;--bg4:#181820;
+  --blue:#4f8ef7;--blue2:#2563eb;--bluedim:rgba(79,142,247,0.08);--bluebrd:rgba(79,142,247,0.2);
   --brd:rgba(255,255,255,0.05);--brd2:rgba(255,255,255,0.08);
-  --t1:#f0f0f4;--t2:#8888a0;--t3:#44445a;--t4:#252535;
+  --t1:#eeeef4;--t2:#787894;--t3:#3a3a52;--t4:#22222e;
+  --green:#22c55e;--red:#e02020;--yellow:#eab308;
   --sidebar:220px;
 }
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
 html,body{height:100%;overflow:hidden;}
 body{font-family:'Inter',sans-serif;background:var(--bg0);color:var(--t1);}
-
-/* ── SCROLLBAR ── */
-::-webkit-scrollbar{width:4px;height:4px;}
+::-webkit-scrollbar{width:3px;}
 ::-webkit-scrollbar-track{background:var(--bg1);}
-::-webkit-scrollbar-thumb{background:var(--red3);border-radius:2px;}
+::-webkit-scrollbar-thumb{background:var(--blue2);border-radius:2px;}
 
-/* ══════════════════════════════════
-   LOGIN
-══════════════════════════════════ */
+/* ══ LOGIN ══ */
 #login{
   position:fixed;inset:0;z-index:200;
   background:var(--bg0);
@@ -34,681 +29,206 @@ body{font-family:'Inter',sans-serif;background:var(--bg0);color:var(--t1);}
 }
 .login-bg{
   position:absolute;inset:0;
-  background:radial-gradient(ellipse 70% 50% at 50% 50%,rgba(224,32,32,0.06),transparent 70%);
+  background:radial-gradient(ellipse 60% 50% at 50% 50%,rgba(79,142,247,0.06),transparent 70%);
 }
-.login-card{
+.lcard{
   position:relative;z-index:1;
-  width:380px;
-  background:var(--bg2);
-  border:1px solid var(--redbrd);
-  border-radius:16px;
-  padding:40px 36px;
-  box-shadow:0 0 60px rgba(224,32,32,0.08);
+  width:360px;
+  background:var(--bg2);border:1px solid var(--bluebrd);
+  border-radius:16px;padding:36px 32px;
+  box-shadow:0 0 60px rgba(79,142,247,0.06);
+  animation:fadeUp .6s ease both;
 }
-.login-logo{
-  display:flex;flex-direction:column;align-items:center;
-  margin-bottom:32px;
-}
-.login-logo svg{width:64px;height:64px;margin-bottom:12px;}
-.login-brand{
-  font-family:'Rajdhani',sans-serif;
-  font-size:1.4rem;font-weight:700;letter-spacing:4px;
-  color:var(--t1);text-transform:uppercase;
-}
-.login-sub{font-size:.65rem;color:var(--t3);letter-spacing:2px;margin-top:2px;}
-.login-divider{
-  display:flex;align-items:center;gap:10px;
-  font-size:.58rem;letter-spacing:2px;color:var(--t3);
-  margin-bottom:24px;
-}
-.login-divider span{flex:1;height:1px;background:var(--brd2);}
-.login-field{margin-bottom:14px;}
-.login-field label{
-  display:block;font-size:.6rem;font-weight:600;letter-spacing:1.5px;
-  color:var(--t3);text-transform:uppercase;margin-bottom:6px;
-}
-.login-wrap{position:relative;display:flex;align-items:center;}
-.login-icon{position:absolute;left:12px;font-size:.85rem;}
-.login-wrap input{
+@keyframes fadeUp{from{opacity:0;transform:translateY(20px);}to{opacity:1;transform:translateY(0);}}
+.llogo{text-align:center;margin-bottom:28px;}
+.llogo svg{width:40px;height:40px;}
+.lbrand{font-family:'Rajdhani',sans-serif;font-size:1.1rem;font-weight:700;letter-spacing:3px;margin-top:8px;}
+.lsub{font-size:.6rem;color:var(--t3);letter-spacing:2px;margin-top:2px;}
+.ldiv{display:flex;align-items:center;gap:10px;font-size:.55rem;letter-spacing:2px;color:var(--t3);margin-bottom:20px;}
+.ldiv span{flex:1;height:1px;background:var(--brd2);}
+.lfield{margin-bottom:12px;}
+.lfield label{display:block;font-size:.58rem;letter-spacing:1.5px;color:var(--t3);text-transform:uppercase;margin-bottom:5px;}
+.lwrap{position:relative;display:flex;align-items:center;}
+.lic{position:absolute;left:10px;font-size:.8rem;}
+.lwrap input{
   width:100%;background:var(--bg3);border:1px solid var(--brd2);
-  border-radius:8px;padding:10px 12px 10px 36px;
-  color:var(--t1);font-family:'Inter',sans-serif;font-size:.82rem;
+  border-radius:7px;padding:9px 10px 9px 32px;
+  color:var(--t1);font-family:'Inter',sans-serif;font-size:.8rem;
   outline:none;transition:border-color .2s;
 }
-.login-wrap input:focus{border-color:var(--red);}
-.login-btn{
-  width:100%;margin-top:8px;padding:12px;
-  background:linear-gradient(135deg,var(--red),var(--red2));
-  border:none;border-radius:8px;
-  font-family:'Rajdhani',sans-serif;
-  font-size:.9rem;font-weight:700;letter-spacing:2px;
-  color:#fff;cursor:pointer;text-transform:uppercase;
-  transition:opacity .2s;
-}
-.login-btn:hover{opacity:.9;}
-.login-btn:disabled{opacity:.5;cursor:not-allowed;}
-.login-err{
-  color:var(--red);font-size:.7rem;text-align:center;
-  margin-top:10px;display:none;
-}
-.login-dots{display:flex;justify-content:center;gap:8px;margin-top:14px;}
-.dot{
-  width:7px;height:7px;border-radius:50%;
-  background:var(--brd2);border:1px solid var(--t3);
+.lwrap input:focus{border-color:var(--blue);}
+.lbtn{
+  width:100%;margin-top:6px;padding:11px;
+  background:var(--blue);border:none;border-radius:7px;
+  font-family:'Rajdhani',sans-serif;font-size:.88rem;font-weight:700;
+  letter-spacing:2px;color:#fff;cursor:pointer;text-transform:uppercase;
   transition:background .2s;
 }
-.dot.used{background:var(--red);}
-.login-footer{
-  text-align:center;font-size:.58rem;color:var(--t3);
-  margin-top:20px;letter-spacing:1px;
-}
-/* spam */
-#spam-overlay{
-  position:fixed;inset:0;z-index:300;
-  background:rgba(0,0,0,.92);
-  display:none;align-items:center;justify-content:center;
-}
-#spam-overlay.show{display:flex;}
-.spam-box{
-  background:var(--bg2);border:1px solid var(--red3);
-  border-radius:14px;padding:40px;text-align:center;
-}
-.spam-box h2{font-family:'Rajdhani',sans-serif;font-size:1.2rem;letter-spacing:3px;color:var(--red);margin:12px 0 8px;}
-.spam-box p{font-size:.75rem;color:var(--t2);line-height:1.7;}
-.spam-count{font-size:2rem;font-weight:700;color:var(--red);margin-top:14px;font-family:'JetBrains Mono',monospace;}
+.lbtn:hover{background:var(--blue2);}
+.lerr{color:var(--red);font-size:.68rem;text-align:center;margin-top:8px;display:none;}
+.lfooter{text-align:center;font-size:.55rem;color:var(--t3);margin-top:16px;letter-spacing:1px;}
 
-/* ══════════════════════════════════
-   APP LAYOUT
-══════════════════════════════════ */
+/* ══ APP ══ */
 #app{display:none;height:100vh;overflow:hidden;}
 
-/* ── SIDEBAR ── */
+/* SIDEBAR */
 .sidebar{
-  position:fixed;left:0;top:0;bottom:0;
-  width:var(--sidebar);
-  background:var(--bg1);
-  border-right:1px solid var(--brd);
-  display:flex;flex-direction:column;
-  z-index:10;
+  position:fixed;left:0;top:0;bottom:0;width:var(--sidebar);
+  background:var(--bg1);border-right:1px solid var(--brd);
+  display:flex;flex-direction:column;z-index:10;
 }
-.sb-header{
-  padding:18px 16px 14px;
-  border-bottom:1px solid var(--brd);
-  display:flex;align-items:center;gap:10px;
-  cursor:pointer;
-}
-.sb-header svg{width:32px;height:32px;flex-shrink:0;}
-.sb-title{
-  font-family:'Rajdhani',sans-serif;
-  font-size:.9rem;font-weight:700;letter-spacing:3px;
-  color:var(--t1);text-transform:uppercase;
-}
-.sb-sub{font-size:.55rem;color:var(--t3);letter-spacing:1.5px;}
-
-.sb-user{
-  padding:10px 14px;
-  border-bottom:1px solid var(--brd);
-}
-.sb-role{font-size:.58rem;color:var(--red);letter-spacing:1.5px;text-transform:uppercase;}.sb-role.dev{color:#a855f7;}.sb-role.owner{color:#f97316;}.sb-role.admin{color:var(--red);}
-.sb-uname{font-size:.8rem;font-weight:600;margin-top:1px;}
-
-.sb-nav{flex:1;padding:10px 8px;overflow-y:auto;}
-.sb-section{
-  font-size:.52rem;font-weight:700;letter-spacing:2.5px;
-  color:var(--t3);text-transform:uppercase;
-  padding:8px 8px 4px;
-}
-.nav-item{
+.sb-head{
+  padding:16px 14px;border-bottom:1px solid var(--brd);
   display:flex;align-items:center;gap:8px;
-  padding:9px 10px;border-radius:7px;
-  cursor:pointer;font-size:.76rem;color:var(--t2);
-  transition:all .15s;margin-bottom:1px;
-  border:1px solid transparent;
 }
-.nav-item:hover{background:var(--bg3);color:var(--t1);}
-.nav-item.active{
-  background:var(--reddim);color:var(--red);
-  border-color:var(--redbrd);
+.sb-head svg{width:28px;height:28px;}
+.sb-title{font-family:'Rajdhani',sans-serif;font-size:.85rem;font-weight:700;letter-spacing:2px;}
+.sb-sub{font-size:.52rem;color:var(--t3);letter-spacing:1.5px;}
+.sb-user{padding:8px 14px;border-bottom:1px solid var(--brd);}
+.sb-role{font-size:.55rem;color:var(--blue);letter-spacing:1.5px;text-transform:uppercase;}
+.sb-name{font-size:.78rem;font-weight:600;margin-top:1px;}
+.sb-nav{flex:1;padding:8px;overflow-y:auto;}
+.sb-sec{font-size:.5rem;font-weight:700;letter-spacing:2.5px;color:var(--t3);text-transform:uppercase;padding:6px 8px 3px;}
+.nav-i{
+  display:flex;align-items:center;gap:7px;
+  padding:8px 10px;border-radius:6px;cursor:pointer;
+  font-size:.74rem;color:var(--t2);transition:all .15s;
+  margin-bottom:1px;border:1px solid transparent;
 }
-.nav-icon{width:16px;text-align:center;font-size:.85rem;flex-shrink:0;}
-.nav-badge{
-  margin-left:auto;background:var(--red3);
-  border-radius:10px;padding:1px 7px;
-  font-size:.55rem;color:var(--red);
-  font-family:'JetBrains Mono',monospace;
-}
+.nav-i:hover{background:var(--bg3);color:var(--t1);}
+.nav-i.active{background:var(--bluedim);color:var(--blue);border-color:var(--bluebrd);}
+.nav-badge{margin-left:auto;background:var(--blue2);border-radius:10px;padding:1px 6px;font-size:.52rem;color:#fff;font-family:'JetBrains Mono',monospace;}
+.sb-bot{padding:10px 12px;border-top:1px solid var(--brd);}
+.sb-status{display:flex;align-items:center;gap:5px;font-size:.58rem;color:var(--t3);margin-bottom:6px;}
+.dot-live{width:5px;height:5px;border-radius:50%;background:var(--green);animation:pulse 2s infinite;}
+@keyframes pulse{0%,100%{opacity:1;}50%{opacity:.3;}}
+.logout-btn{width:100%;padding:7px;background:var(--bg3);border:1px solid var(--brd2);border-radius:5px;color:var(--t2);font-size:.68rem;cursor:pointer;font-family:'Inter',sans-serif;transition:all .2s;}
+.logout-btn:hover{background:rgba(224,32,32,.1);color:var(--red);border-color:rgba(224,32,32,.3);}
 
-.sb-bottom{
-  padding:12px 14px;border-top:1px solid var(--brd);
-}
-.sb-status{
-  display:flex;align-items:center;gap:6px;
-  font-size:.6rem;color:var(--t3);margin-bottom:8px;
-}
-.dot-live{
-  width:6px;height:6px;border-radius:50%;
-  background:#22c55e;animation:livepulse 2s infinite;
-}
-@keyframes livepulse{0%,100%{opacity:1;}50%{opacity:.3;}}
-.logout-btn{
-  width:100%;padding:8px;background:var(--bg3);
-  border:1px solid var(--brd2);border-radius:6px;
-  color:var(--t2);font-size:.7rem;cursor:pointer;
-  font-family:'Inter',sans-serif;transition:all .2s;
-}
-.logout-btn:hover{background:var(--red3);color:#fff;border-color:var(--red);}
-
-/* ── MAIN ── */
-.main{
-  margin-left:var(--sidebar);
-  height:100vh;
-  display:flex;flex-direction:column;
-  overflow:hidden;
-}
-.topbar{
-  padding:0 24px;height:54px;
-  display:flex;align-items:center;justify-content:space-between;
-  background:var(--bg1);border-bottom:1px solid var(--brd);
-  flex-shrink:0;
-}
-.topbar-title{
-  font-family:'Rajdhani',sans-serif;
-  font-size:.75rem;font-weight:700;letter-spacing:3px;color:var(--t3);
-}
-.topbar-right{display:flex;gap:8px;}
-.content{flex:1;overflow-y:auto;padding:20px 24px;}
-
-/* ── PAGES ── */
+/* MAIN */
+.main{margin-left:var(--sidebar);height:100vh;display:flex;flex-direction:column;overflow:hidden;}
+.topbar{padding:0 22px;height:52px;display:flex;align-items:center;justify-content:space-between;background:var(--bg1);border-bottom:1px solid var(--brd);flex-shrink:0;}
+.topbar-title{font-family:'Rajdhani',sans-serif;font-size:.7rem;font-weight:700;letter-spacing:3px;color:var(--t3);}
+.content{flex:1;overflow-y:auto;padding:18px 22px;}
 .page{display:none;}
 .page.active{display:block;}
 
-/* ══════════════════════════════════
-   SHARED COMPONENTS
-══════════════════════════════════ */
-.stats-row{
-  display:grid;grid-template-columns:repeat(4,1fr);
-  gap:12px;margin-bottom:20px;
-}
-.stat-card{
-  background:var(--bg2);border:1px solid var(--brd);
-  border-radius:10px;padding:16px 18px;
-  position:relative;overflow:hidden;
-}
-.stat-card::before{
-  content:'';position:absolute;top:0;left:0;right:0;height:2px;
-  background:linear-gradient(90deg,var(--red),transparent);
-}
-.stat-label{font-size:.56rem;letter-spacing:2px;color:var(--t3);text-transform:uppercase;}
-.stat-val{
-  font-family:'JetBrains Mono',monospace;
-  font-size:1.7rem;font-weight:700;margin:4px 0 2px;
-}
+/* COMPONENTS */
+.stats-row{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin-bottom:16px;}
+.stat{background:var(--bg2);border:1px solid var(--brd);border-radius:9px;padding:14px 16px;position:relative;overflow:hidden;}
+.stat::before{content:'';position:absolute;top:0;left:0;right:0;height:2px;background:var(--blue);}
+.stat-lbl{font-size:.54px;letter-spacing:2px;color:var(--t3);text-transform:uppercase;font-size:.54rem;}
+.stat-val{font-family:'JetBrains Mono',monospace;font-size:1.6rem;font-weight:700;margin:3px 0 1px;}
+.stat-val.blue{color:var(--blue);}
+.stat-val.green{color:var(--green);}
 .stat-val.red{color:var(--red);}
-.stat-val.green{color:#22c55e;}
-.stat-val.blue{color:#60a5fa;}
-.stat-hint{font-size:.58rem;color:var(--t3);}
+.stat-val.yellow{color:var(--yellow);}
+.stat-hint{font-size:.56rem;color:var(--t3);}
 
-.pbox{
-  background:var(--bg2);border:1px solid var(--brd);
-  border-radius:10px;overflow:hidden;margin-bottom:16px;
-}
-.phead{
-  display:flex;align-items:center;padding:12px 16px;
-  border-bottom:1px solid var(--brd);gap:8px;
-}
-.ptitle{
-  font-family:'Rajdhani',sans-serif;
-  font-size:.65rem;font-weight:700;letter-spacing:2.5px;
-  color:var(--t3);text-transform:uppercase;flex:1;
-}
-.pright{display:flex;align-items:center;gap:8px;}
-.pbody{padding:14px 16px;}
+.pbox{background:var(--bg2);border:1px solid var(--brd);border-radius:9px;overflow:hidden;margin-bottom:14px;}
+.phead{display:flex;align-items:center;padding:11px 14px;border-bottom:1px solid var(--brd);gap:7px;}
+.ptitle{font-family:'Rajdhani',sans-serif;font-size:.62rem;font-weight:700;letter-spacing:2px;color:var(--t3);text-transform:uppercase;flex:1;}
+.pbody{padding:12px 14px;}
 
-/* TABLE */
-.tbl{width:100%;border-collapse:collapse;font-size:.74rem;}
-.tbl th{
-  padding:9px 14px;text-align:left;
-  font-size:.56rem;letter-spacing:1.5px;color:var(--t3);
-  text-transform:uppercase;border-bottom:1px solid var(--brd);
-  font-weight:600;
-}
-.tbl td{padding:9px 14px;border-bottom:1px solid rgba(255,255,255,0.02);}
+.tbl{width:100%;border-collapse:collapse;font-size:.72rem;}
+.tbl th{padding:8px 12px;text-align:left;font-size:.54rem;letter-spacing:1.5px;color:var(--t3);text-transform:uppercase;border-bottom:1px solid var(--brd);font-weight:600;}
+.tbl td{padding:8px 12px;border-bottom:1px solid rgba(255,255,255,0.02);}
 .tbl tbody tr{cursor:pointer;transition:background .12s;}
 .tbl tbody tr:hover{background:var(--bg3);}
 .tbl tbody tr:last-child td{border-bottom:none;}
 
-/* BADGES */
-.badge{
-  display:inline-block;padding:2px 8px;border-radius:20px;
-  font-size:.56rem;font-weight:700;letter-spacing:.8px;text-transform:uppercase;
-}
-.badge-red{background:rgba(224,32,32,.12);color:#f87171;border:1px solid rgba(224,32,32,.25);}
-.badge-green{background:rgba(34,197,94,.12);color:#4ade80;border:1px solid rgba(34,197,94,.25);}
+.badge{display:inline-block;padding:2px 7px;border-radius:20px;font-size:.54rem;font-weight:700;letter-spacing:.8px;text-transform:uppercase;}
+.badge-green{background:rgba(34,197,94,.1);color:#4ade80;border:1px solid rgba(34,197,94,.2);}
+.badge-red{background:rgba(224,32,32,.1);color:#f87171;border:1px solid rgba(224,32,32,.2);}
+.badge-blue{background:var(--bluedim);color:var(--blue);border:1px solid var(--bluebrd);}
+.badge-yellow{background:rgba(234,179,8,.1);color:#fde047;border:1px solid rgba(234,179,8,.2);}
 .badge-gray{background:var(--bg4);color:var(--t3);border:1px solid var(--brd2);}
-.badge-blue{background:rgba(96,165,250,.1);color:#60a5fa;border:1px solid rgba(96,165,250,.2);}
 
-/* BUTTONS */
-.btn{
-  display:inline-flex;align-items:center;gap:5px;
-  padding:6px 12px;border-radius:6px;border:none;
-  font-family:'Inter',sans-serif;font-size:.68rem;font-weight:600;
-  letter-spacing:.5px;cursor:pointer;transition:all .15s;
-}
-.btn-red{background:rgba(224,32,32,.12);color:var(--red);border:1px solid var(--redbrd);}
-.btn-red:hover{background:var(--red3);color:#fff;}
+.btn{display:inline-flex;align-items:center;gap:5px;padding:5px 11px;border-radius:6px;border:none;font-family:'Inter',sans-serif;font-size:.66rem;font-weight:600;letter-spacing:.5px;cursor:pointer;transition:all .15s;}
+.btn-blue{background:var(--bluedim);color:var(--blue);border:1px solid var(--bluebrd);}
+.btn-blue:hover{background:var(--blue);color:#fff;}
+.btn-red{background:rgba(224,32,32,.08);color:var(--red);border:1px solid rgba(224,32,32,.2);}
+.btn-red:hover{background:var(--red);color:#fff;}
 .btn-ghost{background:var(--bg3);color:var(--t2);border:1px solid var(--brd2);}
 .btn-ghost:hover{background:var(--bg4);color:var(--t1);}
-.btn-solid{background:var(--red);color:#fff;}
-.btn-solid:hover{background:var(--red2);}
-.btn-sm{padding:4px 9px;font-size:.62rem;}
-.btn-icon{padding:4px 7px;}
+.btn-solid{background:var(--blue);color:#fff;}
+.btn-solid:hover{background:var(--blue2);}
+.btn-green{background:rgba(34,197,94,.1);color:var(--green);border:1px solid rgba(34,197,94,.2);}
+.btn-green:hover{background:var(--green);color:#fff;}
+.btn-sm{padding:3px 8px;font-size:.6rem;}
 
-/* CHIPS */
-.chip{
-  background:var(--bg3);border:1px solid var(--brd2);
-  border-radius:10px;padding:1px 8px;
-  font-size:.58rem;color:var(--t2);
-  font-family:'JetBrains Mono',monospace;
-}
-.chip-red{background:rgba(224,32,32,.08);border-color:var(--redbrd);color:var(--red);}
-
-.orange{color:#f97316;}
-.red{color:var(--red)!important;}
-.green{color:#22c55e!important;}
-.dim{color:var(--t2);}
-.mono{font-family:'JetBrains Mono',monospace;}
-
-/* EMPTY */
-.empty{
-  display:flex;flex-direction:column;align-items:center;
-  gap:8px;padding:30px;color:var(--t3);
-}
-.empty-icon{font-size:1.4rem;opacity:.5;}
-.empty p{font-size:.7rem;letter-spacing:1px;}
-
-/* MODALS */
-.overlay{
-  position:fixed;inset:0;z-index:50;
-  background:rgba(0,0,0,.7);backdrop-filter:blur(4px);
-  display:none;align-items:center;justify-content:center;
-}
-.overlay.open{display:flex;}
-.modal{
-  background:var(--bg2);border:1px solid var(--redbrd);
-  border-radius:14px;width:500px;max-width:94vw;
-  max-height:90vh;overflow-y:auto;position:relative;
-}
-.modal-accent{
-  position:absolute;top:0;left:0;right:0;height:2px;
-  background:linear-gradient(90deg,var(--red),transparent);
-  border-radius:14px 14px 0 0;
-}
-.mhead{
-  display:flex;align-items:center;justify-content:space-between;
-  padding:16px 18px;border-bottom:1px solid var(--brd);
-}
-.mhead h2{
-  font-family:'Rajdhani',sans-serif;
-  font-size:.78rem;font-weight:700;letter-spacing:2.5px;color:var(--t3);
-}
-.mclose{
-  background:none;border:none;color:var(--t3);
-  cursor:pointer;font-size:.95rem;padding:3px 7px;
-}
-.mclose:hover{color:var(--t1);}
-.mbody{padding:18px;}
-.fgrid{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:10px;}
-.fgrid.c1{grid-template-columns:1fr;}
-.field label{
-  display:block;font-size:.58rem;letter-spacing:1.5px;color:var(--t3);
-  text-transform:uppercase;margin-bottom:4px;
-}
-.field input,.field select,.field textarea{
-  width:100%;background:var(--bg3);border:1px solid var(--brd2);
-  border-radius:6px;padding:8px 10px;color:var(--t1);
-  font-family:'Inter',sans-serif;font-size:.78rem;outline:none;
-  transition:border-color .2s;
-}
-.field input:focus,.field select:focus,.field textarea:focus{border-color:var(--red);}
+/* LICENSE GEN */
+.gen-form{display:grid;grid-template-columns:1fr 1fr 1fr auto;gap:10px;align-items:end;margin-bottom:14px;}
+.field label{display:block;font-size:.56rem;letter-spacing:1.5px;color:var(--t3);text-transform:uppercase;margin-bottom:4px;}
+.field input,.field select{width:100%;background:var(--bg3);border:1px solid var(--brd2);border-radius:6px;padding:7px 10px;color:var(--t1);font-family:'Inter',sans-serif;font-size:.76rem;outline:none;transition:border-color .2s;}
+.field input:focus,.field select:focus{border-color:var(--blue);}
 .field select option{background:var(--bg3);}
-.factions{
-  display:flex;gap:8px;justify-content:flex-end;
-  padding-top:10px;border-top:1px solid var(--brd);margin-top:4px;
+
+/* KEY DISPLAY */
+.key-display{
+  background:var(--bg3);border:1px solid var(--bluebrd);border-radius:8px;
+  padding:12px 14px;margin-bottom:14px;
+  display:none;
 }
+.key-display.show{display:flex;align-items:center;justify-content:space-between;}
+.key-val{font-family:'JetBrains Mono',monospace;font-size:.9rem;color:var(--blue);letter-spacing:2px;}
+.key-copy{background:var(--blue);color:#fff;border:none;border-radius:5px;padding:5px 12px;font-size:.65rem;cursor:pointer;font-family:'Inter',sans-serif;font-weight:600;}
+.key-copy:hover{background:var(--blue2);}
+
+/* MODAL */
+.overlay{position:fixed;inset:0;z-index:50;background:rgba(0,0,0,.7);backdrop-filter:blur(4px);display:none;align-items:center;justify-content:center;}
+.overlay.open{display:flex;}
+.modal{background:var(--bg2);border:1px solid var(--bluebrd);border-radius:12px;width:440px;max-width:94vw;position:relative;}
+.modal-accent{position:absolute;top:0;left:0;right:0;height:2px;background:linear-gradient(90deg,transparent,var(--blue),transparent);border-radius:12px 12px 0 0;}
+.mhead{display:flex;align-items:center;justify-content:space-between;padding:14px 16px;border-bottom:1px solid var(--brd);}
+.mhead h2{font-family:'Rajdhani',sans-serif;font-size:.72rem;font-weight:700;letter-spacing:2px;color:var(--t3);}
+.mclose{background:none;border:none;color:var(--t3);cursor:pointer;font-size:.9rem;padding:2px 6px;}
+.mclose:hover{color:var(--t1);}
+.mbody{padding:16px;}
+.fgrid{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:8px;}
+.fgrid.c1{grid-template-columns:1fr;}
+.factions{display:flex;gap:7px;justify-content:flex-end;padding-top:8px;border-top:1px solid var(--brd);margin-top:6px;}
 
 /* TOAST */
-.toast{
-  position:fixed;bottom:20px;right:20px;z-index:999;
-  background:var(--bg3);border:1px solid var(--redbrd);
-  border-radius:8px;padding:10px 16px;
-  font-size:.74rem;color:var(--t1);
-  opacity:0;transform:translateY(8px);
-  transition:all .3s;pointer-events:none;
-}
+.toast{position:fixed;bottom:18px;right:18px;z-index:999;background:var(--bg3);border:1px solid var(--bluebrd);border-radius:7px;padding:9px 14px;font-size:.72rem;color:var(--t1);opacity:0;transform:translateY(6px);transition:all .3s;pointer-events:none;}
 .toast.show{opacity:1;transform:translateY(0);}
 
-/* ══════════════════════════════════
-   DASHBOARD PAGE
-══════════════════════════════════ */
-.graph-wrap{
-  background:var(--bg2);border:1px solid var(--brd);
-  border-radius:10px;padding:16px;margin-bottom:16px;
-  position:relative;height:180px;overflow:hidden;
-}
-.graph-label{
-  font-size:.56rem;letter-spacing:2px;color:var(--t3);
-  text-transform:uppercase;margin-bottom:8px;
-}
-canvas#playerGraph{width:100%;height:140px;}
-
-.dash-grid{display:grid;grid-template-columns:1fr 320px;gap:16px;}
-
-/* ══════════════════════════════════
-   DOWNLOADS PAGE
-══════════════════════════════════ */
-.dl-grid{
-  display:grid;grid-template-columns:1fr 1fr;
-  gap:16px;margin-bottom:20px;
-}
-.dl-card{
-  background:var(--bg2);border:1px solid var(--brd);
-  border-radius:12px;padding:24px;
-  transition:border-color .2s,transform .2s;
-  position:relative;overflow:hidden;
-}
-.dl-card::before{
-  content:'';position:absolute;top:0;left:0;right:0;height:2px;
-  background:linear-gradient(90deg,var(--red),transparent);
-}
-.dl-card:hover{border-color:var(--redbrd);transform:translateY(-2px);}
-.dl-icon{font-size:2rem;margin-bottom:14px;}
-.dl-name{
-  font-family:'Rajdhani',sans-serif;
-  font-size:1rem;font-weight:700;letter-spacing:1px;margin-bottom:6px;
-}
-.dl-desc{font-size:.72rem;color:var(--t2);line-height:1.6;margin-bottom:16px;}
-.dl-meta{
-  font-size:.6rem;color:var(--t3);letter-spacing:1px;
-  font-family:'JetBrains Mono',monospace;margin-bottom:14px;
-}
-.dl-url-wrap{
-  display:flex;gap:8px;align-items:center;margin-bottom:12px;
-}
-.dl-url-input{
-  flex:1;background:var(--bg3);border:1px solid var(--brd2);
-  border-radius:6px;padding:7px 10px;
-  color:var(--t1);font-family:'JetBrains Mono',monospace;font-size:.65rem;
-  outline:none;transition:border-color .2s;
-}
-.dl-url-input:focus{border-color:var(--red);}
-.dl-btn{
-  display:flex;align-items:center;justify-content:center;gap:8px;
-  width:100%;padding:10px;border-radius:8px;border:none;
-  font-family:'Rajdhani',sans-serif;font-size:.82rem;font-weight:700;
-  letter-spacing:1.5px;cursor:pointer;transition:all .2s;
-  text-decoration:none;
-}
-.dl-btn-red{background:var(--red);color:#fff;}
-.dl-btn-red:hover{background:var(--red2);}
-.dl-btn-ghost{
-  background:transparent;border:1px solid var(--brd2);color:var(--t2);
-}
-.dl-btn-ghost:hover{border-color:var(--red);color:var(--red);}
-
-/* irow */
-.irow{
-  display:flex;justify-content:space-between;align-items:center;
-  padding:8px 0;border-bottom:1px solid rgba(255,255,255,0.03);
-}
-.irow:last-child{border-bottom:none;}
-.ilabel{font-size:.66rem;color:var(--t3);}
-.ival{font-size:.72rem;font-weight:600;}
-
-/* BANS */
-.ban-sev{
-  display:inline-flex;align-items:center;gap:5px;
-  font-size:.62rem;font-weight:600;
-}
-
-/* MONITORING */
-.mon-feed{
-  max-height:300px;overflow-y:auto;
-  display:flex;flex-direction:column;gap:6px;
-  padding:12px 14px;
-}
-.mon-item{
-  display:flex;align-items:flex-start;gap:10px;
-  background:var(--bg3);border-radius:7px;
-  padding:10px 12px;border:1px solid var(--brd);
-}
-.mon-dot{
-  width:8px;height:8px;border-radius:50%;flex-shrink:0;margin-top:4px;
-}
-.mon-dot.red{background:var(--red);}
-.mon-dot.green{background:#22c55e;}
-.mon-dot.yellow{background:#eab308;}
-.mon-body{flex:1;}
-.mon-title{font-size:.74rem;font-weight:600;}
-.mon-meta{font-size:.62rem;color:var(--t3);margin-top:2px;}
-.mon-time{font-size:.58rem;color:var(--t3);white-space:nowrap;font-family:'JetBrains Mono',monospace;}
-
-/* ══ HOME PAGE ══ */
-#home-page{
-  position:fixed;inset:0;z-index:300;
-  background:#030305;
-  display:flex;align-items:center;justify-content:center;
-  overflow:hidden;
-}
-.bg-h{position:absolute;inset:0;pointer-events:none;}
-.bg-grid-h{
-  position:absolute;inset:0;
-  background-image:linear-gradient(rgba(224,32,32,0.025) 1px,transparent 1px),
-    linear-gradient(90deg,rgba(224,32,32,0.025) 1px,transparent 1px);
-  background-size:55px 55px;
-}
-.bg-glow-h{
-  position:absolute;width:800px;height:800px;border-radius:50%;
-  background:radial-gradient(circle,rgba(224,32,32,0.07) 0%,transparent 70%);
-  top:50%;left:50%;transform:translate(-50%,-50%);
-}
-.home-card{
-  position:relative;z-index:1;text-align:center;
-  display:flex;flex-direction:column;align-items:center;padding:20px;
-  animation:homeIn .8s ease both;
-}
-@keyframes homeIn{from{opacity:0;transform:translateY(30px);}to{opacity:1;transform:translateY(0);}}
-.home-logo{
-  width:140px;height:105px;object-fit:contain;margin-bottom:32px;
-  filter:drop-shadow(0 0 30px rgba(224,32,32,0.4));
-}
-.home-title{
-  font-family:'Rajdhani',sans-serif;
-  font-size:clamp(2rem,5vw,3.5rem);font-weight:700;
-  letter-spacing:4px;text-transform:uppercase;margin-bottom:8px;
-}
-.home-sub{font-size:.72rem;letter-spacing:3px;color:#3d3d52;text-transform:uppercase;margin-bottom:36px;}
-.home-divider{
-  width:60px;height:1px;
-  background:linear-gradient(90deg,transparent,rgba(224,32,32,0.5),transparent);
-  margin-bottom:28px;
-}
-.home-welcome{
-  font-size:.95rem;font-weight:300;color:#7b7b94;
-  line-height:1.9;max-width:380px;margin-bottom:44px;
-}
-.home-welcome strong{color:#f0f0f4;font-weight:500;}
-.home-btn{
-  background:#e02020;color:#fff;
-  padding:14px 52px;border-radius:8px;border:none;
-  font-family:'Rajdhani',sans-serif;
-  font-size:1rem;font-weight:700;letter-spacing:2px;text-transform:uppercase;
-  cursor:pointer;transition:background .2s,transform .15s,box-shadow .2s;
-  box-shadow:0 0 30px rgba(224,32,32,0.2);
-}
-.home-btn:hover{background:#b91c1c;transform:translateY(-2px);box-shadow:0 0 40px rgba(224,32,32,0.35);}
-.home-footer{
-  position:absolute;bottom:24px;left:0;right:0;text-align:center;
-  font-size:.55rem;letter-spacing:2px;color:#252535;text-transform:uppercase;
-}
-
-/* ══ DISCORD LOGIN OVERRIDE ══ */
-.discord-login-btn{
-  width:100%;margin-bottom:12px;padding:13px;
-  background:#5865f2;border:none;border-radius:8px;
-  font-family:'Rajdhani',sans-serif;
-  font-size:.9rem;font-weight:700;letter-spacing:2px;
-  color:#fff;cursor:pointer;text-transform:uppercase;
-  transition:background .2s,opacity .2s;
-  display:flex;align-items:center;justify-content:center;gap:10px;
-}
-.discord-login-btn:hover{background:#4752c4;}
-.login-or{
-  display:flex;align-items:center;gap:10px;
-  font-size:.58rem;letter-spacing:2px;color:var(--t3);
-  margin-bottom:12px;
-}
-.login-or span{flex:1;height:1px;background:var(--brd2);}
-
-
-/* ══ VORTEX BADGE ══ */
-#vortex-badge{
-  position:fixed;bottom:20px;left:20px;z-index:9999;
-}
-.vx-logo-btn{
-  width:42px;height:42px;border-radius:10px;
-  background:rgba(8,8,13,0.9);
-  border:1px solid rgba(79,142,247,0.3);
-  display:flex;align-items:center;justify-content:center;
-  cursor:pointer;
-  transition:border-color .2s,box-shadow .2s;
-  box-shadow:0 4px 16px rgba(0,0,0,0.4);
-}
-.vx-logo-btn:hover{
-  border-color:rgba(79,142,247,0.7);
-  box-shadow:0 0 20px rgba(79,142,247,0.2);
-}
-.vx-logo-btn img{
-  width:28px;height:21px;object-fit:contain;
-}
-.vx-popup{
-  position:absolute;bottom:52px;left:0;
-  background:rgba(8,8,13,0.97);
-  border:1px solid rgba(79,142,247,0.25);
-  border-radius:12px;padding:14px 16px;
-  width:220px;
-  opacity:0;pointer-events:none;
-  transform:translateY(8px);
-  transition:opacity .25s,transform .25s;
-  box-shadow:0 8px 32px rgba(0,0,0,0.5);
-}
-.vx-popup.show{
-  opacity:1 !important;pointer-events:all !important;
-  transform:translateY(0) !important;
-}
-.vx-popup-title{
-  font-family:'Rajdhani',sans-serif;
-  font-size:.75rem;font-weight:700;letter-spacing:2px;
-  color:#f0f0f4;text-transform:uppercase;margin-bottom:4px;
-}
-.vx-popup-sub{
-  font-size:.65rem;color:#7b7b94;line-height:1.6;margin-bottom:12px;
-}
-.vx-popup-btn{
-  display:block;width:100%;padding:8px;
-  background:#4f8ef7;color:#fff;border:none;border-radius:7px;
-  font-family:'Rajdhani',sans-serif;
-  font-size:.72rem;font-weight:700;letter-spacing:1.5px;
-  text-transform:uppercase;cursor:pointer;text-align:center;
-  text-decoration:none;transition:background .2s;
-}
-.vx-popup-btn:hover{background:#2563eb;}
-.vx-popup::before{
-  content:'';position:absolute;bottom:-6px;left:14px;
-  width:10px;height:10px;
-  background:rgba(8,8,13,0.97);
-  border-right:1px solid rgba(79,142,247,0.25);
-  border-bottom:1px solid rgba(79,142,247,0.25);
-  transform:rotate(45deg);
-}
-
+/* MONO */
+.mono{font-family:'JetBrains Mono',monospace;}
+.dim{color:var(--t2);}
+.red{color:var(--red)!important;}
+.green{color:var(--green)!important;}
+.yellow{color:var(--yellow)!important;}
 </style>
 </head>
-
-<!-- ══ HOME PAGE ══ -->
-<div id="home-page" style="display:none">
-  <div class="bg-h">
-    <div class="bg-grid-h"></div>
-    <div class="bg-glow-h"></div>
-  </div>
-  <div class="home-card">
-    <img class="home-logo" src="data:image/png;base64,/9j/4AAQSkZJRgABAQAAAQABAAD/4gHYSUNDX1BST0ZJTEUAAQEAAAHIAAAAAAQwAABtbnRyUkdCIFhZWiAH4AABAAEAAAAAAABhY3NwAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAQAA9tYAAQAAAADTLQAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAlkZXNjAAAA8AAAACRyWFlaAAABFAAAABRnWFlaAAABKAAAABRiWFlaAAABPAAAABR3dHB0AAABUAAAABRyVFJDAAABZAAAAChnVFJDAAABZAAAAChiVFJDAAABZAAAAChjcHJ0AAABjAAAADxtbHVjAAAAAAAAAAEAAAAMZW5VUwAAAAgAAAAcAHMAUgBHAEJYWVogAAAAAAAAb6IAADj1AAADkFhZWiAAAAAAAABimQAAt4UAABjaWFlaIAAAAAAAACSgAAAPhAAAts9YWVogAAAAAAAA9tYAAQAAAADTLXBhcmEAAAAAAAQAAAACZmYAAPKnAAANWQAAE9AAAApbAAAAAAAAAABtbHVjAAAAAAAAAAEAAAAMZW5VUwAAACAAAAAcAEcAbwBvAGcAbABlACAASQBuAGMALgAgADIAMAAxADb/2wBDAAUDBAQEAwUEBAQFBQUGBwwIBwcHBw8LCwkMEQ8SEhEPERETFhwXExQaFRERGCEYGh0dHx8fExciJCIeJBweHx7/2wBDAQUFBQcGBw4ICA4eFBEUHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh7/wAARCAGYAmQDASIAAhEBAxEB/8QAHQABAAEFAQEBAAAAAAAAAAAAAAYDBAUHCAIBCf/EAFQQAAEDAwIEAwMIBwMGDAUFAAEAAgMEBREGIRIxQVEHE2EicYEIFDJCkaHB0RUjM1JisfAkcuEWJYKSsvEmQ0RTY3ODoqO0wtIXJzRks0ZUZZOk/8QAGwEBAAIDAQEAAAAAAAAAAAAAAAMEAQIFBgf/xAA5EQACAQMCAwYEBQIFBQAAAAAAAQIDBBEFMRIhQQYTIlFhcZGx0fAUMoGhwSPhBzNCYnIVJVKi8f/aAAwDAQACEQMRAD8A4yREQBERAEREAREQBERAEREAREQBERAEREAREQBERAEREAREQBERAEREAREQBERAEREAREQBERAEREAREQBERAEREAREQBERAEREAREQBERAEREAREQBERAEREAREQBERAEREAREQBERAEREAREQBERAEREAREQBERAEREAREQBERAEREAREQBERAEREAREQBERAEREAREQBERAEREAREQBERAEREAREQBERAEREAREQBERAEREAREQBERAEREAREQBERAEREAREQBERAEREAREQBERAEREAREQBERAEREAREQBERAEREAREQBERAEREAREQBERAEREAREQBERAEREAREQBERAEREAREQBERAEREAREQBERAEREAREQBERAEREAREQBERAEREAREQBERAEREAREQBERAEREAREQBERAEREAREQBERAEREAREQBERAEREBkaSjgrWxtilbDI4hjzI8BjDsAXE8mk/Wzt1A2Jp3a1XG1VDqe40U9NI3GRIwt5jI59xurWGR0T+IAEci08iOxU70Zrltvgp7RqS2Q6j06A5jaOpcWyUgcckwSj2ojnfAPA4H2mnPsgQFFuO6eEFPqG0S6h8Mbm+/wBGwF09vkDWXClP7rohtJ0wWYJ34Wuxk6nr7dW0MskdVTSxmNxa/iYRwnOMEHcH0OChlrBaIiIYCIiAIiIAiIgCIiAIiIAiIgCIiAIiIAiIgCIiAIiIAiIgCIiAIiIAiIgCIiAIiIAiIgCIiAIiIAiIgCL61rnODWtLnE4AAySpXonw/wBR6slk/RtE7yIcmaolIjhiA3PHI72WnGfZ3ccbNKAiayMNoqzGySeN0DHkhnGMF5AyeewA5knGBupvdo9IaOhNLZ5YtTXpzXMfWlv9igfyIhBHFORuON3DGR/xb87Qa619RVzPfUTmeZ4Ae88gByY3oGjbYYG2AMBDLWC0qBGJnthJdGDhpPX15BU0RDAREQBERAEREAREQBERAEREAREQBERAEREAREQBERAEREAVSGTgd7Q4mnZw/rqqaICS6N1JeNL3uG52a4y0dVGOGKdmCCwndj2nIewkbtII2+3pSx6q8PfGaFlp1taIbfqp8flxVVNII5pQOXkSnaTmR5MuSMnhJI25Lgkx7Dz7BOR/Ce/5/wC5Zahq2hvzedolYfpMccA8twTyPqtJZXNFilwT8M+Xr9Tbfib8n+92aGpu+ns320xnLpqGI+fCOvm027m4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" alt="Maverick">
-    <div class="home-title">Maverick AntiCheat</div>
-    <div class="home-sub">Dashboard System</div>
-    <div class="home-divider"></div>
-    <p class="home-welcome">
-      Welcome to the <strong>Maverick AntiCheat</strong> management portal.<br>
-      Developed by the <strong>Vortex Team</strong>.
-    </p>
-    <a href="https://ssi-clan.com" class="home-btn" style="text-decoration:none;display:inline-block">⚡ Enter Dashboard</a>
-  </div>
-  <div class="home-footer">Maverick AntiCheat © 2026 — Developed by Vortex Team</div>
-</div>
-
-
-<!-- ══ SPAM OVERLAY ══ -->
-<div id="spam-overlay">
-  <div class="spam-box">
-    <div style="font-size:2rem">⛔</div>
-    <h2>ACCESS SUSPENDED</h2>
-    <p>Too many failed login attempts.<br>Account temporarily locked.</p>
-    <div class="spam-count" id="spam-cd">60s</div>
-  </div>
-</div>
+<body>
 
 <!-- ══ LOGIN ══ -->
 <div id="login">
   <div class="login-bg"></div>
-  <div class="login-card">
-    <div class="login-logo">
-      <svg viewBox="0 0 200 120" fill="none" xmlns="http://www.w3.org/2000/svg">
-        <path d="M100 10 L140 55 L170 30 L140 80 L100 110 L60 80 L30 30 L60 55 Z" fill="none" stroke="#e02020" stroke-width="3"/>
-        <path d="M100 25 L130 55 L100 95 L70 55 Z" fill="#e02020" opacity=".8"/>
-        <path d="M30 30 L60 55 L70 40 Z" fill="#9ca3af" opacity=".6"/>
-        <path d="M170 30 L140 55 L130 40 Z" fill="#9ca3af" opacity=".6"/>
-        <path d="M60 80 L70 55 L100 95 L130 55 L140 80" fill="none" stroke="#9ca3af" stroke-width="2"/>
+  <div class="lcard">
+    <div class="llogo">
+      <svg viewBox="0 0 200 200" fill="none">
+        <circle cx="100" cy="100" r="90" stroke="white" stroke-width="8"/>
+        <path d="M45 48 L72 48 L100 118 L128 48 L155 48 L100 158 Z" fill="white"/>
+        <path d="M45 48 L62 48 L68 62 L55 82 Z" fill="#050507"/>
+        <path d="M155 48 L138 48 L132 62 L145 82 Z" fill="#050507"/>
       </svg>
-      <div class="login-brand">Maverick AntiCheat</div>
-      <div class="login-sub">ADMIN PORTAL — RESTRICTED</div>
+      <div class="lbrand">VORTEX</div>
+      <div class="lsub">CONTROL PANEL — RESTRICTED</div>
     </div>
-    <div class="login-divider"><span></span><em>AUTHENTICATE</em><span></span></div>
-    <button class="discord-login-btn" onclick="loginWithDiscord()">
-      <svg width="20" height="20" viewBox="0 0 24 24" fill="white"><path d="M20.317 4.37a19.791 19.791 0 0 0-4.885-1.515.074.074 0 0 0-.079.037c-.21.375-.444.864-.608 1.25a18.27 18.27 0 0 0-5.487 0 12.64 12.64 0 0 0-.617-1.25.077.077 0 0 0-.079-.037A19.736 19.736 0 0 0 3.677 4.37a.07.07 0 0 0-.032.027C.533 9.046-.32 13.58.099 18.057a.082.082 0 0 0 .031.057 19.9 19.9 0 0 0 5.993 3.03.078.078 0 0 0 .084-.028 14.09 14.09 0 0 0 1.226-1.994.076.076 0 0 0-.041-.106 13.107 13.107 0 0 1-1.872-.892.077.077 0 0 1-.008-.128 10.2 10.2 0 0 0 .372-.292.074.074 0 0 1 .077-.01c3.928 1.793 8.18 1.793 12.062 0a.074.074 0 0 1 .078.01c.12.098.246.198.373.292a.077.077 0 0 1-.006.127 12.299 12.299 0 0 1-1.873.892.077.077 0 0 0-.041.107c.36.698.772 1.362 1.225 1.993a.076.076 0 0 0 .084.028 19.839 19.839 0 0 0 6.002-3.03.077.077 0 0 0 .032-.054c.5-5.177-.838-9.674-3.549-13.66a.061.061 0 0 0-.031-.03z"/></svg>
-      Login with Discord
-    </button>
-    <div class="login-or"><span></span><em>OR</em><span></span></div>
-    <div class="login-field">
+    <div class="ldiv"><span></span><em>AUTHENTICATE</em><span></span></div>
+    <div class="lfield">
       <label>Username</label>
-      <div class="login-wrap">
-        <span class="login-icon">👤</span>
-        <input type="text" id="l-user" placeholder="Enter username" autocomplete="off">
-      </div>
+      <div class="lwrap"><span class="lic">👤</span><input type="text" id="l-user" placeholder="Enter username" autocomplete="off"></div>
     </div>
-    <div class="login-field">
+    <div class="lfield">
       <label>Password</label>
-      <div class="login-wrap">
-        <span class="login-icon">🔒</span>
-        <input type="password" id="l-pass" placeholder="••••••••" onkeydown="if(event.key==='Enter')doLogin()">
-      </div>
+      <div class="lwrap"><span class="lic">🔒</span><input type="password" id="l-pass" placeholder="••••••••" onkeydown="if(event.key==='Enter')doLogin()"></div>
     </div>
-    <button class="login-btn" id="login-btn" onclick="doLogin()">⚡ ACCESS PORTAL</button>
-    <div class="login-err" id="l-err">Invalid credentials</div>
-    <div class="login-dots">
-      <div class="dot" id="dot-1"></div>
-      <div class="dot" id="dot-2"></div>
-      <div class="dot" id="dot-3"></div>
-    </div>
-    <button onclick="goHome()" style="background:none;border:none;color:#3d3d52;font-size:.62rem;letter-spacing:1.5px;cursor:pointer;margin-top:10px;font-family:'Inter',sans-serif;transition:color .2s;" onmouseover="this.style.color='#e02020'" onmouseout="this.style.color='#3d3d52'">← BACK TO HOME</button>
-    <div class="login-footer">MAVERICK ANTICHEAT © 2026 — Coded by DEIMOS</div>
+    <button class="lbtn" onclick="doLogin()">⚡ ACCESS PANEL</button>
+    <div class="lerr" id="l-err">Invalid credentials</div>
+    <div class="lfooter">VORTEX ANTICHEAT © 2026 — Coded by DEIMOS</div>
   </div>
 </div>
 
@@ -716,34 +236,34 @@ canvas#playerGraph{width:100%;height:140px;}
 <div id="app">
   <!-- SIDEBAR -->
   <nav class="sidebar">
-    <div class="sb-header" onclick="goPage('dashboard')">
-      <svg viewBox="0 0 200 120" fill="none">
-        <path d="M100 10 L140 55 L170 30 L140 80 L100 110 L60 80 L30 30 L60 55 Z" fill="none" stroke="#e02020" stroke-width="3"/>
-        <path d="M100 25 L130 55 L100 95 L70 55 Z" fill="#e02020" opacity=".8"/>
-        <path d="M30 30 L60 55 L70 40 Z" fill="#9ca3af" opacity=".6"/>
-        <path d="M170 30 L140 55 L130 40 Z" fill="#9ca3af" opacity=".6"/>
+    <div class="sb-head">
+      <svg viewBox="0 0 200 200" fill="none">
+        <circle cx="100" cy="100" r="90" stroke="white" stroke-width="8"/>
+        <path d="M45 48 L72 48 L100 118 L128 48 L155 48 L100 158 Z" fill="white"/>
+        <path d="M45 48 L62 48 L68 62 L55 82 Z" fill="#050507"/>
+        <path d="M155 48 L138 48 L132 62 L145 82 Z" fill="#050507"/>
       </svg>
       <div>
-        <div class="sb-title">Maverick</div>
-        <div class="sb-sub">ANTI CHEAT</div>
+        <div class="sb-title">VORTEX</div>
+        <div class="sb-sub">CONTROL PANEL</div>
       </div>
     </div>
     <div class="sb-user">
-      <div class="sb-role" id="sb-role">Role</div>
-      <div class="sb-uname" id="sb-name">Username</div>
+      <div class="sb-role">👨‍💻 Developer</div>
+      <div class="sb-name">DEIMOS</div>
     </div>
     <div class="sb-nav">
-      <div class="sb-section">Main</div>
-      <div class="nav-item active" onclick="goPage('dashboard')"><span class="nav-icon">📊</span> Dashboard</div>
-      <div class="nav-item" onclick="goPage('monitoring')"><span class="nav-icon">👁️</span> Monitoring <span class="nav-badge" id="nb-mon">0</span></div>
-      <div class="nav-item" onclick="goPage('players')"><span class="nav-icon">👥</span> Players <span class="nav-badge" id="nb-players">0</span></div>
-      <div class="nav-item" onclick="goPage('downloads')"><span class="nav-icon">📥</span> Downloads</div>
-      <div class="nav-item" onclick="goPage('licenses')"><span class="nav-icon">🔑</span> Keys License</div>
-      <div class="sb-section owner-only">Management</div>
-      <div class="nav-item owner-only" onclick="goPage('admins')"><span class="nav-icon">🛡️</span> Admins</div>
-      <div class="nav-item owner-only" onclick="goPage('settings')"><span class="nav-icon">⚙️</span> Settings</div>
+      <div class="sb-sec">Main</div>
+      <div class="nav-i active" onclick="goPage('dashboard')"><span>📊</span> Dashboard</div>
+      <div class="nav-i" onclick="goPage('licenses')"><span>🔑</span> Licenses <span class="nav-badge" id="nb-lic">0</span></div>
+      <div class="nav-i" onclick="goPage('clients')"><span>👥</span> Clients <span class="nav-badge" id="nb-cli">0</span></div>
+      <div class="nav-i" onclick="goPage('revenue')"><span>💰</span> Revenue</div>
+      <div class="nav-i" onclick="goPage('downloads')"><span>⬇️</span> Download Keys <span class="nav-badge" id="nb-dl">0</span></div>
+      <div class="nav-i" onclick="goPage('keylicense')"><span>🔑</span> Keys License <span class="nav-badge" id="nb-klics">0</span></div>
+      <div class="sb-sec">Settings</div>
+      <div class="nav-i" onclick="goPage('settings')"><span>⚙️</span> Settings</div>
     </div>
-    <div class="sb-bottom">
+    <div class="sb-bot">
       <div class="sb-status"><div class="dot-live"></div> System Online</div>
       <button class="logout-btn" onclick="doLogout()">⏻ &nbsp;Logout</button>
     </div>
@@ -753,349 +273,228 @@ canvas#playerGraph{width:100%;height:140px;}
   <div class="main">
     <div class="topbar">
       <div class="topbar-title" id="topbar-title">DASHBOARD</div>
-      <div class="topbar-right">
-        <button class="btn btn-red btn-sm admin-only" id="btn-add-ban" onclick="openModal('modal-ban')" style="display:none">+ Ban Player</button>
-        <button class="btn btn-ghost btn-sm admin-only" id="btn-add-player" onclick="openModal('modal-player')" style="display:none">+ Add Player</button>
+      <div style="display:flex;gap:8px">
+        <button class="btn btn-solid btn-sm" onclick="openModal('modal-gen')" id="btn-gen" style="display:none">+ Generate Key</button>
+        <button class="btn btn-ghost btn-sm" onclick="openModal('modal-client')" id="btn-client" style="display:none">+ Add Client</button>
       </div>
     </div>
     <div class="content">
 
-      <!-- ══ DASHBOARD ══ -->
+      <!-- DASHBOARD -->
       <div class="page active" id="page-dashboard">
         <div class="stats-row">
-          <div class="stat-card">
-            <div class="stat-label">Online Players</div>
-            <div class="stat-val blue" id="s-online">0</div>
-            <div class="stat-hint">Right now</div>
-          </div>
-          <div class="stat-card">
-            <div class="stat-label">Peak Players</div>
-            <div class="stat-val" id="s-peak">0</div>
-            <div class="stat-hint">Today</div>
-          </div>
-          <div class="stat-card">
-            <div class="stat-label">Total Bans</div>
-            <div class="stat-val red" id="s-bans">0</div>
-            <div class="stat-hint">All time</div>
-          </div>
-          <div class="stat-card">
-            <div class="stat-label">Live Alerts</div>
-            <div class="stat-val red" id="s-alerts">0</div>
-            <div class="stat-hint">Active</div>
-          </div>
+          <div class="stat"><div class="stat-lbl">Active Licenses</div><div class="stat-val green" id="s-active">0</div><div class="stat-hint">Currently valid</div></div>
+          <div class="stat"><div class="stat-lbl">Total Licenses</div><div class="stat-val blue" id="s-total">0</div><div class="stat-hint">All time</div></div>
+          <div class="stat"><div class="stat-lbl">Expired</div><div class="stat-val yellow" id="s-expired">0</div><div class="stat-hint">Needs renewal</div></div>
+          <div class="stat"><div class="stat-lbl">Banned</div><div class="stat-val red" id="s-banned">0</div><div class="stat-hint">Revoked</div></div>
         </div>
-
-        <div class="graph-wrap">
-          <div class="graph-label">Player Activity — Last 24 Hours</div>
-          <canvas id="playerGraph"></canvas>
-        </div>
-
-        <div class="dash-grid">
-          <div>
-            <div class="pbox">
-              <div class="phead">
-                <span class="ptitle">Recent Bans</span>
-                <div class="pright">
-                  <span class="chip chip-red" id="recent-bans-chip">0</span>
-                  <button class="btn btn-ghost btn-sm" onclick="goPage('bans')">View All →</button>
-                </div>
-              </div>
-              <div style="overflow-x:auto">
-                <table class="tbl">
-                  <thead><tr><th>Player</th><th>Reason</th><th>By</th><th>Date</th></tr></thead>
-                  <tbody id="recent-bans-tbody"></tbody>
-                </table>
-              </div>
-            </div>
-          </div>
-          <div>
-            <div class="pbox">
-              <div class="phead">
-                <span class="ptitle">Live Monitoring</span>
-                <span class="chip chip-red" id="live-chip">0</span>
-              </div>
-              <div class="mon-feed" id="dash-mon-feed">
-                <div class="empty"><span class="empty-icon">🟢</span><p>No active alerts</p></div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      <!-- ══ MONITORING ══ -->
-      <div class="page" id="page-monitoring">
         <div class="pbox">
-          <div class="phead">
-            <span class="ptitle">Live Monitoring Feed</span>
-            <div class="pright">
-              <span class="chip chip-red" id="mon-chip">0</span>
-              <button class="btn btn-red btn-sm" onclick="openModal('modal-alert')">+ Add Alert</button>
-              <button class="btn btn-ghost btn-sm owner-only" onclick="clearAlerts()">🗑 Clear</button>
-            </div>
-          </div>
-          <div style="overflow-x:auto">
-            <table class="tbl">
-              <thead><tr><th>Type</th><th>Player</th><th>Detail</th><th>IP</th><th>Time</th><th></th></tr></thead>
-              <tbody id="mon-tbody"></tbody>
-            </table>
-          </div>
+          <div class="phead"><span class="ptitle">Recent Licenses</span><button class="btn btn-ghost btn-sm" onclick="goPage('licenses')">View All →</button></div>
+          <div style="overflow-x:auto"><table class="tbl"><thead><tr><th>Key</th><th>Client</th><th>Plan</th><th>Expires</th><th>Status</th></tr></thead><tbody id="recent-tbody"></tbody></table></div>
         </div>
-      </div>
-
-      <!-- ══ PLAYERS ══ -->
-      <div class="page" id="page-players">
         <div class="pbox">
-          <div class="phead">
-            <span class="ptitle">Player List</span>
-            <div class="pright">
-              <span class="chip" id="players-chip">0</span>
-              <button class="btn btn-ghost btn-sm" onclick="openModal('modal-player')">+ Add</button>
-              <button class="btn btn-ghost btn-sm owner-only" onclick="clearPlayers()">🗑 Clear</button>
-            </div>
-          </div>
-          <div style="overflow-x:auto">
-            <table class="tbl">
-              <thead><tr><th>#</th><th>Name</th><th>Steam ID</th><th>IP</th><th>Status</th><th>Last Seen</th><th></th></tr></thead>
-              <tbody id="players-tbody"></tbody>
-            </table>
-          </div>
+          <div class="phead"><span class="ptitle">Recent Clients</span><button class="btn btn-ghost btn-sm" onclick="goPage('clients')">View All →</button></div>
+          <div style="overflow-x:auto"><table class="tbl"><thead><tr><th>Name</th><th>Server</th><th>Plan</th><th>Joined</th></tr></thead><tbody id="clients-recent-tbody"></tbody></table></div>
         </div>
       </div>
 
-      <!-- ══ MAP ══ -->
-      <div class="page" id="page-map">
-        <div class="pbox">
-          <div class="phead"><span class="ptitle">Ingame Map</span><span class="badge badge-gray">Live</span></div>
-          <div style="padding:40px;text-align:center;color:var(--t3)">
-            <div style="font-size:3rem;margin-bottom:14px">🗺️</div>
-            <div style="font-size:.8rem;margin-bottom:8px;color:var(--t2)">Connect your FiveM server to enable live map</div>
-            <div style="font-size:.68rem;color:var(--t3)">Requires server-side integration</div>
-          </div>
-        </div>
-      </div>
-
-      <!-- ══ LOOKUP ══ -->
-      <div class="page" id="page-lookup">
-        <div class="pbox" style="margin-bottom:16px">
-          <div class="phead"><span class="ptitle">Player Lookup</span></div>
-          <div class="pbody">
-            <div style="display:flex;gap:10px;margin-bottom:16px">
-              <input id="lookup-input" placeholder="Search by name, Steam ID, or IP..." style="flex:1;background:var(--bg3);border:1px solid var(--brd2);border-radius:7px;padding:9px 12px;color:var(--t1);font-family:'Inter',sans-serif;font-size:.8rem;outline:none;" oninput="doLookup()">
-              <button class="btn btn-solid" onclick="doLookup()">🔍 Search</button>
-            </div>
-            <div id="lookup-results"></div>
-          </div>
-        </div>
-      </div>
-
-      <!-- ══ BANS ══ -->
-      <div class="page" id="page-bans">
-        <div class="pbox">
-          <div class="phead">
-            <span class="ptitle">Ban List</span>
-            <div class="pright">
-              <span class="chip chip-red" id="bans-chip">0</span>
-              <button class="btn btn-red btn-sm" onclick="openModal('modal-ban')">+ Ban Player</button>
-            </div>
-          </div>
-          <div style="overflow-x:auto">
-            <table class="tbl">
-              <thead><tr><th>#</th><th>Player</th><th>Steam ID</th><th>IP</th><th>Reason</th><th>Banned By</th><th>Date</th><th></th></tr></thead>
-              <tbody id="bans-tbody"></tbody>
-            </table>
-          </div>
-        </div>
-      </div>
-
-      <!-- ══ DOWNLOADS ══ -->
-      <div class="page" id="page-downloads">
-        <div class="dl-grid">
-          <!-- SCANNER -->
-          <div class="dl-card">
-            <div class="dl-icon">🔍</div>
-            <div class="dl-name">Scanner v4.0</div>
-            <div class="dl-desc">Deep forensic scanner — 35+ scan steps. Detects cheats, renamed files, deleted traces, DNS history and more.</div>
-            <div class="dl-meta">MAVERICK ANTICHEAT • ULTRA SCANNER • v4.0</div>
-            <div class="dl-url-wrap owner-only">
-              <input class="dl-url-input" id="scanner-url" placeholder="https://your-link/scanner.exe" value="">
-              <button class="btn btn-ghost btn-sm" onclick="saveUrl('scanner')">Save</button>
-            </div>
-            <div style="margin-bottom:10px">
-              <div style="font-size:.56rem;letter-spacing:1.5px;color:var(--t3);text-transform:uppercase;margin-bottom:4px">License Key</div>
-              <div style="display:flex;gap:6px">
-                <input id="scanner-license-key" placeholder="MVK-XXXX-XXXX-XXXX" style="flex:1;background:var(--bg3);border:1px solid var(--brd2);border-radius:6px;padding:7px 10px;color:var(--t1);font-family:'JetBrains Mono',monospace;font-size:.72rem;outline:none;letter-spacing:1px">
-                <button class="btn btn-red btn-sm" onclick="verifyAndDownload()">Verify</button>
-              </div>
-              <div id="lic-status" style="font-size:.6rem;margin-top:4px;display:none"></div>
-            </div>
-            <a id="scanner-dl-btn" href="scanner_v4.py" class="dl-btn dl-btn-red" download="scanner_v4.py" style="display:none">
-              ↓ Download Scanner
-            </a>
-          </div>
-          <!-- MONITOR - owner/dev only -->
-          <div class="dl-card owner-only">
-            <div class="dl-icon">👻</div>
-            <div class="dl-name">Monitor v1.0</div>
-            <div class="dl-desc">Silent live background monitor. Runs 24/7, takes screenshots on detection, auto-starts with Windows.</div>
-            <div class="dl-meta">MAVERICK ANTICHEAT • LIVE MONITOR • v1.0</div>
-            <div class="dl-url-wrap owner-only">
-              <input class="dl-url-input" id="monitor-url" placeholder="https://your-link/monitor.exe" value="">
-              <button class="btn btn-ghost btn-sm" onclick="saveUrl('monitor')">Save</button>
-            </div>
-            <a id="monitor-dl-btn" href="#" class="dl-btn dl-btn-red" onclick="dlFile('monitor');return false;">
-              ↓ Download Monitor
-            </a>
-          </div>
-        </div>
-        <div class="pbox owner-only">
-          <div class="phead"><span class="ptitle">ℹ️ Setup Instructions</span></div>
-          <div class="pbody" style="font-size:.74rem;color:var(--t2);line-height:1.8">
-            <strong style="color:var(--t1)">How to add download links:</strong><br>
-            1. Build scanner.exe and monitor.exe using PyInstaller<br>
-            2. Upload them to Google Drive or GitHub<br>
-            3. Paste the direct download links above and click Save<br>
-            4. Players can then download directly from this page
-          </div>
-        </div>
-      </div>
-
-
-      <!-- ══ LICENSES ══ -->
+      <!-- LICENSES -->
       <div class="page" id="page-licenses">
         <div class="pbox" style="margin-bottom:14px">
-          <div class="phead"><span class="ptitle">⚡ Generate License Key</span></div>
+          <div class="phead"><span class="ptitle">⚡ Generate New License</span></div>
           <div class="pbody">
-            <div style="display:grid;grid-template-columns:1fr auto;gap:10px;align-items:end;margin-bottom:12px">
+            <div class="gen-form">
+              <div class="field"><label>Client Name</label><input id="g-name" placeholder="Server name..."></div>
+              <div class="field"><label>Plan</label><select id="g-plan"><option value="Basic">Basic</option><option value="Pro">Pro</option><option value="Elite">Elite</option></select></div>
+              <div class="field"><label>Duration</label><select id="g-days"><option value="0.003">5 Minutes (TEST)</option>
+              <option value="3">3 Days</option><option value="7">7 Days</option><option value="14">14 Days</option><option value="30">1 Month</option><option value="90">3 Months</option><option value="180">6 Months</option><option value="365">1 Year</option><option value="9999">Lifetime</option></select></div>
+              <div class="field"><label>&nbsp;</label><button class="btn btn-solid" style="width:100%;padding:7px" onclick="genKey()">Generate</button></div>
+            </div>
+            <div class="key-display" id="key-display">
               <div>
-                <label style="font-size:.56rem;letter-spacing:1.5px;color:var(--t3);text-transform:uppercase;display:block;margin-bottom:4px">Client / Server Name</label>
-                <input id="lic-client" placeholder="Server name..." style="width:100%;background:var(--bg3);border:1px solid var(--brd2);border-radius:6px;padding:7px 10px;color:var(--t1);font-family:'Inter',sans-serif;font-size:.76rem;outline:none">
+                <div style="font-size:.56rem;color:var(--t3);letter-spacing:1.5px;margin-bottom:4px">GENERATED KEY</div>
+                <div class="key-val" id="key-val">—</div>
               </div>
-              <button class="btn btn-red" style="padding:8px 18px" onclick="generateLicenseKey()">⚡ Generate</button>
-            </div>
-            <div id="lic-result" style="display:none;background:var(--bg3);border:1px solid rgba(224,32,32,0.3);border-radius:8px;padding:12px 14px;display:none">
-              <div style="font-size:.56rem;color:var(--t3);letter-spacing:1.5px;margin-bottom:4px">GENERATED KEY — ONE TIME USE ONLY</div>
-              <div style="display:flex;align-items:center;justify-content:space-between">
-                <div id="lic-key-val" style="font-family:'JetBrains Mono',monospace;font-size:1rem;color:#e02020;letter-spacing:2px">—</div>
-                <button onclick="copyLicKey()" style="background:#e02020;color:#fff;border:none;border-radius:5px;padding:5px 12px;font-size:.65rem;cursor:pointer;font-weight:600">📋 Copy</button>
-              </div>
+              <button class="key-copy" onclick="copyKey()">📋 Copy</button>
             </div>
           </div>
         </div>
         <div class="pbox">
           <div class="phead">
-            <span class="ptitle">📋 Key History Log</span>
-            <div class="pright">
-              <span style="font-family:'JetBrains Mono',monospace;font-size:.6rem;color:var(--t3)" id="lic-hist-count">0 keys</span>
-              <button class="btn btn-ghost btn-sm" onclick="renderLicHistory()">🔄 Refresh</button>
+            <span class="ptitle">All Licenses</span>
+            <div style="display:flex;gap:7px;align-items:center">
+              <span style="font-family:'JetBrains Mono',monospace;font-size:.6rem;color:var(--t3)" id="lic-count">0 total</span>
+              <button class="btn btn-ghost btn-sm" onclick="syncToServer()">☁️ Sync to Server</button><button class="btn btn-red btn-sm" onclick="clearExpired()">🗑 Clear Expired</button>
             </div>
           </div>
-          <div style="overflow-x:auto"><table class="tbl" style="width:100%;border-collapse:collapse;font-size:.72rem">
-            <thead><tr>
-              <th style="padding:8px 12px;text-align:left;font-size:.54rem;letter-spacing:1.5px;color:var(--t3);text-transform:uppercase;border-bottom:1px solid var(--brd);font-weight:600">Key</th>
-              <th style="padding:8px 12px;text-align:left;font-size:.54rem;letter-spacing:1.5px;color:var(--t3);text-transform:uppercase;border-bottom:1px solid var(--brd);font-weight:600">Client</th>
-              <th style="padding:8px 12px;text-align:left;font-size:.54rem;letter-spacing:1.5px;color:var(--t3);text-transform:uppercase;border-bottom:1px solid var(--brd);font-weight:600">Generated By</th>
-              <th style="padding:8px 12px;text-align:left;font-size:.54rem;letter-spacing:1.5px;color:var(--t3);text-transform:uppercase;border-bottom:1px solid var(--brd);font-weight:600">Date & Time</th>
-              <th style="padding:8px 12px;text-align:left;font-size:.54rem;letter-spacing:1.5px;color:var(--t3);text-transform:uppercase;border-bottom:1px solid var(--brd);font-weight:600">Downloaded</th>
-              <th style="padding:8px 12px;text-align:left;font-size:.54rem;letter-spacing:1.5px;color:var(--t3);text-transform:uppercase;border-bottom:1px solid var(--brd);font-weight:600">Scanner Used</th>
-              <th></th>
-            </tr></thead>
-            <tbody id="lic-hist-tbody"></tbody>
-          </table></div>
+          <div style="overflow-x:auto"><table class="tbl"><thead><tr><th>Key</th><th>Client</th><th>Plan</th><th>Created</th><th>Expires</th><th>Status</th><th></th></tr></thead><tbody id="lic-tbody"></tbody></table></div>
         </div>
       </div>
 
-      <!-- ══ ADMINS ══ -->
-      <div class="page" id="page-admins">
+      <!-- CLIENTS -->
+      <div class="page" id="page-clients">
         <div class="pbox">
           <div class="phead">
-            <span class="ptitle">Admin Team</span>
-            <div class="pright">
-              <span class="chip" id="admins-chip">0</span>
-              <button class="btn btn-ghost btn-sm" onclick="openModal('modal-adduser')">+ Add Admin</button>
-            </div>
+            <span class="ptitle">Client List</span>
+            <span style="font-family:'JetBrains Mono',monospace;font-size:.6rem;color:var(--t3)" id="cli-count">0 clients</span>
           </div>
-          <div style="overflow-x:auto">
-            <table class="tbl">
-              <thead><tr><th>Username</th><th>Discord ID</th><th>Role</th><th>Last Login</th><th>Status</th><th></th></tr></thead>
-              <tbody id="admins-tbody"></tbody>
-            </table>
-          </div>
+          <div style="overflow-x:auto"><table class="tbl"><thead><tr><th>Name</th><th>Server</th><th>Discord</th><th>Plan</th><th>Joined</th><th>Notes</th><th></th></tr></thead><tbody id="cli-tbody"></tbody></table></div>
         </div>
       </div>
 
-      <!-- ══ SETTINGS ══ -->
+      <!-- REVENUE -->
+      <div class="page" id="page-revenue">
+        <div class="stats-row">
+          <div class="stat"><div class="stat-lbl">Total Revenue</div><div class="stat-val green" id="r-total">$0</div><div class="stat-hint">All time</div></div>
+          <div class="stat"><div class="stat-lbl">This Month</div><div class="stat-val blue" id="r-month">$0</div><div class="stat-hint">Current month</div></div>
+          <div class="stat"><div class="stat-lbl">Total Sales</div><div class="stat-val" id="r-sales">0</div><div class="stat-hint">Licenses sold</div></div>
+          <div class="stat"><div class="stat-lbl">Active Clients</div><div class="stat-val blue" id="r-clients">0</div><div class="stat-hint">Paying now</div></div>
+        </div>
+        <div class="pbox">
+          <div class="phead"><span class="ptitle">Revenue History</span><button class="btn btn-ghost btn-sm" onclick="openModal('modal-payment')">+ Add Payment</button></div>
+          <div style="overflow-x:auto"><table class="tbl"><thead><tr><th>Client</th><th>Plan</th><th>Amount</th><th>Date</th><th>Method</th><th></th></tr></thead><tbody id="rev-tbody"></tbody></table></div>
+        </div>
+      </div>
+
+
+      <!-- DOWNLOADS -->
+      <div class="page" id="page-downloads">
+        <div class="pbox" style="margin-bottom:14px">
+          <div class="phead"><span class="ptitle">🔍 Download Scanner v4.0</span></div>
+          <div class="pbody">
+            <div style="font-size:.7rem;color:var(--t2);margin-bottom:12px">Enter your one-time license key to unlock the scanner download.</div>
+            <div style="display:flex;gap:8px;align-items:center;margin-bottom:8px">
+              <input id="dl-verify-key" placeholder="MVK-XXXX-XXXX-XXXX" style="flex:1;background:var(--bg3);border:1px solid var(--brd2);border-radius:6px;padding:7px 10px;color:var(--t1);font-family:'JetBrains Mono',monospace;font-size:.72rem;outline:none;letter-spacing:1px;transition:border-color .2s">
+              <button class="btn btn-solid btn-sm" onclick="verifyKLicAndDownload()">Verify</button>
+            </div>
+            <div id="dl-verify-status" style="font-size:.6rem;margin-bottom:8px;display:none"></div>
+            <a id="dl-scanner-link" href="scanner_v4.py" download="scanner_v4.py" class="btn btn-green" style="display:none;text-decoration:none">↓ Download Scanner v4.0</a>
+          </div>
+        </div>
+        <div class="pbox" style="margin-bottom:14px">
+          <div class="phead"><span class="ptitle">⬇️ Generate Download Key</span></div>
+          <div class="pbody">
+            <div class="gen-form">
+              <div class="field"><label>Client Name</label><input id="dl-name" placeholder="Server name..."></div>
+              <div class="field"><label>Duration</label><select id="dl-days">
+                <option value="0.003">5 Minutes (TEST)</option>
+                <option value="1">1 Day</option>
+                <option value="3">3 Days</option>
+                <option value="7">7 Days</option>
+                <option value="14">14 Days</option>
+                <option value="30">1 Month</option>
+                <option value="9999">Lifetime</option>
+              </select></div>
+              <div class="field"><label>File</label><select id="dl-file">
+                <option value="scanner">Scanner</option>
+                <option value="monitor">Monitor</option>
+                <option value="both">Both</option>
+              </select></div>
+              <div class="field"><label>&nbsp;</label><button class="btn btn-solid" style="width:100%;padding:7px" onclick="genDlKey()">Generate</button></div>
+            </div>
+            <div class="key-display" id="dl-key-display">
+              <div>
+                <div style="font-size:.56rem;color:var(--t3);letter-spacing:1.5px;margin-bottom:4px">DOWNLOAD KEY — TIME LIMITED</div>
+                <div class="key-val" id="dl-key-val">—</div>
+              </div>
+              <button class="key-copy" onclick="copyDlKey()">📋 Copy</button>
+            </div>
+          </div>
+        </div>
+        <div class="pbox">
+          <div class="phead">
+            <span class="ptitle">All Download Keys</span>
+            <div style="display:flex;gap:7px;align-items:center">
+              <span style="font-family:'JetBrains Mono',monospace;font-size:.6rem;color:var(--t3)" id="dl-count">0 total</span>
+              <button class="btn btn-red btn-sm" onclick="clearExpiredDl()">🗑 Clear Expired</button>
+            </div>
+          </div>
+          <div style="overflow-x:auto"><table class="tbl"><thead><tr><th>Key</th><th>Client</th><th>File</th><th>Expires</th><th>Status</th><th></th></tr></thead><tbody id="dl-tbody"></tbody></table></div>
+        </div>
+      </div>
+
+      <!-- KEYS LICENSE -->
+      <div class="page" id="page-keylicense">
+        <div class="pbox" style="margin-bottom:14px">
+          <div class="phead">
+            <span class="ptitle">🔑 Scanner License Keys</span>
+            <div style="display:flex;align-items:center;gap:8px">
+              <span style="font-family:'JetBrains Mono',monospace;font-size:.6rem;color:var(--t3)" id="klic-count">0 keys</span>
+              <button class="btn btn-ghost btn-sm" onclick="renderKLicKeys()">🔄 Refresh</button>
+            </div>
+          </div>
+          <div class="pbody" style="font-size:.72rem;color:var(--t2);padding-bottom:6px">
+            Keys are generated in <strong style="color:var(--t1)">Maverick Dashboard → Keys License</strong>. The client uses the key here to download the scanner, then uses the <strong style="color:var(--t1)">same key</strong> to run it.
+          </div>
+        </div>
+        <div class="pbox">
+          <div class="phead"><span class="ptitle">All Keys</span><span class="nav-badge" id="nb-klics" style="margin-left:0">0</span></div>
+          <div style="overflow-x:auto"><table class="tbl"><thead><tr><th>Key</th><th>Client</th><th>Generated By</th><th>Date & Time</th><th>Status</th><th></th></tr></thead><tbody id="klic-tbody"></tbody></table></div>
+        </div>
+      </div>
+
+      <!-- SETTINGS -->
       <div class="page" id="page-settings">
-        <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px">
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:14px">
           <div class="pbox">
-            <div class="phead"><span class="ptitle">Server Info</span></div>
+            <div class="phead"><span class="ptitle">Panel Info</span></div>
             <div class="pbody">
-              <div class="irow"><span class="ilabel">Server Name</span><span class="ival" id="s-servername">Maverick AntiCheat</span></div>
-              <div class="irow"><span class="ilabel">Dashboard Version</span><span class="ival">v1.0.0</span></div>
-              <div class="irow"><span class="ilabel">Coded By</span><span class="ival" style="color:var(--red)">DEIMOS</span></div>
+              <div style="display:flex;justify-content:space-between;padding:7px 0;border-bottom:1px solid var(--brd2)"><span style="font-size:.66rem;color:var(--t3)">Panel Name</span><span style="font-size:.72rem;font-weight:600">Vortex Control Panel</span></div>
+              <div style="display:flex;justify-content:space-between;padding:7px 0;border-bottom:1px solid var(--brd2)"><span style="font-size:.66rem;color:var(--t3)">Version</span><span style="font-size:.72rem;font-weight:600">v1.0.0</span></div>
+              <div style="display:flex;justify-content:space-between;padding:7px 0;border-bottom:1px solid var(--brd2)"><span style="font-size:.66rem;color:var(--t3)">Coded By</span><span style="font-size:.72rem;font-weight:600;color:var(--blue)">DEIMOS</span></div>
+              <div style="display:flex;justify-content:space-between;padding:7px 0"><span style="font-size:.66rem;color:var(--t3)">License Server</span><span style="font-size:.72rem;font-weight:600">ssi-clan.com/license.php</span></div>
             </div>
           </div>
           <div class="pbox">
-            <div class="phead"><span class="ptitle">Access Control</span></div>
+            <div class="phead"><span class="ptitle">Change Password</span></div>
             <div class="pbody">
-              <div class="irow"><span class="ilabel">Admin Role</span><span class="ival" style="color:var(--red)">Full Access</span></div>
-              <div class="irow"><span class="ilabel">Moderator Role</span><span class="ival">View + Bans</span></div>
-              <div class="irow"><span class="ilabel">Failed Login Max</span><span class="ival">3 attempts</span></div>
-              <div class="irow"><span class="ilabel">Lockout Duration</span><span class="ival">60 seconds</span></div>
+              <div class="field" style="margin-bottom:8px"><label>New Password</label><input type="password" id="new-pass" placeholder="New password"></div>
+              <div class="field" style="margin-bottom:10px"><label>Confirm</label><input type="password" id="conf-pass" placeholder="Confirm password"></div>
+              <button class="btn btn-solid" style="width:100%" onclick="changePass()">Save Password</button>
             </div>
           </div>
         </div>
       </div>
 
-    </div><!-- /content -->
-  </div><!-- /main -->
-</div><!-- /app -->
-
-<!-- ══ MODALS ══ -->
-<!-- Ban -->
-<div class="overlay" id="modal-ban">
-  <div class="modal"><div class="modal-accent"></div>
-    <div class="mhead"><h2>BAN PLAYER</h2><button class="mclose" onclick="closeModal('modal-ban')">✕</button></div>
-    <div class="mbody">
-      <div class="fgrid"><div class="field"><label>Player Name</label><input id="b-name" placeholder="PlayerXXX"></div><div class="field"><label>Steam ID</label><input id="b-steamid" placeholder="765611..."></div></div>
-      <div class="fgrid"><div class="field"><label>IP Address</label><input id="b-ip" placeholder="86.x.x.x"></div><div class="field"><label>Reason</label><select id="b-reason"><option>Cheating</option><option>Mod Menu</option><option>Toxicity</option><option>HWID Spoof</option><option>Exploit</option><option>Other</option></select></div></div>
-      <div class="fgrid c1"><div class="field"><label>Notes</label><input id="b-notes" placeholder="Additional details..."></div></div>
-      <div class="factions"><button class="btn btn-ghost" onclick="closeModal('modal-ban')">Cancel</button><button class="btn btn-solid" onclick="saveBan()">🔒 Ban</button></div>
     </div>
   </div>
 </div>
 
-<!-- Alert -->
-<div class="overlay" id="modal-alert">
+<!-- MODALS -->
+<!-- Generate Key -->
+<div class="overlay" id="modal-gen">
   <div class="modal"><div class="modal-accent"></div>
-    <div class="mhead"><h2>ADD ALERT</h2><button class="mclose" onclick="closeModal('modal-alert')">✕</button></div>
+    <div class="mhead"><h2>GENERATE LICENSE KEY</h2><button class="mclose" onclick="closeModal('modal-gen')">✕</button></div>
     <div class="mbody">
-      <div class="fgrid"><div class="field"><label>Type</label><select id="a-type"><option>Cheat Detected</option><option>Suspicious Activity</option><option>Exploit Attempt</option><option>HWID Spoof</option><option>Memory Injection</option></select></div><div class="field"><label>Player</label><input id="a-player" placeholder="PlayerXXX"></div></div>
-      <div class="fgrid"><div class="field"><label>Detail</label><input id="a-detail" placeholder="e.g. Keyser FiveM Cheat"></div><div class="field"><label>IP</label><input id="a-ip" placeholder="86.x.x.x"></div></div>
-      <div class="factions"><button class="btn btn-ghost" onclick="closeModal('modal-alert')">Cancel</button><button class="btn btn-solid" onclick="saveAlert()">🚨 Save</button></div>
+      <div class="fgrid"><div class="field"><label>Client Name</label><input id="mg-name" placeholder="Server name"></div><div class="field"><label>Plan</label><select id="mg-plan"><option value="Basic">Basic</option><option value="Pro">Pro</option><option value="Elite">Elite</option></select></div></div>
+      <div class="fgrid"><div class="field"><label>Duration</label><select id="mg-days"><option value="0.003">5 Minutes (TEST)</option>
+              <option value="3">3 Days</option><option value="7">7 Days</option><option value="14">14 Days</option><option value="30">1 Month</option><option value="90">3 Months</option><option value="180">6 Months</option><option value="365">1 Year</option><option value="9999">Lifetime</option></select></div><div class="field"><label>Amount Paid ($)</label><input id="mg-amount" placeholder="0.00" type="number"></div></div>
+      <div class="factions"><button class="btn btn-ghost" onclick="closeModal('modal-gen')">Cancel</button><button class="btn btn-solid" onclick="genKeyModal()">⚡ Generate</button></div>
     </div>
   </div>
 </div>
 
-<!-- Player -->
-<div class="overlay" id="modal-player">
+<!-- Add Client -->
+<div class="overlay" id="modal-client">
   <div class="modal"><div class="modal-accent"></div>
-    <div class="mhead"><h2>ADD PLAYER</h2><button class="mclose" onclick="closeModal('modal-player')">✕</button></div>
+    <div class="mhead"><h2>ADD CLIENT</h2><button class="mclose" onclick="closeModal('modal-client')">✕</button></div>
     <div class="mbody">
-      <div class="fgrid"><div class="field"><label>Name</label><input id="p-name" placeholder="PlayerXXX"></div><div class="field"><label>Steam ID</label><input id="p-steamid" placeholder="765611..."></div></div>
-      <div class="fgrid"><div class="field"><label>IP</label><input id="p-ip" placeholder="86.x.x.x"></div><div class="field"><label>Status</label><select id="p-status"><option value="online">🟢 Online</option><option value="offline">⚫ Offline</option><option value="banned">🔴 Banned</option></select></div></div>
-      <div class="factions"><button class="btn btn-ghost" onclick="closeModal('modal-player')">Cancel</button><button class="btn btn-solid" onclick="savePlayer()">✅ Save</button></div>
+      <div class="fgrid"><div class="field"><label>Name</label><input id="c-name" placeholder="Client name"></div><div class="field"><label>Server Name</label><input id="c-server" placeholder="Server name"></div></div>
+      <div class="fgrid"><div class="field"><label>Discord</label><input id="c-discord" placeholder="username#0000"></div><div class="field"><label>Plan</label><select id="c-plan"><option value="Basic">Basic</option><option value="Pro">Pro</option><option value="Elite">Elite</option></select></div></div>
+      <div class="fgrid c1"><div class="field"><label>Notes</label><input id="c-notes" placeholder="Optional notes..."></div></div>
+      <div class="factions"><button class="btn btn-ghost" onclick="closeModal('modal-client')">Cancel</button><button class="btn btn-solid" onclick="saveClient()">✅ Save</button></div>
     </div>
   </div>
 </div>
 
-<!-- Add User -->
-<div class="overlay" id="modal-adduser">
+<!-- Add Payment -->
+<div class="overlay" id="modal-payment">
   <div class="modal"><div class="modal-accent"></div>
-    <div class="mhead"><h2>ADD ADMIN</h2><button class="mclose" onclick="closeModal('modal-adduser')">✕</button></div>
+    <div class="mhead"><h2>ADD PAYMENT</h2><button class="mclose" onclick="closeModal('modal-payment')">✕</button></div>
     <div class="mbody">
-      <div class="fgrid"><div class="field"><label>Username / Name</label><input id="u-name" placeholder="John"></div><div class="field"><label>Discord ID</label><input id="u-disc" placeholder="126717621776673" type="text"></div></div>
-      <div class="fgrid c1"><div class="field"><label>Role</label><select id="u-role"><option value="admin">🛡️ Admin</option><option value="owner">👑 Owner</option><option value="developer">👨‍💻 Developer</option></select></div></div>
-      <div class="factions"><button class="btn btn-ghost" onclick="closeModal('modal-adduser')">Cancel</button><button class="btn btn-solid" onclick="saveUser()">✅ Add</button></div>
+      <div class="fgrid"><div class="field"><label>Client</label><input id="p-client" placeholder="Client name"></div><div class="field"><label>Amount ($)</label><input id="p-amount" type="number" placeholder="0.00"></div></div>
+      <div class="fgrid"><div class="field"><label>Plan</label><select id="p-plan"><option value="Basic">Basic</option><option value="Pro">Pro</option><option value="Elite">Elite</option></select></div><div class="field"><label>Method</label><select id="p-method"><option>PayPal</option><option>USDT</option><option>Binance</option><option>Cash</option><option>Other</option></select></div></div>
+      <div class="factions"><button class="btn btn-ghost" onclick="closeModal('modal-payment')">Cancel</button><button class="btn btn-solid" onclick="savePayment()">💰 Save</button></div>
     </div>
   </div>
 </div>
@@ -1103,618 +502,444 @@ canvas#playerGraph{width:100%;height:140px;}
 <div class="toast" id="toast"></div>
 
 <script>
-// ══ STORAGE ══════════════════════════════════
-const K = {bans:'mvk_bans',alerts:'mvk_alerts',players:'mvk_players',users:'mvk_users',urls:'mvk_urls'};
+// ══ STORAGE ══
+const K = {lic:'vx_licenses', cli:'vx_clients', pay:'vx_payments', pass:'vx_pass'};
 const load = k => { try { return JSON.parse(localStorage.getItem(k)) || []; } catch { return []; } };
-const loadObj = k => { try { return JSON.parse(localStorage.getItem(k)) || {}; } catch { return {}; } };
 const save = (k,d) => localStorage.setItem(k, JSON.stringify(d));
 
-// ══ INIT DEFAULT ADMIN ═══════════════════════
-(function(){
-  let u = load(K.users);
-  // Always ensure DEIMOS exists with developer role
-  const idx = u.findIndex(x=>x.username==='DEIMOS');
-  if(idx === -1){
-    u.push({id:1,username:'DEIMOS',discordId:'641690154461036554',role:'developer',password:'123Sami00',created:new Date().toISOString(),lastLogin:null});
+// ══ LOGIN ══
+const CREDENTIALS = { username: 'DEIMOS', password: '123Sami00' };
+
+function doLogin(){
+  const u = document.getElementById('l-user').value.trim();
+  const p = document.getElementById('l-pass').value;
+  const err = document.getElementById('l-err');
+  if(u === CREDENTIALS.username && p === CREDENTIALS.password){
+    document.getElementById('login').style.display = 'none';
+    document.getElementById('app').style.display = 'block';
+    renderAll();
+    goPage('dashboard');
   } else {
-    u[idx].role = 'developer';
-    u[idx].password = '123Sami00';
-    u[idx].discordId = '641690154461036554';
+    err.style.display = 'block';
+    err.textContent = 'Invalid credentials';
+    document.getElementById('l-pass').value = '';
   }
-  save(K.users, u);
-})();
-
-// ══ LOGIN ════════════════════════════════════
-let currentUser=null, fails=0, spamTimer=null;
-function hasRole(minRole){
-  const hierarchy={developer:3,owner:2,admin:1};
-  const userLevel=hierarchy[currentUser?.role]||0;
-  const minLevel=hierarchy[minRole]||0;
-  return userLevel>=minLevel;
-}
-
-async function doLogin(){
-  const u=document.getElementById('l-user').value.trim();
-  const p=document.getElementById('l-pass').value;
-  const btn=document.getElementById('login-btn');
-  btn.disabled=true; btn.textContent='⏳ Loading...';
-  await new Promise(r=>setTimeout(r,400));
-  btn.disabled=false; btn.textContent='⚡ ACCESS PORTAL';
-  const users=load(K.users);
-  const user=users.find(x=>x.username===u&&x.password===p);
-  if(user){
-    fails=0; resetDots(); currentUser=user;
-    const idx=users.findIndex(x=>x.id===user.id);
-    if(idx>=0){users[idx].lastLogin=new Date().toISOString();save(K.users,users);}
-    document.getElementById('login').style.display='none';
-    document.getElementById('app').style.display='block';
-    document.getElementById('sb-name').textContent=user.username;
-    const roleLabels={developer:'👨‍💻 Developer',owner:'👑 Owner',admin:'🛡️ Admin'};
-    const roleEl=document.getElementById('sb-role');
-    roleEl.textContent=roleLabels[user.role]||user.role;
-    roleEl.className='sb-role '+(user.role||'admin');
-    document.querySelectorAll('.admin-only').forEach(el=>el.style.display=hasRole('admin')?'':'none');
-    document.querySelectorAll('.owner-only').forEach(el=>el.style.display=hasRole('owner')?'':'none');
-    document.querySelectorAll('.dev-only').forEach(el=>el.style.display=hasRole('developer')?'':'none');
-    if(hasRole('admin')){document.getElementById('btn-add-ban').style.display='';document.getElementById('btn-add-player').style.display='';}
-    // Load saved URLs
-    const urls=loadObj(K.urls);
-    if(urls.scanner)document.getElementById('scanner-url').value=urls.scanner;
-    if(urls.monitor)document.getElementById('monitor-url').value=urls.monitor;
-    renderAll(); goPage('dashboard'); drawGraph();
-  } else {
-    fails++;markDot(fails);
-    const e=document.getElementById('l-err');e.style.display='block';
-    e.textContent=`Invalid credentials — Attempt ${fails} of 3`;
-    document.getElementById('l-pass').value='';
-    if(fails>=3) triggerSpam();
-  }
-}
-
-function resetDots(){[1,2,3].forEach(i=>document.getElementById('dot-'+i).classList.remove('used'));}
-function markDot(n){for(let i=1;i<=n;i++)document.getElementById('dot-'+i).classList.add('used');}
-
-function triggerSpam(){
-  fails=0;resetDots();
-  document.getElementById('l-err').style.display='none';
-  const ov=document.getElementById('spam-overlay');ov.classList.add('show');
-  let s=60;document.getElementById('spam-cd').textContent=s+'s';
-  if(spamTimer)clearInterval(spamTimer);
-  spamTimer=setInterval(()=>{
-    s--;document.getElementById('spam-cd').textContent=s+'s';
-    if(s<=0){clearInterval(spamTimer);ov.classList.remove('show');}
-  },1000);
 }
 
 function doLogout(){
-  currentUser=null;
-  document.getElementById('app').style.display='none';
-  document.getElementById('login').style.display='flex';
-  document.getElementById('l-user').value='';
-  document.getElementById('l-pass').value='';
-  document.getElementById('l-err').style.display='none';
-  resetDots();
+  document.getElementById('app').style.display = 'none';
+  document.getElementById('login').style.display = 'flex';
+  document.getElementById('l-user').value = '';
+  document.getElementById('l-pass').value = '';
+  document.getElementById('l-err').style.display = 'none';
 }
 
-// ══ NAVIGATION ═══════════════════════════════
-const PAGES=['dashboard','monitoring','players','map','lookup','bans','downloads','licenses','admins','settings'];
-const TITLES={dashboard:'DASHBOARD',monitoring:'MONITORING',players:'PLAYERS',map:'INGAME MAP',lookup:'PLAYER LOOKUP',bans:'BAN LIST',downloads:'DOWNLOADS',licenses:'LICENSE KEYS',admins:'ADMIN TEAM',settings:'SETTINGS'};
+function changePass(){
+  const np = document.getElementById('new-pass').value;
+  const cp = document.getElementById('conf-pass').value;
+  if(!np || !cp){ toast('❌ Fill both fields'); return; }
+  if(np !== cp){ toast('❌ Passwords do not match'); return; }
+  CREDENTIALS.password = np;
+  toast('✅ Password changed!');
+  document.getElementById('new-pass').value = '';
+  document.getElementById('conf-pass').value = '';
+}
+
+// ══ NAVIGATION ══
+const PAGES = ['dashboard','licenses','clients','revenue','downloads','keylicense','settings'];
+const TITLES = {dashboard:'DASHBOARD',licenses:'LICENSE MANAGER',clients:'CLIENT LIST',revenue:'REVENUE',downloads:'DOWNLOAD KEYS',keylicense:'KEYS LICENSE',settings:'SETTINGS'};
 
 function goPage(p){
-  if(p==='licenses') setTimeout(renderLicHistory, 50);
-  if(!currentUser)return;
-  if(['admins','settings'].includes(p)&&!hasRole('owner'))return;
-  PAGES.forEach(x=>document.getElementById('page-'+x).classList.toggle('active',x===p));
-  document.querySelectorAll('.nav-item').forEach(n=>{
-    n.classList.toggle('active', n.getAttribute('onclick')&&n.getAttribute('onclick').includes("'"+p+"'"));
+  if(p==='downloads') setTimeout(renderDlKeys, 50);
+  if(p==='keylicense') setTimeout(renderKLicKeys, 50);
+  PAGES.forEach(x => document.getElementById('page-'+x).classList.toggle('active', x===p));
+  document.querySelectorAll('.nav-i').forEach(n => {
+    n.classList.toggle('active', n.getAttribute('onclick')?.includes("'"+p+"'"));
   });
-  document.getElementById('topbar-title').textContent=TITLES[p]||p.toUpperCase();
-  // Show/hide topbar buttons
-  document.getElementById('btn-add-ban').style.display=p==='bans'&&hasRole('admin')?'':'none';
-  document.getElementById('btn-add-player').style.display=p==='players'&&hasRole('admin')?'':'none';
+  document.getElementById('topbar-title').textContent = TITLES[p] || p.toUpperCase();
+  document.getElementById('btn-gen').style.display = p==='licenses' ? '' : 'none';
+  document.getElementById('btn-client').style.display = p==='clients' ? '' : 'none';
   renderAll();
 }
 
-// ══ MODALS ═══════════════════════════════════
-function openModal(id){document.getElementById(id).classList.add('open');}
-function closeModal(id){document.getElementById(id).classList.remove('open');}
-document.querySelectorAll('.overlay').forEach(el=>el.addEventListener('click',e=>{if(e.target===el)el.classList.remove('open');}));
+// ══ MODALS ══
+function openModal(id){ document.getElementById(id).classList.add('open'); }
+function closeModal(id){ document.getElementById(id).classList.remove('open'); }
+document.querySelectorAll('.overlay').forEach(el => el.addEventListener('click', e => { if(e.target===el) el.classList.remove('open'); }));
 
-// ══ TOAST ════════════════════════════════════
-function toast(msg){
-  const t=document.getElementById('toast');t.textContent=msg;
-  t.classList.add('show');setTimeout(()=>t.classList.remove('show'),2800);
-}
+// ══ TOAST ══
+function toast(msg){ const t=document.getElementById('toast'); t.textContent=msg; t.classList.add('show'); setTimeout(()=>t.classList.remove('show'),2800); }
 
-// ══ SAVE FUNCTIONS ════════════════════════════
-function saveBan(){
-  const b={id:Date.now(),name:document.getElementById('b-name').value.trim()||'Unknown',steamid:document.getElementById('b-steamid').value.trim()||'N/A',ip:document.getElementById('b-ip').value.trim()||'Unknown',reason:document.getElementById('b-reason').value,notes:document.getElementById('b-notes').value.trim(),by:currentUser?.username||'Unknown',time:new Date().toISOString().replace('T',' ').slice(0,19)};
-  const arr=load(K.bans);arr.unshift(b);save(K.bans,arr);closeModal('modal-ban');renderAll();toast('🔒 Player banned!');
-  ['b-name','b-steamid','b-ip','b-notes'].forEach(i=>document.getElementById(i).value='');
-}
-
-function saveAlert(){
-  const a={id:Date.now(),type:document.getElementById('a-type').value,player:document.getElementById('a-player').value.trim()||'Unknown',detail:document.getElementById('a-detail').value.trim()||'Unknown',ip:document.getElementById('a-ip').value.trim()||'Unknown',time:new Date().toISOString().replace('T',' ').slice(0,19),by:currentUser?.username||'Unknown'};
-  const arr=load(K.alerts);arr.unshift(a);save(K.alerts,arr);closeModal('modal-alert');renderAll();toast('🚨 Alert saved!');
-  ['a-player','a-detail','a-ip'].forEach(i=>document.getElementById(i).value='');
-}
-
-function savePlayer(){
-  const p={id:Date.now(),name:document.getElementById('p-name').value.trim()||'Unknown',steamid:document.getElementById('p-steamid').value.trim()||'N/A',ip:document.getElementById('p-ip').value.trim()||'Unknown',status:document.getElementById('p-status').value,lastSeen:new Date().toISOString().replace('T',' ').slice(0,19)};
-  const arr=load(K.players);arr.unshift(p);save(K.players,arr);closeModal('modal-player');renderAll();toast('✅ Player added!');
-  ['p-name','p-steamid','p-ip'].forEach(i=>document.getElementById(i).value='');
-}
-
-function saveUser(){
-  const n=document.getElementById('u-name').value.trim();
-  const d=document.getElementById('u-disc').value.trim();
-  const r=document.getElementById('u-role').value;
-  if(!n||!d){toast('❌ Fill all fields');return;}
-  if(!/^\d{15,20}$/.test(d)){toast('❌ Invalid Discord ID');return;}
-  const u=load(K.users);
-  if(u.find(x=>x.discordId===d)){toast('❌ Discord ID already added');return;}
-  u.push({id:Date.now(),username:n,discordId:d,role:r,created:new Date().toISOString(),lastLogin:null});
-  save(K.users,u);closeModal('modal-adduser');renderAll();toast('✅ Admin added!');
-  ['u-name','u-disc'].forEach(i=>document.getElementById(i).value='');
-}
-
-function delBan(id){save(K.bans,load(K.bans).filter(b=>b.id!==id));renderAll();toast('🔓 Unbanned');}
-function delAlert(id){save(K.alerts,load(K.alerts).filter(a=>a.id!==id));renderAll();toast('🗑️ Deleted');}
-function delPlayer(id){save(K.players,load(K.players).filter(p=>p.id!==id));renderAll();toast('🗑️ Removed');}
-function delUser(id){save(K.users,load(K.users).filter(u=>u.id!==id));renderAll();toast('👤 Removed');}
-function clearAlerts(){if(confirm('Clear all alerts?')){save(K.alerts,[]);renderAll();toast('🗑️ Cleared');}}
-function clearPlayers(){if(confirm('Clear all players?')){save(K.players,[]);renderAll();toast('🗑️ Cleared');}}
-
-// ══ DOWNLOADS ════════════════════════════════
-function saveUrl(type){
-  const val=document.getElementById(type+'-url').value.trim();
-  const urls=loadObj(K.urls);urls[type]=val;save(K.urls,urls);toast('✅ Link saved!');
-}
-function dlFile(type){
-  const urls=loadObj(K.urls);
-  const url=urls[type];
-  if(!url){toast('❌ No download link set yet — admin must add link first');return;}
-  window.open(url,'_blank');
-}
-
-// ══ LOOKUP ════════════════════════════════════
-function doLookup(){
-  const q=document.getElementById('lookup-input').value.trim().toLowerCase();
-  const el=document.getElementById('lookup-results');
-  if(!q){el.innerHTML='';return;}
-  const players=load(K.players);
-  const bans=load(K.bans);
-  const allItems=[
-    ...players.map(p=>({...p,_type:'player'})),
-    ...bans.map(b=>({...b,name:b.name,_type:'ban'}))
-  ];
-  const results=allItems.filter(x=>(x.name||'').toLowerCase().includes(q)||(x.steamid||'').toLowerCase().includes(q)||(x.ip||'').toLowerCase().includes(q));
-  if(!results.length){el.innerHTML='<div class="empty"><span class="empty-icon">🔍</span><p>No results found</p></div>';return;}
-  el.innerHTML=results.map(r=>`
-    <div style="background:var(--bg3);border:1px solid var(--brd);border-radius:8px;padding:12px 14px;margin-bottom:8px;display:flex;align-items:center;justify-content:space-between">
-      <div>
-        <div style="font-size:.82rem;font-weight:600">${r.name}</div>
-        <div style="font-size:.65rem;color:var(--t3);margin-top:3px">Steam: ${r.steamid||'N/A'} · IP: ${r.ip||'N/A'}</div>
-      </div>
-      <span class="badge ${r._type==='ban'?'badge-red':'badge-green'}">${r._type==='ban'?'BANNED':'PLAYER'}</span>
-    </div>
-  `).join('');
-}
-
-// ══ RENDER ════════════════════════════════════
-function renderAll(){
-  const bans=load(K.bans),alerts=load(K.alerts),players=load(K.players),users=load(K.users);
-
-  // Stats
-  document.getElementById('s-online').textContent=players.filter(p=>p.status==='online').length;
-  document.getElementById('s-peak').textContent=Math.max(players.length,0);
-  document.getElementById('s-bans').textContent=bans.length;
-  document.getElementById('s-alerts').textContent=alerts.length;
-  document.getElementById('nb-bans').textContent=bans.length;
-  document.getElementById('nb-mon').textContent=alerts.length;
-  document.getElementById('nb-players').textContent=players.length;
-  document.getElementById('live-chip').textContent=alerts.length;
-  document.getElementById('mon-chip').textContent=alerts.length;
-  document.getElementById('bans-chip').textContent=bans.length;
-  document.getElementById('players-chip').textContent=players.length;
-  document.getElementById('admins-chip').textContent=users.length;
-  document.getElementById('recent-bans-chip').textContent=bans.length;
-
-  // Recent bans (dashboard)
-  const rbt=document.getElementById('recent-bans-tbody');
-  if(!bans.length){rbt.innerHTML='<tr><td colspan="4"><div class="empty"><span class="empty-icon">🔒</span><p>No bans yet</p></div></td></tr>';}
-  else{rbt.innerHTML=bans.slice(0,5).map(b=>`<tr><td class="red">${b.name}</td><td><span class="badge badge-red">${b.reason}</span></td><td class="dim">${b.by}</td><td class="dim mono" style="font-size:.6rem">${b.time.slice(5,16)}</td></tr>`).join('');}
-
-  // Monitoring feed (dashboard)
-  const dmf=document.getElementById('dash-mon-feed');
-  if(!alerts.length){dmf.innerHTML='<div class="empty"><span class="empty-icon">🟢</span><p>No active alerts</p></div>';}
-  else{dmf.innerHTML=alerts.slice(0,6).map(a=>`<div class="mon-item"><div class="mon-dot red"></div><div class="mon-body"><div class="mon-title">${a.type}</div><div class="mon-meta">${a.player} · ${a.ip}</div></div><div class="mon-time">${a.time.slice(11,16)}</div></div>`).join('');}
-
-  // Monitoring table
-  const mt=document.getElementById('mon-tbody');
-  if(!alerts.length){mt.innerHTML='<tr><td colspan="6"><div class="empty"><span class="empty-icon">🟢</span><p>No alerts</p></div></td></tr>';}
-  else{mt.innerHTML=alerts.map(a=>`<tr><td><span class="badge badge-red">${a.type}</span></td><td>${a.player}</td><td class="dim">${a.detail}</td><td class="mono dim">${a.ip}</td><td class="dim mono" style="font-size:.62rem">${a.time}</td><td>${hasRole('admin')?`<button class="btn btn-red btn-sm btn-icon" onclick="event.stopPropagation();delAlert(${a.id})">✕</button>`:''}</td></tr>`).join('');}
-
-  // Players table
-  const pt=document.getElementById('players-tbody');
-  if(!players.length){pt.innerHTML='<tr><td colspan="7"><div class="empty"><span class="empty-icon">👥</span><p>No players yet</p></div></td></tr>';}
-  else{pt.innerHTML=players.map((p,i)=>`<tr><td class="dim">${i+1}</td><td style="font-weight:600">${p.name}</td><td class="mono dim" style="font-size:.65rem">${p.steamid}</td><td class="mono dim" style="font-size:.65rem">${p.ip}</td><td><span class="badge ${p.status==='online'?'badge-green':p.status==='banned'?'badge-red':'badge-gray'}">${p.status.toUpperCase()}</span></td><td class="dim" style="font-size:.65rem">${p.lastSeen}</td><td>${hasRole('admin')?`<button class="btn btn-red btn-sm btn-icon" onclick="event.stopPropagation();delPlayer(${p.id})">✕</button>`:''}</td></tr>`).join('');}
-
-  // Bans table
-  const bt=document.getElementById('bans-tbody');
-  if(!bans.length){bt.innerHTML='<tr><td colspan="8"><div class="empty"><span class="empty-icon">🔒</span><p>No bans yet</p></div></td></tr>';}
-  else{bt.innerHTML=bans.map((b,i)=>`<tr><td class="dim">${i+1}</td><td class="red" style="font-weight:600">${b.name}</td><td class="mono dim" style="font-size:.62rem">${b.steamid}</td><td class="mono dim" style="font-size:.62rem">${b.ip}</td><td><span class="badge badge-red">${b.reason}</span></td><td class="dim">${b.by}</td><td class="dim mono" style="font-size:.62rem">${b.time}</td><td>${hasRole('admin')?`<button class="btn btn-red btn-sm btn-icon" onclick="event.stopPropagation();delBan(${b.id})">✕</button>`:''}</td></tr>`).join('');}
-
-  // Admins table
-  const at=document.getElementById('admins-tbody');
-  at.innerHTML=users.map(x=>`<tr><td style="font-weight:600;color:var(--red)">${x.username}</td><td class="mono dim" style="font-size:.6rem">${x.discordId||'—'}</td><td><span class="badge ${x.role==='developer'?'badge-red':x.role==='owner'?'badge-blue':'badge-gray'}">${x.role==='developer'?'👨‍💻 DEVELOPER':x.role==='owner'?'👑 OWNER':'🛡️ ADMIN'}</span></td><td class="dim mono" style="font-size:.62rem">${x.lastLogin?x.lastLogin.slice(0,16).replace('T',' '):'Never'}</td><td><span class="badge badge-green">ACTIVE</span></td><td>${x.username!=='DEIMOS'?`<button class="btn btn-red btn-sm btn-icon" onclick="delUser(${x.id})">✕</button>`:''}</td></tr>`).join('');
-}
-
-// ══ GRAPH ════════════════════════════════════
-function drawGraph(){
-  const canvas=document.getElementById('playerGraph');
-  if(!canvas)return;
-  const ctx=canvas.getContext('2d');
-  canvas.width=canvas.offsetWidth*window.devicePixelRatio||800;
-  canvas.height=140*window.devicePixelRatio||140;
-  ctx.scale(window.devicePixelRatio||1,window.devicePixelRatio||1);
-  const W=canvas.offsetWidth||800, H=140;
-
-  // Generate sample data
-  const pts=[];
-  for(let i=0;i<80;i++){
-    const base=30+Math.sin(i/8)*15+Math.sin(i/3)*8;
-    pts.push(Math.max(0,base+Math.random()*10-5));
-  }
-  const maxV=Math.max(...pts);
-
-  ctx.clearRect(0,0,W,H);
-
-  // Fill
-  const grad=ctx.createLinearGradient(0,0,0,H);
-  grad.addColorStop(0,'rgba(224,32,32,0.3)');
-  grad.addColorStop(1,'rgba(224,32,32,0.02)');
-  ctx.beginPath();
-  ctx.moveTo(0,H);
-  pts.forEach((v,i)=>{
-    const x=(i/(pts.length-1))*W;
-    const y=H-(v/maxV)*(H-10);
-    i===0?ctx.lineTo(x,y):ctx.lineTo(x,y);
-  });
-  ctx.lineTo(W,H);ctx.closePath();
-  ctx.fillStyle=grad;ctx.fill();
-
-  // Line
-  ctx.beginPath();
-  pts.forEach((v,i)=>{
-    const x=(i/(pts.length-1))*W;
-    const y=H-(v/maxV)*(H-10);
-    i===0?ctx.moveTo(x,y):ctx.lineTo(x,y);
-  });
-  ctx.strokeStyle='rgba(224,32,32,0.8)';ctx.lineWidth=1.5;ctx.stroke();
-}
-
-// ══ HOME PAGE ══════════════════════════════════════════
-function enterDashboard(){
-  const hp = document.getElementById('home-page');
-  hp.style.transition = 'opacity .5s ease';
-  hp.style.opacity = '0';
-  setTimeout(() => { hp.style.display = 'none'; }, 500);
-  history.pushState({page:'login'}, '', window.location.pathname);
-}
-
-function goHome(){
-  const hp = document.getElementById('home-page');
-  hp.style.display = 'flex';
-  hp.style.opacity = '0';
-  setTimeout(() => {
-    hp.style.transition = 'opacity .5s ease';
-    hp.style.opacity = '1';
-  }, 10);
-  history.pushState({page:'home'}, '', window.location.pathname);
-}
-
-// Handle browser back button
-window.addEventListener('popstate', function(e){
-  const hp = document.getElementById('home-page');
-  const login = document.getElementById('login');
-  const app = document.getElementById('app');
-  if(!e.state || e.state.page === 'home'){
-    hp.style.display = 'flex';
-    hp.style.opacity = '1';
-    if(login) login.style.display = 'none';
-    if(app) app.style.display = 'none';
-  }
-});
-
-// ══ DISCORD LOGIN ═══════════════════════════════════════
-function loginWithDiscord(){
-  window.location.href = 'https://discord.com/api/oauth2/authorize?client_id=1487034395465351218&redirect_uri=https%3A%2F%2Fssi-clan.com%2Fcallback.php&response_type=code&scope=identify';
-}
-
-// Auth check - redirect to login if not authenticated
-(function(){
-  // First check if coming from Discord OAuth via URL params
-  const _urlParams = new URLSearchParams(window.location.search);
-  const _discordId = _urlParams.get('discord_id');
-  const _discordName = _urlParams.get('discord_name');
-  const _role = _urlParams.get('role') || 'admin';
-
-  if(_discordId && _discordName){
-    // Coming from Discord OAuth - build auth from URL params
-    const users = JSON.parse(localStorage.getItem('mvk_users') || '[]');
-    const deimosIdx = users.findIndex(x=>x.username==='DEIMOS');
-    if(deimosIdx >= 0){ users[deimosIdx].discordId='641690154461036554'; users[deimosIdx].role='developer'; }
-    else { users.push({id:1,username:'DEIMOS',discordId:'641690154461036554',role:'developer',created:new Date().toISOString(),lastLogin:null}); }
-    localStorage.setItem('mvk_users', JSON.stringify(users));
-
-    let user = users.find(u => u.discordId === _discordId);
-    if(!user){
-      user = {id:Date.now(), username:_discordName, discordId:_discordId, role:_role, created:new Date().toISOString(), lastLogin:null};
-      users.push(user);
-      localStorage.setItem('mvk_users', JSON.stringify(users));
-    }
-    const authData = JSON.stringify({...user, discordName:_discordName});
-    sessionStorage.setItem('mvk_auth', authData);
-    localStorage.setItem('mvk_auth', authData);
-    // Clean URL
-    window.history.replaceState({}, '', '/dashboard/');
-  }
-
-  // Now check auth
-  let auth = sessionStorage.getItem('mvk_auth');
-  if(!auth) auth = localStorage.getItem('mvk_auth');
-  if(!auth) auth = localStorage.getItem('mvk_auth_backup');
-
-  if(!auth){
-    window.location.href = '/login';
-    return;
-  }
-  try {
-    const user = JSON.parse(auth);
-    currentUser = user;
-    document.getElementById('login').style.display = 'none';
-    document.getElementById('app').style.display = 'block';
-    document.getElementById('sb-name').textContent = user.discordName || user.username;
-    const roleLabels={developer:'👨‍💻 Developer',owner:'👑 Owner',admin:'🛡️ Admin',trainee:'🎓 Trainee'};
-    const roleEl = document.getElementById('sb-role');
-    if(roleEl){ roleEl.textContent = roleLabels[user.role] || user.role; roleEl.className = 'sb-role ' + (user.role || 'admin'); }
-    document.querySelectorAll('.admin-only').forEach(el=>el.style.display=hasRole('admin')?'':'none');
-    document.querySelectorAll('.owner-only').forEach(el=>el.style.display=hasRole('owner')?'':'none');
-    document.querySelectorAll('.dev-only').forEach(el=>el.style.display=hasRole('developer')?'':'none');
-    if(currentUser?.role==='trainee'){
-      document.querySelectorAll('.nav-item').forEach(el=>{
-        const oc=el.getAttribute('onclick')||'';
-        const allowed=['dashboard','monitoring'];
-        const visible=allowed.some(p=>oc.includes("'"+p+"'"));
-        el.style.display=visible?'':'none';
-      });
-    }
-    renderAll(); goPage('dashboard'); drawGraph();
-  } catch(e){ window.location.href = '/login'; }
-})();
-
-// Check if returning from Discord OAuth
-(function(){
-  const params = new URLSearchParams(window.location.search);
-  const discordId = params.get('discord_id');
-  const discordName = params.get('discord_name');
-  const errorMsg = params.get('error');
-  
-  if(errorMsg){
-    // Show login page with error
-    document.getElementById('home-page').style.display = 'none';
-    document.getElementById('login').style.display = 'flex';
-    const err = document.getElementById('l-err');
-    err.style.display = 'block';
-    err.textContent = decodeURIComponent(errorMsg);
-    return;
-  }
-  
-  if(discordId && discordName){
-    // Hide home, show app directly
-    document.getElementById('home-page').style.display = 'none';
-    // Make sure default users are initialized first
-    let users = JSON.parse(localStorage.getItem('mvk_users') || '[]');
-    const hasDeimos = users.find(x => x.username === 'DEIMOS');
-    if(!hasDeimos){
-      users.push({id:1,username:'DEIMOS',discordId:'641690154461036554',role:'developer',created:new Date().toISOString(),lastLogin:null});
-      localStorage.setItem('mvk_users', JSON.stringify(users));
-    } else {
-      const idx = users.findIndex(x => x.username === 'DEIMOS');
-      users[idx].discordId = '641690154461036554';
-      users[idx].role = 'developer';
-      localStorage.setItem('mvk_users', JSON.stringify(users));
-    }
-    // Get role from URL (set by callback.php)
-    const urlRole = params.get('role') || 'admin';
-    let user = users.find(u => u.discordId === discordId);
-    if(!user){
-      // Create user on the fly from callback data
-      user = {id: Date.now(), username: discordName, discordId: discordId, role: urlRole, created: new Date().toISOString(), lastLogin: null};
-      users.push(user);
-      localStorage.setItem('mvk_users', JSON.stringify(users));
-    } else {
-      // Update role from server
-      user.role = urlRole;
-    }
-    if(user){
-      currentUser = user;
-      document.getElementById('login').style.display = 'none';
-      document.getElementById('app').style.display = 'block';
-      document.getElementById('sb-name').textContent = discordName;
-      const roleLabels={developer:'👨‍💻 Developer',owner:'👑 Owner',admin:'🛡️ Admin',trainee:'🎓 Trainee'};
-      const roleEl = document.getElementById('sb-role');
-      roleEl.textContent = roleLabels[user.role] || user.role;
-      roleEl.className = 'sb-role ' + (user.role || 'admin');
-      document.querySelectorAll('.admin-only').forEach(el=>el.style.display=hasRole('admin')?'':'none');
-      document.querySelectorAll('.owner-only').forEach(el=>el.style.display=hasRole('owner')?'':'none');
-      document.querySelectorAll('.dev-only').forEach(el=>el.style.display=hasRole('developer')?'':'none');
-      if(currentUser?.role==='trainee'){
-        document.querySelectorAll('.nav-item').forEach(el=>{
-          const oc=el.getAttribute('onclick')||'';
-          const allowed=['dashboard','monitoring'];
-          const visible=allowed.some(p=>oc.includes("'"+p+"'"));
-          el.style.display=visible?'':'none';
-        });
-        document.querySelectorAll('.sb-section').forEach(el=>el.style.display='none');
-      }
-      renderAll(); goPage('dashboard'); drawGraph();
-      // Clean URL
-      window.history.replaceState({}, '', window.location.pathname);
-    } else {
-      // Not authorized
-      document.getElementById('login').style.display = 'flex';
-      const err = document.getElementById('l-err');
-      err.style.display = 'block';
-      err.textContent = '❌ You are not authorized. Visit vortex-ac.com for access.';
-    }
-  }
-})();
-
-</script>
-
-<!-- ══ VORTEX BADGE ══ -->
-<div id="vortex-badge">
-  <div class="vx-popup">
-    <div class="vx-popup-title">⚡ Vortex AntiCheat</div>
-    <div class="vx-popup-sub">Want your own dashboard &amp; anticheat system? Get it now!</div>
-    <a href="https://www.vortex-ac.com" target="_blank" class="vx-popup-btn">Get Your System →</a>
-  </div>
-    <div class="vx-logo-btn">
-    <svg width="26" height="26" viewBox="0 0 200 200" fill="none">
-      <circle cx="100" cy="100" r="90" stroke="white" stroke-width="8"/>
-      <path d="M45 48 L72 48 L100 118 L128 48 L155 48 L100 158 Z" fill="white"/>
-      <path d="M45 48 L62 48 L68 62 L55 82 Z" fill="#08080d"/>
-      <path d="M155 48 L138 48 L132 62 L145 82 Z" fill="#08080d"/>
-    </svg>
-  </div>
-</div>
-
-<script>
-// Vortex badge click
-(function(){
-  var btn = document.querySelector('.vx-logo-btn');
-  var popup = document.querySelector('.vx-popup');
-  if(!btn || !popup) return;
-  btn.addEventListener('click', function(e){
-    e.stopPropagation();
-    popup.classList.toggle('show');
-  });
-  document.addEventListener('click', function(e){
-    if(!e.target.closest('#vortex-badge')){
-      popup.classList.remove('show');
-    }
-  });
-})();
-</script>
-
-<script>
-// ══ LICENSE KEYS ════════════════════════════════════════════════
-const K_LIC = 'mvk_license_keys';
-const WEBHOOK_KEYS = 'https://discord.com/api/webhooks/1487429277212479549/UkO5ZqsGupVz3-lQS7YOyoOkDPgD-vC3Js_4iFVwd47dZFBpARqc-Rf1M3NWaapeock8';
-
-function genLicKey(){
+// ══ KEY GENERATOR ══
+function generateKey(){
   const chars = 'ABCDEFGHJKLMNPQRSTUVWXYZ23456789';
   const seg = () => Array.from({length:4}, ()=>chars[Math.floor(Math.random()*chars.length)]).join('');
   return `MVK-${seg()}-${seg()}-${seg()}`;
 }
 
-function generateLicenseKey(){
-  const client = document.getElementById('lic-client').value.trim() || 'Unknown';
-  const key = genLicKey();
-  const now = new Date();
-  const dateStr = now.toISOString().slice(0,10).replace(/-/g,'/');
-  const timeStr = now.toTimeString().slice(0,5);
-  const datetime = dateStr + ' ' + timeStr;
-  const by = typeof currentUser !== 'undefined' ? (currentUser?.username || 'Unknown') : 'DEIMOS';
-
-  const keys = JSON.parse(localStorage.getItem(K_LIC) || '[]');
-  keys.unshift({id:Date.now(), key, client, by, datetime, used:false});
-  localStorage.setItem(K_LIC, JSON.stringify(keys));
-
-  document.getElementById('lic-key-val').textContent = key;
-  document.getElementById('lic-result').style.display = 'block';
-  document.getElementById('lic-client').value = '';
-  renderLicHistory();
-
-  fetch(WEBHOOK_KEYS, {
-    method: 'POST',
-    headers: {'Content-Type':'application/json'},
-    body: JSON.stringify({
-      username: 'Maverick AntiCheat — License System',
-      embeds: [{
-        title: '🔑 New License Key Generated',
-        color: 14680064,
-        fields: [
-          {name:'🔑 Key', value:'`' + key + '`', inline:false},
-          {name:'👤 Client', value:'`' + client + '`', inline:true},
-          {name:'👨‍💻 Generated By', value:'`' + by + '`', inline:true},
-          {name:'🕐 Date & Time', value:'`' + datetime + '`', inline:true},
-        ],
-        footer: {text: 'Maverick AntiCheat • License System • One-Time Use'},
-        timestamp: now.toISOString()
-      }]
-    })
-  }).catch(()=>{});
-
-  toast('✅ Key generated: ' + key);
+function getExpiry(days){
+  if(days == 9999) return 'Lifetime';
+  const d = new Date();
+  const daysFloat = parseFloat(days);
+  if(daysFloat < 1){
+    // Add minutes
+    const minutes = Math.round(daysFloat * 24 * 60);
+    d.setMinutes(d.getMinutes() + minutes);
+    // Return full datetime for minute-level expiry
+    return d.toISOString().slice(0,19).replace('T',' ');
+  }
+  d.setDate(d.getDate() + Math.floor(daysFloat));
+  return d.toISOString().slice(0,10);
 }
 
-function copyLicKey(){
-  const key = document.getElementById('lic-key-val').textContent;
+function getStatus(lic){
+  if(lic.banned) return 'banned';
+  if(lic.expiry === 'Lifetime') return 'active';
+  if(new Date(lic.expiry) < new Date()) return 'expired';
+  return 'active';
+}
+
+function genKey(){
+  const name = document.getElementById('g-name').value.trim() || 'Unknown';
+  const plan = document.getElementById('g-plan').value;
+  const days = document.getElementById('g-days').value;
+  const key = generateKey();
+  const expiry = getExpiry(days);
+  const lic = {id:Date.now(), key, client:name, plan, created:new Date().toISOString().slice(0,10), expiry, banned:false};
+  const arr = load(K.lic); arr.unshift(lic); save(K.lic, arr);
+  document.getElementById('key-val').textContent = key;
+  document.getElementById('key-display').classList.add('show');
+  renderAll(); toast('✅ License key generated!'); setTimeout(syncToServer, 500);
+}
+
+function genKeyModal(){
+  const name = document.getElementById('mg-name').value.trim() || 'Unknown';
+  const plan = document.getElementById('mg-plan').value;
+  const days = document.getElementById('mg-days').value;
+  const amount = parseFloat(document.getElementById('mg-amount').value) || 0;
+  const key = generateKey();
+  const expiry = getExpiry(days);
+  const lic = {id:Date.now(), key, client:name, plan, created:new Date().toISOString().slice(0,10), expiry, banned:false};
+  const arr = load(K.lic); arr.unshift(lic); save(K.lic, arr);
+  // Add payment if amount > 0
+  if(amount > 0){
+    const pay = load(K.pay);
+    pay.unshift({id:Date.now(), client:name, plan, amount, method:'Manual', date:new Date().toISOString().slice(0,10)});
+    save(K.pay, pay);
+  }
+  closeModal('modal-gen');
+  navigator.clipboard?.writeText(key);
+  renderAll(); toast('✅ Key generated & copied: ' + key);
+}
+
+function copyKey(){
+  const key = document.getElementById('key-val').textContent;
+  navigator.clipboard?.writeText(key);
+  toast('📋 Key copied to clipboard!');
+}
+
+function banLic(id){
+  const arr = load(K.lic);
+  const idx = arr.findIndex(x => x.id===id);
+  if(idx>=0){ arr[idx].banned = !arr[idx].banned; save(K.lic, arr); renderAll(); toast(arr[idx].banned ? '🔒 License banned!' : '✅ License unbanned!'); }
+}
+
+function delLic(id){ save(K.lic, load(K.lic).filter(x=>x.id!==id)); renderAll(); toast('🗑️ Deleted'); }
+
+function clearExpired(){
+  const arr = load(K.lic).filter(x => getStatus(x) !== 'expired');
+  save(K.lic, arr); renderAll(); toast('🗑️ Expired licenses cleared');
+}
+
+// ══ CLIENTS ══
+function saveClient(){
+  const c = {id:Date.now(), name:document.getElementById('c-name').value.trim()||'Unknown', server:document.getElementById('c-server').value.trim()||'Unknown', discord:document.getElementById('c-discord').value.trim()||'N/A', plan:document.getElementById('c-plan').value, notes:document.getElementById('c-notes').value.trim(), joined:new Date().toISOString().slice(0,10)};
+  const arr = load(K.cli); arr.unshift(c); save(K.cli, arr);
+  closeModal('modal-client'); renderAll(); toast('✅ Client added!');
+  ['c-name','c-server','c-discord','c-notes'].forEach(i=>document.getElementById(i).value='');
+}
+function delClient(id){ save(K.cli, load(K.cli).filter(x=>x.id!==id)); renderAll(); toast('🗑️ Removed'); }
+
+// ══ PAYMENTS ══
+function savePayment(){
+  const p = {id:Date.now(), client:document.getElementById('p-client').value.trim()||'Unknown', plan:document.getElementById('p-plan').value, amount:parseFloat(document.getElementById('p-amount').value)||0, method:document.getElementById('p-method').value, date:new Date().toISOString().slice(0,10)};
+  const arr = load(K.pay); arr.unshift(p); save(K.pay, arr);
+  closeModal('modal-payment'); renderAll(); toast('💰 Payment recorded!');
+  document.getElementById('p-client').value=''; document.getElementById('p-amount').value='';
+}
+function delPayment(id){ save(K.pay, load(K.pay).filter(x=>x.id!==id)); renderAll(); toast('🗑️ Deleted'); }
+
+// ══ RENDER ══
+function renderAll(){
+  const lics = load(K.lic);
+  const clients = load(K.cli);
+  const payments = load(K.pay);
+
+  const active = lics.filter(x=>getStatus(x)==='active').length;
+  const expired = lics.filter(x=>getStatus(x)==='expired').length;
+  const banned = lics.filter(x=>x.banned).length;
+
+  // Stats
+  document.getElementById('s-active').textContent = active;
+  document.getElementById('s-total').textContent = lics.length;
+  document.getElementById('s-expired').textContent = expired;
+  document.getElementById('s-banned').textContent = banned;
+  document.getElementById('nb-lic').textContent = lics.length;
+  document.getElementById('nb-cli').textContent = clients.length;
+  document.getElementById('lic-count').textContent = lics.length + ' total';
+  document.getElementById('cli-count').textContent = clients.length + ' clients';
+
+  // Revenue stats
+  const totalRev = payments.reduce((s,p)=>s+p.amount,0);
+  const now = new Date();
+  const monthRev = payments.filter(p=>p.date.slice(0,7)===now.toISOString().slice(0,7)).reduce((s,p)=>s+p.amount,0);
+  document.getElementById('r-total').textContent = '$' + totalRev.toFixed(2);
+  document.getElementById('r-month').textContent = '$' + monthRev.toFixed(2);
+  document.getElementById('r-sales').textContent = lics.length;
+  document.getElementById('r-clients').textContent = clients.length;
+
+  // Status badge helper
+  const statusBadge = s => {
+    if(s==='active') return '<span class="badge badge-green">ACTIVE</span>';
+    if(s==='expired') return '<span class="badge badge-yellow">EXPIRED</span>';
+    if(s==='banned') return '<span class="badge badge-red">BANNED</span>';
+    return '<span class="badge badge-gray">UNKNOWN</span>';
+  };
+
+  // Plan badge
+  const planBadge = p => {
+    if(p==='Elite') return '<span class="badge badge-blue">ELITE</span>';
+    if(p==='Pro') return '<span class="badge badge-blue" style="color:#a78bfa;border-color:rgba(167,139,250,.3)">PRO</span>';
+    return '<span class="badge badge-gray">BASIC</span>';
+  };
+
+  // Recent licenses (dashboard)
+  const rt = document.getElementById('recent-tbody');
+  if(!lics.length) rt.innerHTML='<tr><td colspan="5"><div style="padding:16px;text-align:center;color:var(--t3);font-size:.7rem">No licenses yet</div></td></tr>';
+  else rt.innerHTML = lics.slice(0,5).map(l=>`<tr><td class="mono" style="font-size:.65rem;color:var(--blue)">${l.key}</td><td style="font-weight:600">${l.client}</td><td>${planBadge(l.plan)}</td><td class="dim mono" style="font-size:.63rem">${l.expiry}</td><td>${statusBadge(getStatus(l))}</td></tr>`).join('');
+
+  // All licenses
+  const lt = document.getElementById('lic-tbody');
+  if(!lics.length) lt.innerHTML='<tr><td colspan="7"><div style="padding:20px;text-align:center;color:var(--t3);font-size:.7rem">No licenses yet — generate one above</div></td></tr>';
+  else lt.innerHTML = lics.map(l=>`<tr>
+    <td class="mono" style="font-size:.63rem;color:var(--blue)">${l.key}</td>
+    <td style="font-weight:600">${l.client}</td>
+    <td>${planBadge(l.plan)}</td>
+    <td class="dim mono" style="font-size:.62rem">${l.created}</td>
+    <td class="dim mono" style="font-size:.62rem">${l.expiry}</td>
+    <td>${statusBadge(getStatus(l))}</td>
+    <td style="display:flex;gap:4px">
+      <button class="btn btn-ghost btn-sm" onclick="event.stopPropagation();navigator.clipboard?.writeText('${l.key}');toast('📋 Copied!')">📋</button>
+      <button class="btn ${l.banned?'btn-green':'btn-red'} btn-sm" onclick="event.stopPropagation();banLic(${l.id})">${l.banned?'✅':'🔒'}</button>
+      <button class="btn btn-red btn-sm" onclick="event.stopPropagation();delLic(${l.id})">🗑</button>
+    </td>
+  </tr>`).join('');
+
+  // Clients recent
+  const crt = document.getElementById('clients-recent-tbody');
+  if(!clients.length) crt.innerHTML='<tr><td colspan="4"><div style="padding:16px;text-align:center;color:var(--t3);font-size:.7rem">No clients yet</div></td></tr>';
+  else crt.innerHTML = clients.slice(0,5).map(c=>`<tr><td style="font-weight:600">${c.name}</td><td class="dim">${c.server}</td><td>${planBadge(c.plan)}</td><td class="dim mono" style="font-size:.62rem">${c.joined}</td></tr>`).join('');
+
+  // All clients
+  const ct = document.getElementById('cli-tbody');
+  if(!clients.length) ct.innerHTML='<tr><td colspan="7"><div style="padding:20px;text-align:center;color:var(--t3);font-size:.7rem">No clients yet</div></td></tr>';
+  else ct.innerHTML = clients.map(c=>`<tr>
+    <td style="font-weight:600">${c.name}</td>
+    <td class="dim">${c.server}</td>
+    <td class="dim">${c.discord}</td>
+    <td>${planBadge(c.plan)}</td>
+    <td class="dim mono" style="font-size:.62rem">${c.joined}</td>
+    <td class="dim" style="font-size:.65rem">${c.notes||'—'}</td>
+    <td><button class="btn btn-red btn-sm" onclick="event.stopPropagation();delClient(${c.id})">🗑</button></td>
+  </tr>`).join('');
+
+  // Revenue
+  const pvt = document.getElementById('rev-tbody');
+  if(!payments.length) pvt.innerHTML='<tr><td colspan="6"><div style="padding:20px;text-align:center;color:var(--t3);font-size:.7rem">No payments recorded yet</div></td></tr>';
+  else pvt.innerHTML = payments.map(p=>`<tr>
+    <td style="font-weight:600">${p.client}</td>
+    <td>${planBadge(p.plan)}</td>
+    <td class="green" style="font-weight:700;font-family:\'JetBrains Mono\',monospace">$${p.amount.toFixed(2)}</td>
+    <td class="dim mono" style="font-size:.62rem">${p.date}</td>
+    <td><span class="badge badge-gray">${p.method}</span></td>
+    <td><button class="btn btn-red btn-sm" onclick="event.stopPropagation();delPayment(${p.id})">🗑</button></td>
+  </tr>`).join('');
+}
+
+// ══ SYNC TO SERVER ══════════════════════════════════════════════
+const SYNC_URL = 'https://ssi-clan.com/sync.php';
+const SYNC_SECRET = 'VORTEX-SYNC-2026-DEIMOS';
+
+async function syncToServer(){
+  const lics = load(K.lic);
+  try {
+    const fd = new FormData();
+    fd.append('secret', SYNC_SECRET);
+    fd.append('licenses', JSON.stringify(lics));
+    const resp = await fetch(SYNC_URL, {method:'POST', body:fd});
+    const data = await resp.json();
+    if(data.ok) toast('☁️ Synced to server! (' + data.count + ' keys)');
+    else toast('❌ Sync failed: ' + data.reason);
+  } catch(e){
+    toast('❌ Cannot reach server');
+  }
+}
+
+
+// ══ KEYS LICENSE — reads Maverick's mvk_license_keys ════════════
+// Keys are generated in Maverick dashboard → used here to download
+// Key stays ACTIVE after download so scanner can still use it to run
+const K_KLIC = 'mvk_license_keys'; // same store as Maverick
+
+function renderKLicKeys(){
+  const keys = JSON.parse(localStorage.getItem(K_KLIC) || '[]');
+  const nb = document.getElementById('nb-klics');
+  if(nb) nb.textContent = keys.length;
+  const cnt = document.getElementById('klic-count');
+  if(cnt) cnt.textContent = keys.length + ' keys';
+  const tb = document.getElementById('klic-tbody');
+  if(!tb) return;
+  if(!keys.length){
+    tb.innerHTML='<tr><td colspan="6"><div style="padding:20px;text-align:center;color:var(--t3);font-size:.7rem">No keys found — generate them in Maverick Dashboard</div></td></tr>';
+    return;
+  }
+  tb.innerHTML = keys.map(k=>`<tr>
+    <td class="mono" style="font-size:.63rem;color:var(--blue)">${k.key}</td>
+    <td style="font-weight:600">${k.client||'—'}</td>
+    <td class="dim">${k.by||'—'}</td>
+    <td class="dim mono" style="font-size:.62rem">${k.datetime||'—'}</td>
+    <td>
+      ${k.downloaded ? '<span class="badge badge-yellow">DOWNLOADED</span>' : ''}
+      ${k.used ? '<span class="badge badge-red">USED</span>' : (!k.downloaded ? '<span class="badge badge-green">ACTIVE</span>' : '')}
+    </td>
+    <td>
+      <button class="btn btn-ghost btn-sm" onclick="event.stopPropagation();navigator.clipboard?.writeText('${k.key}');toast('📋 Copied!')">📋</button>
+    </td>
+  </tr>`).join('');
+}
+
+// ── Download page: verify MVK key → mark downloaded → unlock file ─
+function verifyKLicAndDownload(){
+  const keyInput = document.getElementById('dl-verify-key').value.trim().toUpperCase();
+  const status = document.getElementById('dl-verify-status');
+  if(!keyInput){ status.style.display='block'; status.style.color='var(--red)'; status.textContent='❌ Please enter your license key'; return; }
+  const keys = JSON.parse(localStorage.getItem(K_KLIC) || '[]');
+  const found = keys.find(k => k.key === keyInput);
+  if(!found){ status.style.display='block'; status.style.color='var(--red)'; status.textContent='❌ Invalid key. Contact your admin (Maverick Dashboard).'; return; }
+  if(found.downloaded){ status.style.display='block'; status.style.color='var(--yellow)'; status.textContent='⚠️ File already downloaded with this key.'; return; }
+  if(found.used){ status.style.display='block'; status.style.color='var(--red)'; status.textContent='❌ This key has already been used to run the scanner.'; return; }
+  // Mark as downloaded — key stays valid so scanner can still use it to run
+  found.downloaded = true;
+  localStorage.setItem(K_KLIC, JSON.stringify(keys));
+  renderKLicKeys();
+  status.style.display='block'; status.style.color='var(--green)'; status.textContent='✅ Key verified! Your download is ready. Keep this key — you will need it to run the scanner.';
+  document.getElementById('dl-scanner-link').style.display='inline-flex';
+  document.getElementById('dl-verify-key').disabled = true;
+  toast('✅ Download unlocked! Keep your key to run the scanner.');
+}
+
+document.addEventListener('DOMContentLoaded', renderKLicKeys);
+
+
+const K_DL = 'vx_dl_keys';
+
+function genDlKeyCode(){
+  const chars = 'ABCDEFGHJKLMNPQRSTUVWXYZ23456789';
+  const seg = () => Array.from({length:4}, ()=>chars[Math.floor(Math.random()*chars.length)]).join('');
+  return `DLK-${seg()}-${seg()}-${seg()}`;
+}
+
+function getDlExpiry(days){
+  if(days == 9999) return 'Lifetime';
+  const d = new Date();
+  const daysFloat = parseFloat(days);
+  if(daysFloat < 1){
+    const minutes = Math.round(daysFloat * 24 * 60);
+    d.setMinutes(d.getMinutes() + minutes);
+    return d.toISOString().slice(0,19).replace('T',' ');
+  }
+  d.setDate(d.getDate() + Math.floor(daysFloat));
+  return d.toISOString().slice(0,10);
+}
+
+function getDlStatus(k){
+  if(k.banned) return 'banned';
+  if(k.expiry === 'Lifetime') return 'active';
+  if(new Date(k.expiry) < new Date()) return 'expired';
+  return 'active';
+}
+
+function genDlKey(){
+  const name = document.getElementById('dl-name').value.trim() || 'Unknown';
+  const days = document.getElementById('dl-days').value;
+  const file = document.getElementById('dl-file').value;
+  const key = genDlKeyCode();
+  const expiry = getDlExpiry(days);
+  const arr = load(K_DL); 
+  arr.unshift({id:Date.now(), key, client:name, file, created:new Date().toISOString().slice(0,10), expiry, banned:false});
+  save(K_DL, arr);
+  document.getElementById('dl-key-val').textContent = key;
+  document.getElementById('dl-key-display').classList.add('show');
+  document.getElementById('dl-name').value = '';
+  renderDlKeys();
+  toast('✅ Download key generated!');
+}
+
+function copyDlKey(){
+  const key = document.getElementById('dl-key-val').textContent;
   navigator.clipboard?.writeText(key);
   toast('📋 Key copied!');
 }
 
-function delLicKey(id){
-  const keys = JSON.parse(localStorage.getItem(K_LIC) || '[]').filter(x=>x.id!==id);
-  localStorage.setItem(K_LIC, JSON.stringify(keys));
-  renderLicHistory();
-  toast('🗑️ Deleted');
+function banDlKey(id){
+  const arr = load(K_DL);
+  const idx = arr.findIndex(x => x.id===id);
+  if(idx>=0){ arr[idx].banned = !arr[idx].banned; save(K_DL, arr); renderDlKeys(); toast(arr[idx].banned ? '🔒 Key banned!' : '✅ Key unbanned!'); }
 }
 
-function renderLicHistory(){
-  const keys = JSON.parse(localStorage.getItem(K_LIC) || '[]');
-  const countEl = document.getElementById('lic-hist-count');
-  if(countEl) countEl.textContent = keys.length + ' keys';
-  const tb = document.getElementById('lic-hist-tbody');
+function delDlKey(id){ save(K_DL, load(K_DL).filter(x=>x.id!==id)); renderDlKeys(); toast('🗑️ Deleted'); }
+
+function clearExpiredDl(){
+  save(K_DL, load(K_DL).filter(x=>getDlStatus(x)!=='expired'));
+  renderDlKeys(); toast('🗑️ Expired keys cleared');
+}
+
+function renderDlKeys(){
+  const keys = load(K_DL);
+  const nb = document.getElementById('nb-dl');
+  if(nb) nb.textContent = keys.length;
+  const cnt = document.getElementById('dl-count');
+  if(cnt) cnt.textContent = keys.length + ' total';
+  const tb = document.getElementById('dl-tbody');
   if(!tb) return;
   if(!keys.length){
-    tb.innerHTML='<tr><td colspan="7"><div style="padding:20px;text-align:center;color:var(--t3);font-size:.7rem">No keys generated yet</div></td></tr>';
+    tb.innerHTML='<tr><td colspan="6"><div style="padding:20px;text-align:center;color:var(--t3);font-size:.7rem">No download keys yet</div></td></tr>';
     return;
   }
+  const statusBadge = s => {
+    if(s==='active') return '<span class="badge badge-green">ACTIVE</span>';
+    if(s==='expired') return '<span class="badge badge-yellow">EXPIRED</span>';
+    return '<span class="badge badge-red">BANNED</span>';
+  };
+  const fileBadge = f => {
+    if(f==='scanner') return '<span class="badge badge-blue">SCANNER</span>';
+    if(f==='monitor') return '<span class="badge badge-blue" style="color:#a78bfa">MONITOR</span>';
+    return '<span class="badge badge-gray">BOTH</span>';
+  };
   tb.innerHTML = keys.map(k=>`<tr>
-    <td style="font-family:'JetBrains Mono',monospace;font-size:.63rem;color:#e02020">${k.key}</td>
+    <td class="mono" style="font-size:.63rem;color:var(--blue)">${k.key}</td>
     <td style="font-weight:600">${k.client}</td>
-    <td style="color:var(--t2)">${k.by}</td>
-    <td style="font-family:'JetBrains Mono',monospace;font-size:.62rem;color:var(--t2)">${k.datetime}</td>
-    <td>${k.downloaded ? '<span style="background:rgba(79,142,247,.1);color:#60a5fa;border:1px solid rgba(79,142,247,.25);padding:2px 7px;border-radius:20px;font-size:.54rem;font-weight:700">✅ YES</span>' : '<span style="background:var(--reddim);color:var(--t3);border:1px solid var(--brd2);padding:2px 7px;border-radius:20px;font-size:.54rem;font-weight:700">NO</span>'}</td>
-    <td>${k.used ? '<span style="background:rgba(234,179,8,.1);color:#fde047;border:1px solid rgba(234,179,8,.2);padding:2px 7px;border-radius:20px;font-size:.54rem;font-weight:700">✅ USED</span>' : '<span style="background:rgba(34,197,94,.1);color:#4ade80;border:1px solid rgba(34,197,94,.2);padding:2px 7px;border-radius:20px;font-size:.54rem;font-weight:700">ACTIVE</span>'}</td>
-    <td><button onclick="delLicKey(${k.id})" style="background:rgba(224,32,32,.08);color:#e02020;border:1px solid rgba(224,32,32,.2);border-radius:5px;padding:3px 8px;font-size:.6rem;cursor:pointer">🗑</button></td>
+    <td>${fileBadge(k.file)}</td>
+    <td class="dim mono" style="font-size:.62rem">${k.expiry}</td>
+    <td>${statusBadge(getDlStatus(k))}</td>
+    <td style="display:flex;gap:4px">
+      <button class="btn btn-ghost btn-sm" onclick="event.stopPropagation();navigator.clipboard?.writeText('${k.key}');toast('📋 Copied!')">📋</button>
+      <button class="btn ${k.banned?'btn-green':'btn-red'} btn-sm" onclick="event.stopPropagation();banDlKey(${k.id})">${k.banned?'✅':'🔒'}</button>
+      <button class="btn btn-red btn-sm" onclick="event.stopPropagation();delDlKey(${k.id})">🗑</button>
+    </td>
   </tr>`).join('');
 }
 
-function verifyAndDownload(){
-  const keyInput = document.getElementById('scanner-license-key').value.trim().toUpperCase();
-  const status = document.getElementById('lic-status');
-  if(!keyInput){ status.style.display='block'; status.style.color='#e02020'; status.textContent='❌ Please enter your license key'; return; }
-  const keys = JSON.parse(localStorage.getItem(K_LIC) || '[]');
-  const found = keys.find(k => k.key === keyInput);
-  if(!found){ status.style.display='block'; status.style.color='#e02020'; status.textContent='❌ Invalid key. Contact your admin.'; return; }
-  if(found.used){ status.style.display='block'; status.style.color='#eab308'; status.textContent='⚠️ This key has already been used.'; return; }
-  found.used = true;
-  localStorage.setItem(K_LIC, JSON.stringify(keys));
-  renderLicHistory();
-  status.style.display='block'; status.style.color='#22c55e'; status.textContent='✅ Key verified! Your download is ready.';
-  document.getElementById('scanner-dl-btn').style.display='flex';
-  document.getElementById('scanner-license-key').disabled=true;
-  toast('✅ License verified — download unlocked!');
-}
-
-// Render on page load
-document.addEventListener('DOMContentLoaded', renderLicHistory);
 </script>
-
 </body>
 </html>
