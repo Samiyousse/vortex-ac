@@ -306,7 +306,7 @@ footer{
 
 <!-- NAV -->
 <nav>
-  <a href="vortex_homepage_4.html" class="nav-logo">
+  <a href="../" class="nav-logo">
     <svg viewBox="0 0 200 200" fill="none">
       <circle cx="100" cy="100" r="90" stroke="white" stroke-width="7" opacity=".9"/>
       <path d="M45 48 L72 48 L100 118 L128 48 L155 48 L100 158 Z" fill="white" opacity=".95"/>
@@ -316,13 +316,13 @@ footer{
     <span class="nav-brand">VORTEX</span>
   </a>
   <ul class="nav-links">
-    <li><a href="vortex_homepage_4.html#features">Features</a></li>
-    <li><a href="vortex_homepage_4.html#why">Why Us</a></li>
-    <li><a href="vortex_homepage_4.html#pricing">Pricing</a></li>
-    <li><a href="vortex_homepage_4.html#faq">FAQ</a></li>
-    <li><a href="#">Discord</a></li>
-    <li><a href="vortex_login_1.html">Login</a></li>
-    <li><a href="vortex_download.html" class="nav-btn active">Download</a></li>
+    <li><a href="../#features">Features</a></li>
+    <li><a href="../#compare">Why Us</a></li>
+    <li><a href="../#pricing">Pricing</a></li>
+    <li><a href="../#faq">FAQ</a></li>
+    <li><a href="https://discord.gg/zUMUBXHbJ2" target="_blank">Discord</a></li>
+    <li><a href="../login/">Login</a></li>
+    <li><a href="../download/" class="nav-btn active">Download</a></li>
   </ul>
 </nav>
 
@@ -492,16 +492,59 @@ function formatKey(input){
 }
 
 function handleDownload(){
-  const pin = document.getElementById('keyInput').value.trim();
   const inp = document.getElementById('keyInput');
-  if(pin.length < 6){
+  const pin = inp.value.trim().toUpperCase();
+
+  function shakeError(msg){
     inp.style.borderColor = 'rgba(239,68,68,0.5)';
     inp.style.boxShadow   = '0 0 0 3px rgba(239,68,68,0.08)';
-    inp.placeholder = 'Enter 6-digit PIN';
-    setTimeout(()=>{inp.style.borderColor='';inp.style.boxShadow='';inp.placeholder='• • • • • •';}, 1800);
+    inp.style.animation   = 'shake .4s ease';
+    // show error message
+    let errEl = document.getElementById('dl-error-msg');
+    if(!errEl){
+      errEl = document.createElement('div');
+      errEl.id = 'dl-error-msg';
+      errEl.style.cssText = 'font-size:.65rem;color:#f87171;margin-top:8px;letter-spacing:.5px;font-weight:500;';
+      inp.closest('.dl-input-row').insertAdjacentElement('afterend', errEl);
+    }
+    errEl.textContent = msg;
+    setTimeout(()=>{
+      inp.style.borderColor=''; inp.style.boxShadow=''; inp.style.animation='';
+      if(errEl) errEl.remove();
+    }, 2400);
+  }
+
+  if(pin.length < 6){
+    shakeError('Please enter a 6-character PIN.');
     return;
   }
-  // actual download logic would go here
+
+  // Read pins from localStorage
+  let pins = [];
+  try{ pins = JSON.parse(localStorage.getItem('vortex_pins') || '[]'); } catch(e){}
+
+  // Find matching pin (case-insensitive)
+  const match = pins.find(p => p.id && p.id.toUpperCase() === pin);
+
+  if(!match){
+    shakeError('Invalid PIN');
+    return;
+  }
+  if(match.status === 'EXPIRED'){
+    shakeError('PIN has expired');
+    return;
+  }
+
+  // Mark as used and finished
+  match.used = true;
+  match.status = 'FINISHED';
+  localStorage.setItem('vortex_pins', JSON.stringify(pins));
+
+  // Trigger download
+  const a = document.createElement('a');
+  a.href = 'vortex_scanner_v1.0.0.py';
+  a.download = 'vortex_scanner_v1.0.0.py';
+  a.click();
 }
 
 // Nebula background — same palette as homepage
