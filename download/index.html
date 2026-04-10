@@ -1,0 +1,578 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Vortex — Download</title>
+<link href="https://fonts.googleapis.com/css2?family=Rajdhani:wght@400;500;600;700;800&family=Outfit:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+html{scroll-behavior:smooth;}
+body{
+  font-family:'Outfit',sans-serif;
+  background:#050508;color:#eeeef4;
+  overflow-x:hidden;-webkit-font-smoothing:antialiased;
+  min-height:100vh;
+}
+::-webkit-scrollbar{width:4px;}
+::-webkit-scrollbar-track{background:#050508;}
+::-webkit-scrollbar-thumb{background:#1e3a8a;border-radius:2px;}
+
+:root{
+  --bg0:#050508;--bg1:#07070c;--bg2:#0c0c14;--bg3:#111119;--bg4:#17171f;
+  --blue:#4f8ef7;--blue2:#2563eb;--blue3:#1e3a8a;
+  --blueglow:rgba(79,142,247,0.12);--bluebrd:rgba(79,142,247,0.18);
+  --bluedim:rgba(79,142,247,0.06);
+  --brd:rgba(255,255,255,0.04);--brd2:rgba(255,255,255,0.07);
+  --t1:#eeeef4;--t2:#6b6b88;--t3:#363650;
+}
+
+/* ═══ NOISE ═══ */
+body::before{
+  content:'';position:fixed;inset:0;z-index:9999;pointer-events:none;
+  background:url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.03'/%3E%3C/svg%3E");
+  opacity:.5;
+}
+
+/* ═══ NEBULA CANVAS ═══ */
+#bg-canvas{position:fixed;inset:0;width:100%;height:100%;z-index:-1;pointer-events:none;}
+.vignette-bg{
+  position:fixed;inset:0;z-index:0;pointer-events:none;
+  background:radial-gradient(ellipse 80% 70% at 50% 40%,transparent 25%,rgba(5,5,8,0.65) 100%);
+}
+
+/* ═══ NAV ═══ */
+nav{
+  position:fixed;top:0;left:0;right:0;z-index:100;height:64px;
+  display:flex;align-items:center;justify-content:space-between;padding:0 48px;
+  background:rgba(5,5,8,0.7);backdrop-filter:blur(30px) saturate(1.4);
+  border-bottom:1px solid var(--brd);
+}
+.nav-logo{display:flex;align-items:center;gap:10px;text-decoration:none;}
+.nav-logo svg{width:28px;height:28px;}
+.nav-brand{font-family:'Rajdhani',sans-serif;font-size:1rem;font-weight:800;letter-spacing:3px;color:var(--t1);}
+.nav-links{display:flex;align-items:center;gap:2px;list-style:none;}
+.nav-links a{font-size:.78rem;font-weight:500;color:var(--t2);text-decoration:none;padding:8px 16px;border-radius:8px;letter-spacing:.2px;transition:all .2s;}
+.nav-links a:hover{color:var(--t1);background:rgba(255,255,255,0.03);}
+.nav-links a.active{color:var(--blue);}
+.nav-btn{
+  background:var(--blue);color:#fff!important;font-weight:600!important;
+  padding:9px 22px!important;border-radius:100px!important;
+  box-shadow:0 0 20px rgba(79,142,247,0.25);
+  transition:all .25s!important;
+}
+.nav-btn:hover{background:var(--blue2)!important;transform:translateY(-1px);box-shadow:0 4px 24px rgba(79,142,247,0.4)!important;}
+
+/* ═══ PAGE WRAPPER ═══ */
+.page{position:relative;z-index:1;padding-top:64px;}
+
+/* ═══ HERO SECTION ═══ */
+.dl-hero{
+  text-align:center;padding:80px 24px 60px;
+  display:flex;flex-direction:column;align-items:center;
+}
+
+.dl-badge{
+  display:inline-flex;align-items:center;gap:8px;
+  background:rgba(79,142,247,0.06);border:1px solid rgba(79,142,247,0.14);
+  border-radius:100px;padding:6px 18px 6px 12px;
+  font-size:.62rem;font-weight:600;letter-spacing:2.5px;color:var(--blue);
+  text-transform:uppercase;margin-bottom:28px;
+  opacity:0;animation:fadeUp .7s .1s ease forwards;
+}
+.dl-badge-dot{width:6px;height:6px;border-radius:50%;background:#22c55e;box-shadow:0 0 8px rgba(34,197,94,0.6);animation:blink 2s infinite;}
+@keyframes blink{0%,100%{opacity:1;}50%{opacity:.3;}}
+
+.dl-title{
+  font-family:'Rajdhani',sans-serif;
+  font-size:clamp(2.8rem,5.5vw,5.5rem);
+  font-weight:800;letter-spacing:-2px;line-height:.95;margin-bottom:16px;
+  opacity:0;animation:fadeUp .8s .2s ease forwards;
+}
+.dl-title span{
+  background:linear-gradient(115deg,#fff 10%,var(--blue) 55%,#93c5fd 90%);
+  -webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;
+  display:block;
+}
+.dl-sub{
+  font-size:.9rem;color:var(--t2);font-weight:300;letter-spacing:.3px;margin-bottom:48px;
+  opacity:0;animation:fadeUp .7s .35s ease forwards;
+}
+.dl-sub strong{color:var(--t1);font-weight:500;}
+
+@keyframes fadeUp{0%{opacity:0;transform:translateY(18px);}100%{opacity:1;transform:translateY(0);}}
+
+/* ═══ DOWNLOAD CARD ═══ */
+.dl-card-wrap{
+  width:100%;max-width:560px;
+  opacity:0;animation:fadeUp .8s .45s ease forwards;
+}
+.dl-card{
+  background:rgba(10,10,18,0.82);
+  border:1px solid rgba(79,142,247,0.14);
+  border-radius:20px;padding:36px 32px;
+  backdrop-filter:blur(40px) saturate(1.3);
+  box-shadow:
+    0 0 0 1px rgba(255,255,255,0.02),
+    0 24px 80px rgba(0,0,0,0.6),
+    0 0 80px rgba(79,142,247,0.06),
+    inset 0 1px 0 rgba(255,255,255,0.04);
+  position:relative;overflow:hidden;
+}
+.dl-card::before{
+  content:'';position:absolute;top:0;left:15%;right:15%;height:1px;
+  background:linear-gradient(90deg,transparent,rgba(79,142,247,0.4),transparent);
+}
+
+/* Version info row */
+.dl-version-row{
+  display:flex;align-items:center;justify-content:space-between;margin-bottom:24px;
+}
+.dl-ver-left{display:flex;align-items:center;gap:12px;}
+.dl-ver-icon{
+  width:42px;height:42px;border-radius:10px;
+  background:var(--bluedim);border:1px solid var(--bluebrd);
+  display:flex;align-items:center;justify-content:center;font-size:1.2rem;
+}
+.dl-ver-name{font-family:'Rajdhani',sans-serif;font-size:1rem;font-weight:700;letter-spacing:1px;}
+.dl-ver-num{font-family:'JetBrains Mono',monospace;font-size:.62rem;color:var(--blue);letter-spacing:1px;margin-top:2px;}
+.dl-status{
+  display:flex;align-items:center;gap:6px;
+  background:rgba(34,197,94,0.06);border:1px solid rgba(34,197,94,0.15);
+  border-radius:100px;padding:5px 12px;
+  font-size:.6rem;font-weight:600;letter-spacing:1.5px;color:#4ade80;text-transform:uppercase;
+}
+.dl-status-dot{width:5px;height:5px;border-radius:50%;background:#22c55e;box-shadow:0 0 6px rgba(34,197,94,0.7);animation:blink 2s infinite;}
+
+/* Key input */
+.dl-key-label{
+  font-size:.58rem;font-weight:600;letter-spacing:2px;color:var(--t2);
+  text-transform:uppercase;margin-bottom:10px;
+}
+.dl-input-row{display:flex;gap:10px;margin-bottom:18px;}
+.dl-input{
+  flex:1;background:rgba(255,255,255,0.03);border:1px solid var(--brd2);
+  border-radius:10px;padding:13px 16px;
+  font-family:'JetBrains Mono',monospace;font-size:.82rem;color:var(--t1);
+  letter-spacing:2px;outline:none;transition:border-color .2s,box-shadow .2s;
+}
+.dl-input::placeholder{color:var(--t3);letter-spacing:1px;font-family:'Outfit',sans-serif;font-size:.78rem;}
+.dl-input:focus{border-color:rgba(79,142,247,0.4);box-shadow:0 0 0 3px rgba(79,142,247,0.08);}
+
+.dl-btn{
+  background:var(--blue);color:#fff;border:none;
+  padding:13px 28px;border-radius:10px;cursor:pointer;
+  font-family:'Rajdhani',sans-serif;font-size:.9rem;font-weight:700;letter-spacing:1.5px;
+  text-transform:uppercase;white-space:nowrap;
+  display:flex;align-items:center;gap:8px;
+  transition:all .25s;box-shadow:0 0 24px rgba(79,142,247,0.28);
+  overflow:hidden;position:relative;
+}
+.dl-btn::after{
+  content:'';position:absolute;top:0;left:-100%;width:60%;height:100%;
+  background:linear-gradient(90deg,transparent,rgba(255,255,255,0.18),transparent);
+  transition:none;
+}
+.dl-btn:hover::after{left:120%;transition:left .5s ease;}
+.dl-btn:hover{background:var(--blue2);transform:translateY(-2px);box-shadow:0 6px 32px rgba(79,142,247,0.45);}
+.dl-btn:active{transform:translateY(0);}
+.dl-btn svg{flex-shrink:0;}
+
+/* Meta pills */
+.dl-meta{display:flex;align-items:center;gap:8px;flex-wrap:wrap;margin-top:18px;}
+.dl-pill{
+  display:flex;align-items:center;gap:5px;
+  background:rgba(255,255,255,0.03);border:1px solid var(--brd);
+  border-radius:100px;padding:5px 12px;
+  font-size:.58rem;color:var(--t2);letter-spacing:1px;font-weight:500;
+}
+.dl-pill svg{opacity:.5;}
+
+/* ═══ STATS ROW ═══ */
+.stats-row{
+  display:flex;align-items:center;justify-content:center;gap:0;
+  max-width:560px;width:100%;margin-top:24px;
+  background:rgba(10,10,18,0.6);border:1px solid var(--brd);border-radius:14px;
+  overflow:hidden;
+  opacity:0;animation:fadeUp .7s .6s ease forwards;
+}
+.stat-item{
+  flex:1;padding:16px 8px;text-align:center;
+  border-right:1px solid var(--brd);
+}
+.stat-item:last-child{border-right:none;}
+.stat-val{font-family:'JetBrains Mono',monospace;font-size:1.1rem;font-weight:700;color:var(--t1);}
+.stat-lbl{font-size:.52rem;color:#eeeef4;letter-spacing:1.5px;text-transform:uppercase;margin-top:3px;}
+
+/* ═══ SECTIONS ═══ */
+.sections{max-width:860px;margin:0 auto;padding:0 24px 80px;}
+
+.sec-header{
+  display:flex;align-items:center;gap:12px;margin-bottom:20px;
+}
+.sec-line{flex:1;height:1px;background:var(--brd);}
+.sec-label{
+  font-size:.6rem;font-weight:600;letter-spacing:2.5px;
+  color:var(--t3);text-transform:uppercase;white-space:nowrap;
+}
+
+/* ═══ SYSTEM REQUIREMENTS ═══ */
+.req-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin-bottom:48px;}
+.req-card{
+  background:rgba(10,10,18,0.7);border:1px solid var(--brd);border-radius:14px;
+  padding:18px 14px;transition:border-color .2s,transform .2s;
+}
+.req-card:hover{border-color:var(--bluebrd);transform:translateY(-2px);}
+.req-icon{
+  width:36px;height:36px;border-radius:8px;
+  background:var(--bluedim);border:1px solid var(--bluebrd);
+  display:flex;align-items:center;justify-content:center;font-size:1rem;margin-bottom:12px;
+}
+.req-name{font-size:.82rem;font-weight:600;color:var(--t1);margin-bottom:4px;}
+.req-val{font-size:.65rem;color:var(--t2);line-height:1.5;}
+
+/* ═══ HOW TO USE ═══ */
+.steps-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-bottom:48px;}
+.step-card{
+  background:rgba(10,10,18,0.7);border:1px solid var(--brd);border-radius:14px;
+  padding:20px 18px;position:relative;overflow:hidden;
+  transition:border-color .2s,transform .2s;
+}
+.step-card:hover{border-color:var(--bluebrd);transform:translateY(-2px);}
+.step-num{
+  position:absolute;top:14px;right:16px;
+  font-family:'Rajdhani',sans-serif;font-size:2.2rem;font-weight:800;
+  color:rgba(79,142,247,0.07);line-height:1;letter-spacing:-1px;
+}
+.step-icon{font-size:1.15rem;margin-bottom:10px;}
+.step-title{font-size:.82rem;font-weight:600;color:var(--t1);margin-bottom:5px;}
+.step-desc{font-size:.68rem;color:var(--t2);line-height:1.6;}
+
+/* ═══ CHANGELOG ═══ */
+.changelog{margin-bottom:48px;}
+.cl-item{
+  display:flex;gap:16px;padding:18px 0;
+  border-bottom:1px solid var(--brd);
+}
+.cl-item:last-child{border-bottom:none;}
+.cl-ver{
+  min-width:90px;
+  font-family:'JetBrains Mono',monospace;font-size:.7rem;font-weight:600;color:var(--blue);
+}
+.cl-date{font-size:.6rem;color:var(--t3);margin-top:3px;letter-spacing:.5px;}
+.cl-changes{flex:1;}
+.cl-change-item{
+  display:flex;align-items:flex-start;gap:8px;
+  font-size:.72rem;color:var(--t2);line-height:1.6;margin-bottom:4px;
+}
+.cl-tag{
+  font-size:.5rem;font-weight:700;letter-spacing:1px;text-transform:uppercase;
+  padding:2px 7px;border-radius:4px;white-space:nowrap;margin-top:2px;
+}
+.cl-tag.new{background:rgba(34,197,94,0.1);color:#4ade80;border:1px solid rgba(34,197,94,0.2);}
+.cl-tag.fix{background:rgba(251,191,36,0.1);color:#fbbf24;border:1px solid rgba(251,191,36,0.2);}
+.cl-tag.imp{background:rgba(79,142,247,0.1);color:var(--blue);border:1px solid var(--bluebrd);}
+
+/* ═══ FOOTER ═══ */
+footer{
+  border-top:1px solid var(--brd);padding:28px 48px;
+  display:flex;align-items:center;justify-content:space-between;
+  position:relative;z-index:1;
+}
+.foot-left{display:flex;align-items:center;gap:10px;}
+.foot-brand{font-family:'Rajdhani',sans-serif;font-size:.8rem;font-weight:700;letter-spacing:2px;color:var(--t3);}
+.foot-copy{font-size:.62rem;color:var(--t3);letter-spacing:.5px;}
+.foot-links{display:flex;gap:20px;}
+.foot-links a{font-size:.65rem;color:var(--t3);text-decoration:none;letter-spacing:.5px;transition:color .2s;}
+.foot-links a:hover{color:var(--t1);}
+
+@media(max-width:768px){
+  nav{padding:0 20px;}
+  .dl-hero{padding:60px 16px 40px;}
+  .dl-card{padding:24px 18px;}
+  .dl-input-row{flex-direction:column;}
+  .req-grid{grid-template-columns:repeat(2,1fr);}
+  .steps-grid{grid-template-columns:1fr;}
+  .stats-row{flex-wrap:wrap;}
+  .stat-item{border-right:none;border-bottom:1px solid var(--brd);}
+  footer{flex-direction:column;gap:16px;text-align:center;padding:24px 20px;}
+}
+</style>
+</head>
+<body>
+
+<canvas id="bg-canvas"></canvas>
+<div class="vignette-bg"></div>
+
+<!-- NAV -->
+<nav>
+  <a href="vortex_homepage_4.html" class="nav-logo">
+    <svg viewBox="0 0 200 200" fill="none">
+      <circle cx="100" cy="100" r="90" stroke="white" stroke-width="7" opacity=".9"/>
+      <path d="M45 48 L72 48 L100 118 L128 48 L155 48 L100 158 Z" fill="white" opacity=".95"/>
+      <path d="M45 48 L62 48 L68 62 L55 82 Z" fill="#050508"/>
+      <path d="M155 48 L138 48 L132 62 L145 82 Z" fill="#050508"/>
+    </svg>
+    <span class="nav-brand">VORTEX</span>
+  </a>
+  <ul class="nav-links">
+    <li><a href="vortex_homepage_4.html#features">Features</a></li>
+    <li><a href="vortex_homepage_4.html#why">Why Us</a></li>
+    <li><a href="vortex_homepage_4.html#pricing">Pricing</a></li>
+    <li><a href="vortex_homepage_4.html#faq">FAQ</a></li>
+    <li><a href="#">Discord</a></li>
+    <li><a href="vortex_login_1.html">Login</a></li>
+    <li><a href="vortex_download.html" class="nav-btn active">Download</a></li>
+  </ul>
+</nav>
+
+<div class="page">
+  <!-- HERO -->
+  <div class="dl-hero">
+    <div class="dl-badge">
+      <span class="dl-badge-dot"></span>
+      All Systems Operational
+    </div>
+
+    <h1 class="dl-title">
+      Download
+      <span>Vortex AC</span>
+    </h1>
+    <p class="dl-sub">Enter your <strong>6-digit PIN</strong> to get the latest signed build.</p>
+
+    <!-- Download card -->
+    <div class="dl-card-wrap">
+      <div class="dl-card">
+        <div class="dl-version-row">
+          <div class="dl-ver-left">
+            <div class="dl-ver-icon">⚡</div>
+            <div>
+              <div class="dl-ver-name">VORTEX CLIENT</div>
+              <div class="dl-ver-num">v1.0.0 — STABLE</div>
+            </div>
+          </div>
+          <div class="dl-status">
+            <span class="dl-status-dot"></span>
+            Undetected
+          </div>
+        </div>
+
+        <div class="dl-key-label">Session PIN</div>
+        <div class="dl-input-row">
+          <input class="dl-input" type="text" placeholder="• • • • • •" maxlength="6" id="keyInput" oninput="formatKey(this)" inputmode="numeric"/>
+          <button class="dl-btn" onclick="handleDownload()">
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+            Download
+          </button>
+        </div>
+
+        <div class="dl-meta">
+          <div class="dl-pill">
+            <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M3 9h18"/></svg>
+            Windows 10/11
+          </div>
+          <div class="dl-pill">
+            <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+            SHA-256 Signed
+          </div>
+          <div class="dl-pill">
+            <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="23 4 23 10 17 10"/><path d="M20.49 15a9 9 0 1 1-2.12-9.36L23 10"/></svg>
+            Auto-Update
+          </div>
+          <div class="dl-pill">
+            <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+            ~2.4 MB
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- SECTIONS -->
+  <div class="sections">
+
+    <!-- System Requirements -->
+    <div class="sec-header">
+      <span class="sec-label">System Requirements</span>
+      <div class="sec-line"></div>
+    </div>
+    <div class="req-grid">
+      <div class="req-card">
+        <div class="req-icon">🖥️</div>
+        <div class="req-name">Operating System</div>
+        <div class="req-val">Windows 10 / 11<br>64-bit only</div>
+      </div>
+      <div class="req-card">
+        <div class="req-icon">⚙️</div>
+        <div class="req-name">Processor</div>
+        <div class="req-val">Any modern CPU<br>x64 architecture</div>
+      </div>
+      <div class="req-card">
+        <div class="req-icon">🌐</div>
+        <div class="req-name">Internet</div>
+        <div class="req-val">Stable connection<br>Required for auth</div>
+      </div>
+      <div class="req-card">
+        <div class="req-icon">🔑</div>
+        <div class="req-name">Permissions</div>
+        <div class="req-val">Run as Administrator<br>Required</div>
+      </div>
+    </div>
+
+    <!-- How to use -->
+    <div class="sec-header">
+      <span class="sec-label">How To Use</span>
+      <div class="sec-line"></div>
+    </div>
+    <div class="steps-grid">
+      <div class="step-card">
+        <div class="step-num">01</div>
+        <div class="step-icon">⬇️</div>
+        <div class="step-title">Download Client</div>
+        <div class="step-desc">Enter your 6-digit PIN above and download the signed Vortex client executable.</div>
+      </div>
+      <div class="step-card">
+        <div class="step-num">02</div>
+        <div class="step-icon">🛡️</div>
+        <div class="step-title">Run as Admin</div>
+        <div class="step-desc">Right-click the executable and select "Run as Administrator" to launch properly.</div>
+      </div>
+      <div class="step-card">
+        <div class="step-num">03</div>
+        <div class="step-icon">🔐</div>
+        <div class="step-title">Authenticate</div>
+        <div class="step-desc">Log in with your Discord account to verify your active Vortex subscription.</div>
+      </div>
+      <div class="step-card">
+        <div class="step-num">04</div>
+        <div class="step-icon">🎮</div>
+        <div class="step-title">Select Game</div>
+        <div class="step-desc">Pick the target FiveM server or game instance from the Vortex dashboard.</div>
+      </div>
+      <div class="step-card">
+        <div class="step-num">05</div>
+        <div class="step-icon">⏳</div>
+        <div class="step-title">Wait for Scan</div>
+        <div class="step-desc">Allow 2–4 minutes for the deep forensics engine to complete its analysis.</div>
+      </div>
+      <div class="step-card">
+        <div class="step-num">06</div>
+        <div class="step-icon">📊</div>
+        <div class="step-title">Review Report</div>
+        <div class="step-desc">Open the dashboard to view the full report, flags, and confidence scores.</div>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- FOOTER -->
+  <footer>
+    <div class="foot-left">
+      <svg viewBox="0 0 200 200" fill="none" width="20" height="20">
+        <circle cx="100" cy="100" r="90" stroke="rgba(255,255,255,0.2)" stroke-width="7"/>
+        <path d="M45 48 L72 48 L100 118 L128 48 L155 48 L100 158 Z" fill="rgba(255,255,255,0.2)"/>
+      </svg>
+      <span class="foot-brand">VORTEX ANTICHEAT</span>
+      <span class="foot-copy">© 2026 — All rights reserved</span>
+    </div>
+    <div class="foot-links">
+      <a href="#">Terms</a>
+      <a href="#">Privacy</a>
+      <a href="#">Support</a>
+      <a href="#">Discord</a>
+    </div>
+  </footer>
+</div>
+
+<script>
+// Key formatter
+function formatKey(input){
+  input.value = input.value.replace(/[^0-9]/g,'').slice(0,6);
+}
+
+function handleDownload(){
+  const pin = document.getElementById('keyInput').value.trim();
+  const inp = document.getElementById('keyInput');
+  if(pin.length < 6){
+    inp.style.borderColor = 'rgba(239,68,68,0.5)';
+    inp.style.boxShadow   = '0 0 0 3px rgba(239,68,68,0.08)';
+    inp.placeholder = 'Enter 6-digit PIN';
+    setTimeout(()=>{inp.style.borderColor='';inp.style.boxShadow='';inp.placeholder='• • • • • •';}, 1800);
+    return;
+  }
+  // actual download logic would go here
+}
+
+// Nebula background — same palette as homepage
+(function(){
+  const canvas = document.getElementById('bg-canvas');
+  const ctx = canvas.getContext('2d');
+  let W, H;
+  function resize(){ W = canvas.width = window.innerWidth; H = canvas.height = window.innerHeight; }
+  resize();
+  window.addEventListener('resize', resize);
+
+  const clouds = [
+    { ox:.18, oy:.18, rx:.22, ry:.14, fx:.031, fy:.027, px:0.0, py:1.2, r:37,  g:99,  b:235, a:.13, sr:.55 },
+    { ox:.78, oy:.72, rx:.20, ry:.18, fx:.024, fy:.033, px:2.1, py:0.6, r:99,  g:102, b:241, a:.10, sr:.50 },
+    { ox:.50, oy:.35, rx:.28, ry:.22, fx:.019, fy:.022, px:4.4, py:3.1, r:79,  g:142, b:247, a:.09, sr:.60 },
+    { ox:.12, oy:.75, rx:.18, ry:.16, fx:.037, fy:.029, px:1.6, py:4.8, r:30,  g:58,  b:138, a:.12, sr:.45 },
+    { ox:.85, oy:.25, rx:.16, ry:.20, fx:.028, fy:.036, px:3.3, py:1.9, r:56,  g:189, b:248, a:.06, sr:.42 },
+    { ox:.40, oy:.82, rx:.24, ry:.16, fx:.022, fy:.025, px:5.5, py:2.4, r:37,  g:99,  b:235, a:.08, sr:.48 },
+  ];
+
+  const stars = Array.from({length:160}, () => ({
+    x:Math.random(), y:Math.random(),
+    r:Math.random()<.15?1.1:.55,
+    ph:Math.random()*Math.PI*2, spd:.0004+Math.random()*.0008,
+    base:.12+Math.random()*.4,
+  }));
+
+  function drawStars(ts){
+    for(const s of stars){
+      const a = s.base*(0.5+0.5*Math.sin(ts*s.spd+s.ph));
+      ctx.beginPath(); ctx.arc(s.x*W, s.y*H, s.r, 0, Math.PI*2);
+      ctx.fillStyle=`rgba(200,220,255,${a})`; ctx.fill();
+    }
+  }
+
+  function drawClouds(ts){
+    ctx.save(); ctx.globalCompositeOperation='screen';
+    for(const c of clouds){
+      const t=ts*.001;
+      const cx=(c.ox+Math.sin(t*c.fx+c.px)*c.rx)*W;
+      const cy=(c.oy+Math.cos(t*c.fy+c.py)*c.ry)*H;
+      const pulse=1+0.06*Math.sin(ts*.00035+c.px);
+      const rx=c.sr*W*pulse, ry=c.sr*H*pulse*.65;
+      ctx.save(); ctx.translate(cx,cy); ctx.scale(1,ry/rx);
+      const g=ctx.createRadialGradient(0,0,0,0,0,rx);
+      g.addColorStop(0,   `rgba(${c.r},${c.g},${c.b},${c.a})`);
+      g.addColorStop(0.4, `rgba(${c.r},${c.g},${c.b},${c.a*.55})`);
+      g.addColorStop(0.75,`rgba(${c.r},${c.g},${c.b},${c.a*.18})`);
+      g.addColorStop(1,   `rgba(${c.r},${c.g},${c.b},0)`);
+      ctx.beginPath(); ctx.arc(0,0,rx,0,Math.PI*2);
+      ctx.fillStyle=g; ctx.fill(); ctx.restore();
+    }
+    ctx.restore();
+  }
+
+  function drawSpotlight(){
+    const g=ctx.createRadialGradient(W*.5,0,0,W*.5,0,W*.6);
+    g.addColorStop(0,'rgba(37,99,235,0.10)');
+    g.addColorStop(0.5,'rgba(37,99,235,0.04)');
+    g.addColorStop(1,'rgba(37,99,235,0)');
+    ctx.fillStyle=g; ctx.fillRect(0,0,W,H*.6);
+  }
+
+  function frame(ts){
+    ctx.clearRect(0,0,W,H);
+    ctx.fillStyle='#050508'; ctx.fillRect(0,0,W,H);
+    drawStars(ts); drawSpotlight(); drawClouds(ts);
+    requestAnimationFrame(frame);
+  }
+  requestAnimationFrame(frame);
+})();
+</script>
+</body>
+</html>
