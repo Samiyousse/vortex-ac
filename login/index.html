@@ -1,0 +1,343 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Vortex — Login</title>
+<link href="https://fonts.googleapis.com/css2?family=Rajdhani:wght@400;500;600;700;800&family=Outfit:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+html,body{height:100%;overflow:hidden;}
+body{
+  font-family:'Outfit',sans-serif;
+  background:#06060c;color:#e8e8f0;
+  display:flex;align-items:center;justify-content:center;
+  -webkit-font-smoothing:antialiased;
+}
+
+/* ═══ CANVAS RIBBON BACKGROUND ═══ */
+.bg-scene{
+  position:fixed;inset:0;z-index:0;overflow:hidden;
+  background:#000;
+}
+#ribbon-canvas{
+  position:absolute;inset:0;width:100%;height:100%;
+}
+
+/* Grain */
+.grain{
+  position:fixed;inset:0;z-index:1;pointer-events:none;
+  opacity:.3;
+  background:url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.04'/%3E%3C/svg%3E");
+}
+
+/* ═══ VIGNETTE ═══ */
+.vignette{
+  position:fixed;inset:0;z-index:1;pointer-events:none;
+  background:radial-gradient(ellipse 65% 65% at 50% 45%,transparent 20%,rgba(5,5,10,0.6) 100%);
+}
+
+/* ═══ LOGIN CARD ═══ */
+.login-wrap{
+  position:relative;z-index:10;
+  display:flex;flex-direction:column;align-items:center;
+  opacity:0;animation:cardIn .9s .3s cubic-bezier(0.16,1,0.3,1) forwards;
+}
+@keyframes cardIn{
+  0%{opacity:0;transform:translateY(30px) scale(0.96);}
+  100%{opacity:1;transform:translateY(0) scale(1);}
+}
+
+.card{
+  width:380px;max-width:92vw;
+  background:rgba(10,10,18,0.75);
+  border:1px solid rgba(255,255,255,0.06);
+  border-radius:20px;
+  padding:40px 32px 32px;
+  backdrop-filter:blur(40px) saturate(1.2);
+  -webkit-backdrop-filter:blur(40px) saturate(1.2);
+  box-shadow:
+    0 0 0 1px rgba(255,255,255,0.02),
+    0 20px 60px rgba(0,0,0,0.5),
+    0 0 100px rgba(79,142,247,0.03);
+  position:relative;overflow:hidden;
+}
+
+/* Top edge light */
+.card::before{
+  content:'';position:absolute;top:0;left:20%;right:20%;height:1px;
+  background:linear-gradient(90deg,transparent,rgba(79,142,247,0.25),transparent);
+}
+
+/* Inner glow */
+.card::after{
+  content:'';position:absolute;top:-50%;left:50%;transform:translateX(-50%);
+  width:200%;height:100%;border-radius:50%;
+  background:radial-gradient(ellipse,rgba(79,142,247,0.03),transparent 60%);
+  pointer-events:none;
+}
+
+/* Logo */
+.logo-area{text-align:center;margin-bottom:28px;position:relative;z-index:1;}
+.logo-area svg{
+  width:48px;height:48px;
+  filter:drop-shadow(0 0 20px rgba(79,142,247,0.15));
+  opacity:0;animation:logoIn .6s .6s ease forwards;
+}
+@keyframes logoIn{
+  0%{opacity:0;transform:scale(0.8);}
+  100%{opacity:1;transform:scale(1);}
+}
+.logo-name{
+  font-family:'Rajdhani',sans-serif;font-size:1.2rem;font-weight:800;
+  letter-spacing:4px;margin-top:10px;color:#e8e8f0;
+  opacity:0;animation:fadeUp .5s .75s ease forwards;
+}
+.logo-sub{
+  font-size:.58rem;letter-spacing:2.5px;color:rgba(255,255,255,0.5);
+  text-transform:uppercase;margin-top:3px;
+  opacity:0;animation:fadeUp .5s .85s ease forwards;
+}
+@keyframes fadeUp{
+  0%{opacity:0;transform:translateY(8px);}
+  100%{opacity:1;transform:translateY(0);}
+}
+
+/* Discord button */
+.discord-btn{
+  position:relative;z-index:1;
+  width:100%;padding:14px;margin-bottom:24px;
+  background:#5865F2;border:none;border-radius:12px;
+  color:#fff;font-family:'Outfit',sans-serif;font-size:.88rem;font-weight:600;
+  letter-spacing:.3px;cursor:pointer;
+  display:flex;align-items:center;justify-content:center;gap:10px;
+  transition:all .3s cubic-bezier(0.25,0.46,0.45,0.94);
+  box-shadow:0 4px 20px rgba(88,101,242,0.25);
+  opacity:0;animation:fadeUp .5s .95s ease forwards;
+  overflow:hidden;
+}
+/* Shine sweep on hover */
+.discord-btn::after{
+  content:'';position:absolute;top:0;left:-100%;
+  width:60%;height:100%;
+  background:linear-gradient(90deg,transparent,rgba(255,255,255,0.15),transparent);
+  transition:none;
+}
+.discord-btn:hover::after{
+  left:120%;
+  transition:left .6s ease;
+}
+.discord-btn:hover{
+  background:#4752c4;
+  transform:translateY(-3px) scale(1.02);
+  box-shadow:0 8px 32px rgba(88,101,242,0.45),0 0 16px rgba(88,101,242,0.2);
+}
+.discord-btn:hover svg{
+  animation:discordWiggle .5s ease;
+}
+.discord-btn:active{transform:translateY(0) scale(0.98);}
+
+@keyframes discordWiggle{
+  0%{transform:rotate(0deg);}
+  20%{transform:rotate(-8deg);}
+  40%{transform:rotate(8deg);}
+  60%{transform:rotate(-5deg);}
+  80%{transform:rotate(3deg);}
+  100%{transform:rotate(0deg);}
+}
+.discord-btn svg{transition:transform .2s;}
+
+/* Info section */
+.info-section{
+  position:relative;z-index:1;
+  margin-top:20px;padding-top:18px;
+  border-top:1px solid rgba(255,255,255,0.06);
+  opacity:0;animation:fadeUp .5s 1.05s ease forwards;
+}
+.info-label{
+  font-size:.54rem;font-weight:600;letter-spacing:2px;
+  color:rgba(255,255,255,0.45);text-transform:uppercase;
+  margin-bottom:12px;display:flex;align-items:center;gap:6px;
+}
+.info-label svg{width:12px;height:12px;opacity:.6;}
+.info-cards{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;}
+.info-card{
+  background:rgba(255,255,255,0.03);
+  border:1px solid rgba(255,255,255,0.06);
+  border-radius:10px;padding:14px 8px;text-align:center;
+  transition:border-color .2s;
+}
+.info-card:hover{border-color:rgba(79,142,247,0.25);}
+.info-card-icon{font-size:1.1rem;margin-bottom:5px;opacity:.8;}
+.info-card-text{font-size:.54rem;letter-spacing:1.5px;color:rgba(255,255,255,0.55);text-transform:uppercase;font-weight:500;}
+
+/* Footer */
+.login-footer{
+  text-align:center;margin-top:28px;
+  opacity:0;animation:fadeUp .5s 1.15s ease forwards;
+}
+.login-footer a{
+  font-size:.6rem;color:rgba(255,255,255,0.4);text-decoration:none;
+  letter-spacing:1.2px;transition:color .2s;margin:0 10px;font-weight:500;
+}
+.login-footer a:hover{color:rgba(255,255,255,0.8);}
+.login-footer .copy{
+  display:block;font-size:.52rem;color:rgba(255,255,255,0.25);
+  letter-spacing:1.5px;margin-top:12px;font-weight:400;
+}
+
+/* ═══ RESPONSIVE ═══ */
+@media(max-width:480px){
+  .card{padding:32px 22px 26px;border-radius:16px;}
+  .info-cards{grid-template-columns:repeat(3,1fr);gap:6px;}
+}
+</style>
+</head>
+<body>
+
+<!-- ═══ BACKGROUND ═══ -->
+<div class="bg-scene">
+  <canvas id="ribbon-canvas"></canvas>
+</div>
+<div class="vignette"></div>
+<div class="grain"></div>
+
+<!-- ═══ LOGIN ═══ -->
+<div class="login-wrap">
+  <div class="card">
+    <div class="logo-area">
+      <svg viewBox="0 0 200 200" fill="none">
+        <circle cx="100" cy="100" r="90" stroke="white" stroke-width="7" opacity=".9"/>
+        <path d="M45 48 L72 48 L100 118 L128 48 L155 48 L100 158 Z" fill="white" opacity=".95"/>
+        <path d="M45 48 L62 48 L68 62 L55 82 Z" fill="#06060c"/>
+        <path d="M155 48 L138 48 L132 62 L145 82 Z" fill="#06060c"/>
+      </svg>
+      <div class="logo-name">VORTEX</div>
+      <div class="logo-sub">Secure Access Portal</div>
+    </div>
+
+    <!-- Discord Login -->
+    <button class="discord-btn" onclick="window.open('https://discord.gg/zUMUBXHbJ2','_blank')">
+      <svg viewBox="0 0 127.14 96.36" fill="currentColor" style="width:22px;height:22px"><path d="M107.7 8.07A105.15 105.15 0 0 0 81.47 0a72.06 72.06 0 0 0-3.36 6.83 97.68 97.68 0 0 0-29.11 0A72.37 72.37 0 0 0 45.64 0 105.89 105.89 0 0 0 19.39 8.09C2.79 32.65-1.71 56.6.54 80.21a105.73 105.73 0 0 0 32.17 16.15 77.7 77.7 0 0 0 6.89-11.11 68.42 68.42 0 0 1-10.85-5.18c.91-.66 1.8-1.34 2.66-2.04a75.57 75.57 0 0 0 64.32 0c.87.71 1.76 1.39 2.66 2.04a68.68 68.68 0 0 1-10.87 5.19 77 77 0 0 0 6.89 11.1 105.25 105.25 0 0 0 32.19-16.14c2.64-27.38-4.51-51.11-18.9-72.15ZM42.45 65.69C36.18 65.69 31 60 31 53.05s5-12.68 11.45-12.68S54 46.07 53.89 53.05 48.84 65.69 42.45 65.69Zm42.24 0C78.41 65.69 73.25 60 73.25 53.05s5-12.68 11.44-12.68S96.23 46.07 96.12 53.05 91.08 65.69 84.69 65.69Z"/></svg>
+      Continue with Discord
+    </button>
+
+    <!-- Info -->
+    <div class="info-section">
+      <div class="info-label">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 16v-4M12 8h.01"/></svg>
+        Secure Connection
+      </div>
+      <div class="info-cards">
+        <div class="info-card">
+          <div class="info-card-icon">🔐</div>
+          <div class="info-card-text">Encrypted</div>
+        </div>
+        <div class="info-card">
+          <div class="info-card-icon">🛡️</div>
+          <div class="info-card-text">Protected</div>
+        </div>
+        <div class="info-card">
+          <div class="info-card-icon">⚡</div>
+          <div class="info-card-text">Real-time</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="login-footer">
+    <a href="#">Terms</a>
+    <a href="#">Privacy</a>
+    <a href="https://discord.gg/zUMUBXHbJ2" target="_blank">Support</a>
+    <span class="copy">© 2026 VORTEX ANTICHEAT — SECURE SYSTEMS</span>
+  </div>
+</div>
+
+
+<script>
+(function(){
+  const canvas = document.getElementById('ribbon-canvas');
+  const ctx = canvas.getContext('2d');
+  let W, H;
+
+  function resize(){
+    W = canvas.width = window.innerWidth;
+    H = canvas.height = window.innerHeight;
+  }
+  resize();
+  window.addEventListener('resize', resize);
+
+  // Each ribbon is a flowing sine-based strip rendered as filled quads
+  const ribbons = [
+    { amp:0.28, freq:0.55, speed:0.00018, phase:0,    yBase:0.38, width:0.22, brightness:0.13 },
+    { amp:0.22, freq:0.45, speed:0.00013, phase:2.1,  yBase:0.52, width:0.18, brightness:0.09 },
+    { amp:0.32, freq:0.60, speed:0.00021, phase:4.3,  yBase:0.62, width:0.16, brightness:0.11 },
+    { amp:0.18, freq:0.40, speed:0.00016, phase:1.5,  yBase:0.25, width:0.14, brightness:0.07 },
+    { amp:0.25, freq:0.70, speed:0.00025, phase:3.7,  yBase:0.75, width:0.20, brightness:0.10 },
+    { amp:0.20, freq:0.50, speed:0.00012, phase:5.1,  yBase:0.45, width:0.12, brightness:0.08 },
+  ];
+
+  let t = 0;
+
+  function drawRibbon(r){
+    const steps = 120;
+    const halfW = r.width * H;
+
+    // Build top and bottom edge points
+    const top = [], bot = [];
+    for(let i = 0; i <= steps; i++){
+      const x = (i / steps) * W;
+      const nx = i / steps; // normalized 0..1
+      // sine wave y position
+      const y = r.yBase * H + Math.sin(nx * Math.PI * 2 * r.freq + t * r.speed * 60000 + r.phase) * r.amp * H;
+      // twist: width modulated by another sine
+      const twist = 0.5 + 0.5 * Math.sin(nx * Math.PI * 3.5 + t * r.speed * 40000 + r.phase * 1.3);
+      const hw = halfW * twist;
+      top.push({ x, y: y - hw });
+      bot.push({ x, y: y + hw });
+    }
+
+    // Draw with gradient shading
+    for(let i = 0; i < steps; i++){
+      const t0 = top[i], t1 = top[i+1];
+      const b0 = bot[i], b1 = bot[i+1];
+
+      // Per-segment brightness based on twist (simulates light hitting the surface)
+      const nx = i / steps;
+      const lightVal = 0.3 + 0.7 * Math.abs(Math.sin(nx * Math.PI * 3.5 + t * r.speed * 40000 + r.phase * 1.3 + 1.0));
+      const alpha = r.brightness * lightVal;
+
+      const grad = ctx.createLinearGradient(t0.x, t0.y, b0.x, b0.y);
+      grad.addColorStop(0,   `rgba(255,255,255,0)`);
+      grad.addColorStop(0.3, `rgba(255,255,255,${alpha * 0.6})`);
+      grad.addColorStop(0.5, `rgba(255,255,255,${alpha})`);
+      grad.addColorStop(0.7, `rgba(255,255,255,${alpha * 0.6})`);
+      grad.addColorStop(1,   `rgba(255,255,255,0)`);
+
+      ctx.beginPath();
+      ctx.moveTo(t0.x, t0.y);
+      ctx.lineTo(t1.x, t1.y);
+      ctx.lineTo(b1.x, b1.y);
+      ctx.lineTo(b0.x, b0.y);
+      ctx.closePath();
+      ctx.fillStyle = grad;
+      ctx.fill();
+    }
+  }
+
+  function frame(ts){
+    t = ts;
+    ctx.clearRect(0, 0, W, H);
+    // Dark base
+    ctx.fillStyle = '#040408';
+    ctx.fillRect(0, 0, W, H);
+
+    for(const r of ribbons) drawRibbon(r);
+
+    requestAnimationFrame(frame);
+  }
+  requestAnimationFrame(frame);
+})();
+</script>
+</body>
+</html>
