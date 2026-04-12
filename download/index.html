@@ -488,7 +488,7 @@ footer{
 <script>
 // Key formatter
 /* ── API URL — change to your server ── */
-const API_URL = 'http://localhost:5000';
+const API_URL = 'https://api.vortex-ac.com';
 
 function formatKey(input){
   input.value = input.value.replace(/[^A-Za-z0-9]/g,'').toUpperCase().slice(0,6);
@@ -545,8 +545,8 @@ async function handleDownload(){
     inp.style.boxShadow   = '0 0 0 3px rgba(34,197,94,0.08)';
 
     const a = document.createElement('a');
-    a.href = 'vortex_scanner_v1.0.0.py';
-    a.download = 'vortex_scanner_v1.0.0.py';
+    a.href = '/download/Vortex-pc-checker.exe';
+    a.download = 'Vortex-pc-checker.exe';
     a.click();
 
   } catch(e){
