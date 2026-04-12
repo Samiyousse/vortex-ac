@@ -8,6 +8,7 @@
 <style>
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
 html,body{height:100%;overflow:hidden;}
+html{font-size:21px;}
 body{
   font-family:'Outfit',sans-serif;
   background:#050508;color:#eeeef4;
@@ -21,8 +22,8 @@ body{
   --bluedim:rgba(79,142,247,0.06);
   --brd:rgba(255,255,255,0.04);--brd2:rgba(255,255,255,0.07);
   --t1:#eeeef4;--t2:#6b6b88;--t3:#363650;
-  --sidebar-w:155px;
-  --topbar-h:52px;
+  --sidebar-w:215px;
+  --topbar-h:64px;
   --red:#ef4444;--yellow:#f59e0b;--green:#22c55e;
 }
 
@@ -1184,11 +1185,11 @@ function showPage(name, navEl){
   document.querySelectorAll('.sb-item').forEach(el => el.classList.remove('active'));
   if(navEl) navEl.classList.add('active');
 
-  // If pins page, refresh
-  if(name === 'pins') refreshPinsPage();
+  // If pins page, refresh from API
+  if(name === 'pins'){ fetchPins().then(()=>{ refreshPinsPage(); }); }
 
   // Update dashboard stats too
-  if(name === 'dashboard') updateDashStats();
+  if(name === 'dashboard'){ fetchPins().then(()=>{ updateDashStats(); }); }
 
   // Close mobile sidebar
   if(window.innerWidth <= 900){
@@ -1227,17 +1228,24 @@ function switchTab(page, panelId, btn){
 }
 
 /* ═══════════════════════════════════
-   localStorage HELPERS
+   API CONFIG — change this URL to your server
 ═══════════════════════════════════ */
-function getPins(){
+const API_URL = 'http://localhost:5000';
+
+/* ═══════════════════════════════════
+   PIN API HELPERS (replaces localStorage)
+═══════════════════════════════════ */
+let _pinsCache = [];
+
+async function fetchPins(){
   try{
-    return JSON.parse(localStorage.getItem('vortex_pins') || '[]');
-  } catch(e){ return []; }
+    const r = await fetch(API_URL + '/api/pins');
+    _pinsCache = await r.json();
+  } catch(e){ console.error('API error:', e); }
+  return _pinsCache;
 }
 
-function savePins(pins){
-  localStorage.setItem('vortex_pins', JSON.stringify(pins));
-}
+function getPins(){ return _pinsCache; }
 
 /* ═══════════════════════════════════
    MODAL
@@ -1279,38 +1287,25 @@ function genPinId(){
 }
 
 /* ═══════════════════════════════════
-   CREATE PIN
+   CREATE PIN (via API)
 ═══════════════════════════════════ */
-function createPin(){
+async function createPin(){
   const game = document.getElementById('modal-game').value;
   const visEl = document.querySelector('#modal-visibility .toggle-opt.selected');
   const expEl = document.querySelector('#modal-expiry .expiry-opt.selected');
   const visibility = visEl ? visEl.dataset.val : 'Private';
   const expiry = expEl ? expEl.dataset.val : '24h';
 
-  // Compute expiry date
-  let expiresAt = null;
-  const now = new Date();
-  if(expiry === '24h'){ const d=new Date(now); d.setHours(d.getHours()+24); expiresAt=d.toISOString(); }
-  else if(expiry === '48h'){ const d=new Date(now); d.setHours(d.getHours()+48); expiresAt=d.toISOString(); }
-  else if(expiry === '7d'){ const d=new Date(now); d.setDate(d.getDate()+7); expiresAt=d.toISOString(); }
+  try{
+    await fetch(API_URL + '/api/pins', {
+      method: 'POST',
+      headers: {'Content-Type':'application/json'},
+      body: JSON.stringify({ game, visibility, expiry })
+    });
+  } catch(e){ console.error('Create PIN failed:', e); }
 
-  const pin = {
-    id: genPinId(),
-    game,
-    visibility,
-    status: 'PENDING',
-    used: false,
-    result: 'NONE',
-    created: now.toISOString(),
-    expiry,
-    expiresAt,
-  };
-
-  const pins = getPins();
-  pins.unshift(pin);
-  savePins(pins);
   closeModal();
+  await fetchPins();
   refreshPinsPage();
   updateDashStats();
 }
@@ -1318,9 +1313,11 @@ function createPin(){
 /* ═══════════════════════════════════
    DELETE PIN
 ═══════════════════════════════════ */
-function deletePin(id){
-  const pins = getPins().filter(p => p.id !== id);
-  savePins(pins);
+async function deletePin(id){
+  try{
+    await fetch(API_URL + '/api/pins/' + id, { method: 'DELETE' });
+  } catch(e){ console.error('Delete PIN failed:', e); }
+  await fetchPins();
   refreshPinsPage();
   updateDashStats();
 }
@@ -1339,8 +1336,8 @@ function copyPin(id){
 function refreshPinsPage(){
   const pins = getPins();
   const total = pins.length;
-  const pending = pins.filter(p=>p.status==='PENDING').length;
-  const finished = pins.filter(p=>p.status==='FINISHED').length;
+  const pending = pins.filter(p=>p.status==='ACTIVE').length;
+  const finished = pins.filter(p=>p.status==='USED').length;
   const expired = pins.filter(p=>p.status==='EXPIRED').length;
 
   // Update stats
@@ -1375,10 +1372,11 @@ function renderPinsTable(){
   }
 
   tbody.innerHTML = filtered.map(p => {
-    const statusClass = p.status === 'PENDING' ? 'badge-pending' : p.status === 'FINISHED' ? 'badge-finished' : 'badge-expired';
+    const statusClass = p.status === 'ACTIVE' ? 'badge-pending' : p.status === 'USED' ? 'badge-finished' : 'badge-expired';
     const resultClass = p.result === 'CLEAN' ? 'result-clean' : p.result === 'CHEAT' ? 'result-cheat' : 'result-none';
     const resultLabel = p.result === 'NONE' ? '—' : p.result;
-    const usedLabel = p.used ? '<span style="color:#4ade80;">Yes</span>' : '<span style="color:var(--t3);">No</span>';
+    const uses = p.uses_remaining != null ? p.uses_remaining : '?';
+    const usedLabel = uses <= 0 ? '<span style="color:#ef4444;">0/2</span>' : `<span style="color:#4ade80;">${uses}/2</span>`;
     const visIcon = p.visibility === 'Public'
       ? `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" width="10" height="10"><circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg>`
       : `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" width="10" height="10"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>`;
@@ -1415,9 +1413,11 @@ function updateDashStats(){
 }
 
 /* ═══════════════════════════════════
-   INIT
+   INIT — fetch PINs from API on load
 ═══════════════════════════════════ */
-updateDashStats();
+fetchPins().then(()=>{
+  updateDashStats();
+});
 </script>
 </body>
 </html>
