@@ -487,19 +487,22 @@ footer{
 
 <script>
 // Key formatter
+/* ── API URL — change to your server ── */
+const API_URL = 'http://localhost:5000';
+
 function formatKey(input){
-  input.value = input.value.replace(/[^0-9]/g,'').slice(0,6);
+  input.value = input.value.replace(/[^A-Za-z0-9]/g,'').toUpperCase().slice(0,6);
 }
 
-function handleDownload(){
+async function handleDownload(){
   const inp = document.getElementById('keyInput');
   const pin = inp.value.trim().toUpperCase();
+  const btn = document.querySelector('.dl-btn');
 
   function shakeError(msg){
     inp.style.borderColor = 'rgba(239,68,68,0.5)';
     inp.style.boxShadow   = '0 0 0 3px rgba(239,68,68,0.08)';
     inp.style.animation   = 'shake .4s ease';
-    // show error message
     let errEl = document.getElementById('dl-error-msg');
     if(!errEl){
       errEl = document.createElement('div');
@@ -508,6 +511,7 @@ function handleDownload(){
       inp.closest('.dl-input-row').insertAdjacentElement('afterend', errEl);
     }
     errEl.textContent = msg;
+    if(btn) btn.disabled = false;
     setTimeout(()=>{
       inp.style.borderColor=''; inp.style.boxShadow=''; inp.style.animation='';
       if(errEl) errEl.remove();
@@ -519,32 +523,35 @@ function handleDownload(){
     return;
   }
 
-  // Read pins from localStorage
-  let pins = [];
-  try{ pins = JSON.parse(localStorage.getItem('vortex_pins') || '[]'); } catch(e){}
+  // Disable button during request
+  if(btn) btn.disabled = true;
 
-  // Find matching pin (case-insensitive)
-  const match = pins.find(p => p.id && p.id.toUpperCase() === pin);
+  try{
+    const resp = await fetch(API_URL + '/api/pins/validate', {
+      method: 'POST',
+      headers: {'Content-Type':'application/json'},
+      body: JSON.stringify({ pin: pin, source: 'download' })
+    });
+    const data = await resp.json();
 
-  if(!match){
-    shakeError('Invalid PIN');
-    return;
+    if(!data.valid){
+      shakeError(data.reason || 'Invalid PIN');
+      return;
+    }
+
+    // PIN valid — trigger download
+    if(btn) btn.disabled = false;
+    inp.style.borderColor = 'rgba(34,197,94,0.5)';
+    inp.style.boxShadow   = '0 0 0 3px rgba(34,197,94,0.08)';
+
+    const a = document.createElement('a');
+    a.href = 'vortex_scanner_v1.0.0.py';
+    a.download = 'vortex_scanner_v1.0.0.py';
+    a.click();
+
+  } catch(e){
+    shakeError('Cannot connect to server');
   }
-  if(match.status === 'EXPIRED'){
-    shakeError('PIN has expired');
-    return;
-  }
-
-  // Mark as used and finished
-  match.used = true;
-  match.status = 'FINISHED';
-  localStorage.setItem('vortex_pins', JSON.stringify(pins));
-
-  // Trigger download
-  const a = document.createElement('a');
-  a.href = 'vortex_scanner_v1.0.0.py';
-  a.download = 'vortex_scanner_v1.0.0.py';
-  a.click();
 }
 
 // Nebula background — same palette as homepage
