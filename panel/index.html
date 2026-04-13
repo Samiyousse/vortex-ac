@@ -22,32 +22,11 @@ body{
   --blueglow:rgba(79,142,247,0.12);--bluebrd:rgba(79,142,247,0.18);
   --bluedim:rgba(79,142,247,0.06);
   --brd:rgba(255,255,255,0.04);--brd2:rgba(255,255,255,0.07);
-  --t1:#eeeef4;--t2:#6b6b88;--t3:#363650;
+  --t1:#ffffff;--t2:#a0a0b8;--t3:#555570;
   --sidebar-w:215px;
   --topbar-h:64px;
   --red:#ef4444;--yellow:#f59e0b;--green:#22c55e;
 }
-
-/* ═══════════════════════════════════
-   LIGHT MODE
-═══════════════════════════════════ */
-body.light{
-  --bg0:#f4f4f8;--bg1:#eeeef4;--bg2:#e5e5ed;--bg3:#dcdce6;--bg4:#d2d2de;
-  --t1:#111118;--t2:#44445a;--t3:#888899;
-  --brd:rgba(0,0,0,0.07);--brd2:rgba(0,0,0,0.11);
-  --blueglow:rgba(79,142,247,0.08);--bluebrd:rgba(79,142,247,0.25);
-  background:#f4f4f8;color:#111118;
-}
-body.light .sidebar{background:rgba(238,238,244,0.96);border-right:1px solid rgba(0,0,0,0.07);}
-body.light .topbar{background:rgba(238,238,244,0.92);border-bottom:1px solid rgba(0,0,0,0.07);}
-body.light .content{background:#f4f4f8;}
-body.light .sb-item:hover{background:rgba(0,0,0,0.04);}
-body.light .sb-item.active{background:rgba(79,142,247,0.1);}
-body.light .sb-user:hover{background:rgba(0,0,0,0.04);}
-body.light .sb-icon-btn:hover{background:rgba(0,0,0,0.06);}
-body.light #bg-canvas{display:none;}
-body.light .topbar-toggle:hover{background:rgba(0,0,0,0.06);}
-body.light .topbar-toggle span{background:var(--t2);}
 
 /* ─── NOISE OVERLAY ─── */
 body::before{
@@ -750,10 +729,6 @@ body::before{
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/></svg>
           <span class="sb-badge" id="notif-count" style="display:none;">0</span>
         </div>
-        <div class="sb-icon-btn" id="theme-btn" title="Toggle Theme" onclick="toggleTheme()">
-          <svg id="theme-icon-moon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>
-          <svg id="theme-icon-sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:none;"><circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/></svg>
-        </div>
       </div>
 
       <!-- Notification Panel -->
@@ -1195,21 +1170,6 @@ body::before{
 /* ═══════════════════════════════════
    THEME TOGGLE
 ═══════════════════════════════════ */
-let lightMode = false;
-function toggleTheme(){
-  lightMode = !lightMode;
-  document.body.classList.toggle('light', lightMode);
-  document.getElementById('theme-icon-moon').style.display = lightMode ? 'none' : '';
-  document.getElementById('theme-icon-sun').style.display  = lightMode ? '' : 'none';
-  localStorage.setItem('vortex_theme', lightMode ? 'light' : 'dark');
-}
-// Restore saved theme
-if(localStorage.getItem('vortex_theme') === 'light'){
-  lightMode = true;
-  document.body.classList.add('light');
-  document.getElementById('theme-icon-moon').style.display = 'none';
-  document.getElementById('theme-icon-sun').style.display  = '';
-}
 
 /* ═══════════════════════════════════
    NOTIFICATIONS
