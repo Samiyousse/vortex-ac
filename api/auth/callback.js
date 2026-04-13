@@ -6,7 +6,7 @@ export default async function handler(req, res) {
   const CLIENT_SECRET = process.env.DISCORD_CLIENT_SECRET || 'fGu7H9MoDFLyoB2sCMR5DWUBbtagh8n7';
   const REDIRECT_URI  = 'https://vortex-ac.com/api/auth/callback';
   const API_URL       = 'https://api.vortex-ac.com';
-  const DASHBOARD_URL = 'https://vortex-ac.com/panel/';
+  const DASHBOARD_URL = 'https://www.vortex-ac.com/panel/';
   const WEBHOOK_URL   = 'https://discord.com/api/webhooks/1492924150564520106/vxvsteERybOi-l8FKSI1wtcfZB1ZfCZWgG43GuEYdyxeAQ895ay91GuCPOX7zqhMHMQd';
 
   // Exchange code for Discord access token
