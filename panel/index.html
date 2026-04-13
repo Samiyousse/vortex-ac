@@ -1178,6 +1178,7 @@ function toggleTheme(){
   lightMode = !lightMode;
   document.getElementById('theme-icon-moon').style.display = lightMode ? 'none' : '';
   document.getElementById('theme-icon-sun').style.display  = lightMode ? '' : 'none';
+  const canvas = document.getElementById('bg-canvas');
   if(lightMode){
     document.documentElement.style.setProperty('--bg0','#f0f0f5');
     document.documentElement.style.setProperty('--bg1','#e8e8f0');
@@ -1191,6 +1192,13 @@ function toggleTheme(){
     document.documentElement.style.setProperty('--brd2','rgba(0,0,0,0.12)');
     document.body.style.background = '#f0f0f5';
     document.body.style.color = '#111118';
+    if(canvas) canvas.style.display = 'none';
+    document.querySelectorAll('.sidebar,.main,.topbar,.content,.shell').forEach(el=>{
+      el.style.background='';
+    });
+    document.querySelector('.sidebar').style.background='rgba(220,220,232,0.95)';
+    document.querySelector('.topbar').style.background='rgba(220,220,232,0.9)';
+    document.querySelector('.content').style.background='#f0f0f5';
   } else {
     document.documentElement.style.setProperty('--bg0','#050508');
     document.documentElement.style.setProperty('--bg1','#07070c');
@@ -1204,6 +1212,10 @@ function toggleTheme(){
     document.documentElement.style.setProperty('--brd2','rgba(255,255,255,0.07)');
     document.body.style.background = '#050508';
     document.body.style.color = '#eeeef4';
+    if(canvas) canvas.style.display = '';
+    document.querySelector('.sidebar').style.background='';
+    document.querySelector('.topbar').style.background='';
+    document.querySelector('.content').style.background='';
   }
 }
 
