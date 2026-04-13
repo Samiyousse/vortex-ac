@@ -1146,6 +1146,31 @@ body::before{
 })();
 
 /* ═══════════════════════════════════
+   SESSION CHECK
+═══════════════════════════════════ */
+(function(){
+  const params = new URLSearchParams(window.location.search);
+  const token  = params.get('token');
+  const uid    = params.get('uid');
+  const uname  = params.get('uname');
+  if(token){ localStorage.setItem('vortex_token', token); }
+  if(uid)  { localStorage.setItem('vortex_uid', uid); }
+  if(uname){ localStorage.setItem('vortex_uname', decodeURIComponent(uname)); }
+  if(!localStorage.getItem('vortex_token')){
+    window.location.href = '/login/';
+    return;
+  }
+  // Show username in sidebar
+  const name = localStorage.getItem('vortex_uname') || 'Admin';
+  const el = document.getElementById('sb-username');
+  const av = document.getElementById('sb-avatar-initials');
+  if(el) el.textContent = name;
+  if(av) av.textContent = name.charAt(0).toUpperCase();
+  // Clean URL
+  if(token){ history.replaceState({}, '', window.location.pathname); }
+})();
+
+/* ═══════════════════════════════════
    THEME TOGGLE
 ═══════════════════════════════════ */
 let lightMode = false;
