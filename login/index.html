@@ -256,6 +256,10 @@ body{
 
 
 <script>
+// Redirect to dashboard if already logged in
+if(localStorage.getItem('vortex_token')){
+  window.location.href = '/panel/';
+}
 (function(){
   const canvas = document.getElementById('ribbon-canvas');
   const ctx = canvas.getContext('2d');
