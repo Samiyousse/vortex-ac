@@ -28,6 +28,27 @@ body{
   --red:#ef4444;--yellow:#f59e0b;--green:#22c55e;
 }
 
+/* ═══════════════════════════════════
+   LIGHT MODE
+═══════════════════════════════════ */
+body.light{
+  --bg0:#f4f4f8;--bg1:#eeeef4;--bg2:#e5e5ed;--bg3:#dcdce6;--bg4:#d2d2de;
+  --t1:#111118;--t2:#44445a;--t3:#888899;
+  --brd:rgba(0,0,0,0.07);--brd2:rgba(0,0,0,0.11);
+  --blueglow:rgba(79,142,247,0.08);--bluebrd:rgba(79,142,247,0.25);
+  background:#f4f4f8;color:#111118;
+}
+body.light .sidebar{background:rgba(238,238,244,0.96);border-right:1px solid rgba(0,0,0,0.07);}
+body.light .topbar{background:rgba(238,238,244,0.92);border-bottom:1px solid rgba(0,0,0,0.07);}
+body.light .content{background:#f4f4f8;}
+body.light .sb-item:hover{background:rgba(0,0,0,0.04);}
+body.light .sb-item.active{background:rgba(79,142,247,0.1);}
+body.light .sb-user:hover{background:rgba(0,0,0,0.04);}
+body.light .sb-icon-btn:hover{background:rgba(0,0,0,0.06);}
+body.light #bg-canvas{display:none;}
+body.light .topbar-toggle:hover{background:rgba(0,0,0,0.06);}
+body.light .topbar-toggle span{background:var(--t2);}
+
 /* ─── NOISE OVERLAY ─── */
 body::before{
   content:'';position:fixed;inset:0;z-index:9999;pointer-events:none;
@@ -1177,47 +1198,17 @@ body::before{
 let lightMode = false;
 function toggleTheme(){
   lightMode = !lightMode;
+  document.body.classList.toggle('light', lightMode);
   document.getElementById('theme-icon-moon').style.display = lightMode ? 'none' : '';
   document.getElementById('theme-icon-sun').style.display  = lightMode ? '' : 'none';
-  const canvas = document.getElementById('bg-canvas');
-  if(lightMode){
-    document.documentElement.style.setProperty('--bg0','#f0f0f5');
-    document.documentElement.style.setProperty('--bg1','#e8e8f0');
-    document.documentElement.style.setProperty('--bg2','#dcdce8');
-    document.documentElement.style.setProperty('--bg3','#d0d0e0');
-    document.documentElement.style.setProperty('--bg4','#c8c8d8');
-    document.documentElement.style.setProperty('--t1','#111118');
-    document.documentElement.style.setProperty('--t2','#444460');
-    document.documentElement.style.setProperty('--t3','#888899');
-    document.documentElement.style.setProperty('--brd','rgba(0,0,0,0.08)');
-    document.documentElement.style.setProperty('--brd2','rgba(0,0,0,0.12)');
-    document.body.style.background = '#f0f0f5';
-    document.body.style.color = '#111118';
-    if(canvas) canvas.style.display = 'none';
-    document.querySelectorAll('.sidebar,.main,.topbar,.content,.shell').forEach(el=>{
-      el.style.background='';
-    });
-    document.querySelector('.sidebar').style.background='rgba(220,220,232,0.95)';
-    document.querySelector('.topbar').style.background='rgba(220,220,232,0.9)';
-    document.querySelector('.content').style.background='#f0f0f5';
-  } else {
-    document.documentElement.style.setProperty('--bg0','#050508');
-    document.documentElement.style.setProperty('--bg1','#07070c');
-    document.documentElement.style.setProperty('--bg2','#0c0c14');
-    document.documentElement.style.setProperty('--bg3','#111119');
-    document.documentElement.style.setProperty('--bg4','#17171f');
-    document.documentElement.style.setProperty('--t1','#eeeef4');
-    document.documentElement.style.setProperty('--t2','#6b6b88');
-    document.documentElement.style.setProperty('--t3','#363650');
-    document.documentElement.style.setProperty('--brd','rgba(255,255,255,0.04)');
-    document.documentElement.style.setProperty('--brd2','rgba(255,255,255,0.07)');
-    document.body.style.background = '#050508';
-    document.body.style.color = '#eeeef4';
-    if(canvas) canvas.style.display = '';
-    document.querySelector('.sidebar').style.background='';
-    document.querySelector('.topbar').style.background='';
-    document.querySelector('.content').style.background='';
-  }
+  localStorage.setItem('vortex_theme', lightMode ? 'light' : 'dark');
+}
+// Restore saved theme
+if(localStorage.getItem('vortex_theme') === 'light'){
+  lightMode = true;
+  document.body.classList.add('light');
+  document.getElementById('theme-icon-moon').style.display = 'none';
+  document.getElementById('theme-icon-sun').style.display  = '';
 }
 
 /* ═══════════════════════════════════
